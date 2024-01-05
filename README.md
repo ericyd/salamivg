@@ -15,8 +15,7 @@ See [the /sketch folder in my personal generative art repo](https://github.com/e
 Here's a minimal example:
 
 ```js
-import { circle, hypot, vec2, map } from 'artsvg'
-import { renderSvg } from 'artsvg/render'
+import { renderSvg, circle, hypot, vec2, map } from '@salamivg/core'
 
 const config = {
   width: 100,
@@ -79,7 +78,7 @@ This lib is heavily inspired by [OPENRNDR](https://openrndr.org/), which means i
 Install dependencies:
 
 ```shell
-npm ci
+npm i
 ```
 
 Before committing:
