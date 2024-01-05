@@ -5,6 +5,13 @@
   "description": "A creative coding framework for generating SVGs",
   "main": "lib/index.js",
   "module": "lib/index.js",
+  "homepage": "https://github.com/ericyd/salamivg#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ericyd/salamivg.git"
+  },
+  "author": "Eric Dauenhauer",
+  "license": "The Unlicense",
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -14,6 +21,9 @@
   "directories": {
     "lib": "lib"
   },
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "format": "npx @biomejs/biome format lib/**/*.js --write",
     "lint": "npx @biomejs/biome lint lib/**/*.js",
@@ -33,8 +43,6 @@
     "drawing",
     "procedural"
   ],
-  "author": "Eric Dauenhauer",
-  "license": "The Unlicense",
   "devDependencies": {
     "@biomejs/biome": "1.4.1",
     "@types/node": "^20.10.5",
