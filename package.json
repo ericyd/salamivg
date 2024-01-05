@@ -31,6 +31,7 @@
     "test": "node --test",
     "check:types": "tsc --noEmit true --emitDeclarationOnly false",
     "check:format": "npx @biomejs/biome format lib/**/*.js",
+    "check:all": "npm run check:format && npm run check:types && npm run lint && npm test",
     "pretypegen": "find lib/* | grep '\\.d\\.ts' | grep -v 'lib/types\\.d\\.ts' | xargs rm",
     "typegen": "tsc"
   },
