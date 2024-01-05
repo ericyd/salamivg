@@ -22,7 +22,8 @@
     "lib": "lib"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "!lib/**/*.test.js"
   ],
   "scripts": {
     "format": "npx @biomejs/biome format lib/**/*.js --write",
