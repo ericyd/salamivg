@@ -6,7 +6,15 @@ A place to play with SVGs.
 
 I love [OPENRNDR](https://openrndr.org/) and wanted to see if I could make a generative art framework that ran in an interpretted language. I've never been a JVM guy, and even though I like Kotlin, it sounded appealing to me to be able to write generative art in a language I used every day: JavaScript.
 
-Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" ¯\\_(ツ)_/¯
+Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" `¯\_(ツ)_/¯`
+
+## Installation
+
+```
+npm i --save @salamivg/core
+```
+
+If you use yarn and you can't automatically convert the above to the correct yarn command, then that's on you 😏
 
 ## Examples
 
@@ -69,6 +77,10 @@ Here's the output of the above script:
 
 [Please see the Wiki](https://github.com/ericyd/salamivg/wiki)
 
+## FAQ
+
+[Please see the Wiki](https://github.com/ericyd/salamivg/wiki/FAQ)
+
 ## Design Philosophy
 
 This lib is heavily inspired by [OPENRNDR](https://openrndr.org/), which means it utilizes the builder pattern extensively. My first attempt at writing my own SVG "framework" attempted to be much more functional, and I found the scripts to be really verbose and hard to follow. I think for the purpose of making art, imperative builder patterns are really nice.
@@ -95,18 +107,22 @@ npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
 
-### Compatibility
+## Compatibility
 
 I developed this with Node 20 but I'd bet money it works back to like Node 14 or so.
 
 ### Deno / Bun?
 
-Please open an issue, although tbh I'd expect this to work fine with any JS runtime. The most modern JS feature this library uses is classes with private properties.
+Please open an issue if needed, although tbh I'd expect this to work fine with any JS runtime. The most modern JS feature this library uses is classes with private properties.
+
+### ES Modules only
+
+Is this a problem? Feel free to open an issue if you need commonjs. I think it would be trivial to set up rollup or similar to bundle into a commonjs package and include it in the exports, I just haven't done it because probably nobody will ever install this library.
 
 ## TODO
 
-1. Describe why not https://www.npmjs.com/package/svg.js, or https://dmitrybaranovskiy.github.io/raphael/
-2. Add comparisons to other frameworks (see https://openrndr.org/ for example)
+1. Describe why not https://www.npmjs.com/package/svg.js, or https://dmitrybaranovskiy.github.io/raphael/, or p5.js
+2. Add comparisons to frameworks in other languages (see https://openrndr.org/ for example)
 3. Finish public interface for "oscillator noise"
 4. Finish "guide"
 5. Set up CI
@@ -114,4 +130,3 @@ Please open an issue, although tbh I'd expect this to work fine with any JS runt
     - npm run check:format
     - npm run check:types
     - npm run lint
-6. Publish on npm 😱
