@@ -26,7 +26,7 @@
     "!lib/**/*.test.js"
   ],
   "scripts": {
-    "prepublish": "npm run typegen && npm run check:all",
+    "prepublishOnly": "npm run typegen && npm run check:all",
     "format": "npx @biomejs/biome format lib/**/*.js --write",
     "lint": "npx @biomejs/biome lint lib/**/*.js",
     "lint:fix": "npx @biomejs/biome lint --apply-unsafe lib/**/*.js",
