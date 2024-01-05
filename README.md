@@ -92,7 +92,6 @@ npm run check:all
 ```shell
 npm version minor
 npm login --registry https://registry.npmjs.org --scope=@salamivg
-npm run typegen # >> important! <<
 npm publish --access public
 ```
 
