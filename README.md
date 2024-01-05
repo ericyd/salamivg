@@ -10,7 +10,7 @@ Of course you may (reasonably) ask why I'm not just using p5.js, the dominant Ja
 
 ## Examples
 
-See [the /sketch folder in my personal generative art repo](https://github.com/ericyd/generative-art/tree/ce4536cffea702ccf4050e389c1b9882561732c2/homegrown-svg/sketch) for some examples.
+See [the /sketch folder in my personal generative art repo](https://github.com/ericyd/generative-art/tree/57c17efb12df78fa5f4b5ab73adc6352a543cbbc/homegrown-svg/sketch) for some examples.
 
 Here's a minimal example:
 
