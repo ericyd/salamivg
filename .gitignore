@@ -128,3 +128,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+lib/**/*.d.ts
+!lib/types.d.ts
+package-lock.json
