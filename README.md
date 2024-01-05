@@ -93,7 +93,7 @@ npm test
 
 ### Compatibility
 
-I developed this with Node 20 but I'd bet money it works back to like Node 10 or something.
+I developed this with Node 20 but I'd bet money it works back to like Node 14 or so.
 
 ### Deno / Bun?
 
