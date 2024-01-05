@@ -89,6 +89,7 @@ npm run format
 npm run lint
 npm run check:types
 npm run check:format
+npm test
 ```
 
 ### Compatibility
