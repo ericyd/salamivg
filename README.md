@@ -87,6 +87,15 @@ Before committing:
 npm run check:all
 ```
 
+## Publishing
+
+```shell
+npm version minor
+npm login --registry https://registry.npmjs.org --scope=@salamivg
+npm run typegen # >> important! <<
+npm publish --access public
+```
+
 ### Compatibility
 
 I developed this with Node 20 but I'd bet money it works back to like Node 14 or so.
