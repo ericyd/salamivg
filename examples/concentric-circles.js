@@ -12,6 +12,7 @@ renderSvg(config, (svg) => {
   svg.setBackground('#fff')
   svg.fill = null
   svg.stroke = '#000'
+  svg.numericPrecision = 3
 
   svg.circle(
     circle({
