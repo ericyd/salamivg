@@ -2,6 +2,8 @@
 
 A place to play with SVGs.
 
+SalamiVG is a creative coding framework for JavaScript with a single render target: SVG.
+
 ## Why?
 
 I love [OPENRNDR](https://openrndr.org/) and wanted to see if I could make a generative art framework that ran in an interpretted language. I've never been a JVM guy, and even though I like Kotlin, it sounded appealing to me to be able to write generative art in a language I used every day: JavaScript.
@@ -99,7 +101,7 @@ import {
   ColorSequence,
   shuffle,
   createOscNoise,
-} from '../lib/index.js'
+} from '@salamivg/core'
 
 const config = {
   width: 100,
