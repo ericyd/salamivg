@@ -134,3 +134,4 @@ lib/**/*.d.ts
 package-lock.json
 .DS_Store
 .vscode
+screenshots
