@@ -1,5 +1,4 @@
-import { circle, hypot, vec2, map } from '../lib/index.js'
-import { renderSvg } from '../lib/render.js'
+import { renderSvg, circle, hypot, vec2, map } from '../lib/index.js'
 
 const config = {
   width: 100,

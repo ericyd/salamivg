@@ -133,3 +133,4 @@ lib/**/*.d.ts
 !lib/types.d.ts
 package-lock.json
 .DS_Store
+.vscode
