@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "prepublishOnly": "npm run typegen && npm run check:all",
+    "preversion": "npm run typegen && npm run check:all",
     "format": "npx @biomejs/biome format lib/**/*.js examples/*.js --write",
     "lint": "npx @biomejs/biome lint lib/**/*.js",
     "lint:fix": "npx @biomejs/biome lint --apply-unsafe lib/**/*.js",

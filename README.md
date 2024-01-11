@@ -167,6 +167,8 @@ renderSvg(config, (svg) => {
 
 This lib is heavily inspired by [OPENRNDR](https://openrndr.org/), which means it utilizes the builder pattern extensively. My first attempt at writing my own SVG "framework" attempted to be much more functional, and I found the scripts to be really verbose and hard to follow. I think for the purpose of making art, imperative builder patterns are really nice.
 
+TypeScript is used extensively for typechecking the lib, but the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and I have to say it provides a lot of benefits. I didn't realize how much of my life I was losing to compilation times. That is time I could be spending looking at art!
+
 ## Development
 
 Install dependencies:
@@ -185,6 +187,7 @@ npm run check:all
 
 ```shell
 npm version minor
+git push --tags
 npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
