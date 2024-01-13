@@ -8,7 +8,7 @@ SalamiVG is a creative coding framework for JavaScript with a single render targ
 
 I love [OPENRNDR](https://openrndr.org/) and wanted to see if I could make a generative art framework that ran in an interpretted language. I've never been a JVM guy, and even though I like Kotlin, it sounded appealing to me to be able to write generative art in a language I used every day: JavaScript.
 
-Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" `¯\_(ツ)_/¯`
+Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" `¯\_(ツ)_/¯`. (There is a [more detailed answer to this question in the Wiki](https://github.com/ericyd/salamivg/wiki/FAQ#why-not-p5js).)
 
 ## Installation
 
@@ -187,7 +187,7 @@ npm run check:all
 
 ```shell
 npm version minor
-git push --tags
+git push --tags && git push
 npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
@@ -196,9 +196,17 @@ npm publish --access public
 
 I developed this with Node 20 but I'd bet money it works back to like Node 14 or so.
 
+This library has been tested against
+* Node 20.8.0
+* Node 18.19.0
+* Node 16.20.2
+* I tried to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on my M1 Mac and I didn't try to hard to fix it. Please open an issue if this is causing you problems.
+
 ### Deno / Bun?
 
 Please open an issue if needed, although tbh I'd expect this to work fine with any JS runtime. The most modern JS feature this library uses is classes with private properties.
+
+The one exception is the `renderSvg` function which uses `node` internal libraries such as `node:fs` and `node:path`. Happy to add similar functions for Deno or Bun if there's demand.
 
 ### ES Modules only
 
@@ -206,11 +214,8 @@ Is this a problem? Feel free to open an issue if you need commonjs. I think it w
 
 ## TODO
 
-1. Describe why not https://www.npmjs.com/package/svg.js, or https://dmitrybaranovskiy.github.io/raphael/, or p5.js
-2. Add comparisons to frameworks in other languages (see https://openrndr.org/ for example)
-3. Finish public interface for "oscillator noise"
-4. Finish "guide"
-5. Set up CI
+1. Finish "guide"
+2. Set up CI
     - npm test
     - npm run check:format
     - npm run check:types
