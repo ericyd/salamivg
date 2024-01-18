@@ -245,7 +245,7 @@ npm run check:all
 ```shell
 npm version minor
 git push --tags && git push
-./scripts/changelog
+./scripts/changelog.sh
 npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
