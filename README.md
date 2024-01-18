@@ -4,6 +4,11 @@ A place to play with SVGs.
 
 SalamiVG is a creative coding framework for JavaScript with a single render target: SVG.
 
+<!-- TODO@v1 -->
+## Heads up
+
+This is in beta stage. I've been using it personally for a few weeks and it is pretty stable, but some things might change before v1.0
+
 ## Why?
 
 I love [OPENRNDR](https://openrndr.org/) and wanted to see if I could make a generative art framework that ran in an interpretted language. I've never been a JVM guy, and even though I like Kotlin, it sounded appealing to me to be able to write generative art in a language I used every day: JavaScript.
@@ -45,29 +50,62 @@ const config = {
 }
 
 renderSvg(config, (svg) => {
-  const center = vec2(svg.width, svg.height).div(2)
+  // set basic SVG props
   svg.setBackground('#fff')
   svg.fill = null
   svg.stroke = '#000'
+  svg.numericPrecision = 3
 
-  svg.circle(circle({
-    x: center.x,
-    y: center.y,
-    radius: hypot(svg.width, svg.height) * 0.04,
-    'stroke-width': 1
-  }))
+  // draw circle in middle of viewport
+  svg.circle(
+    circle({
+      x: svg.center.x,
+      y: svg.center.y,
+      radius: hypot(svg.width, svg.height) * 0.04,
+      'stroke-width': 1,
+    }),
+  )
 
+  // draw 14 concentric rings around the center. (14 is arbitrary)
   const nRings = 14
   for (let i = 1; i <= nRings; i++) {
-    const baseRadius = map(0, Math.log(nRings), hypot(svg.width, svg.height) * 0.09, hypot(svg.width, svg.height) * 0.3, Math.log(i))
-    const sineInfluence = map(0, Math.log(nRings), baseRadius * 0.01, baseRadius * 0.1, Math.log(i))
+    // use `map` to linearly interpolate the radius on a log scale
+    const baseRadius = map(
+      0,
+      Math.log(nRings),
+      hypot(svg.width, svg.height) * 0.09,
+      hypot(svg.width, svg.height) * 0.3,
+      Math.log(i),
+    )
+
+    // as the rings get further from the center,
+    // the path is increasingly perturbated by the sine wave.
+    const sineInfluence = map(
+      0,
+      Math.log(nRings),
+      baseRadius * 0.01,
+      baseRadius * 0.1,
+      Math.log(i),
+    )
+
     svg.path((p) => {
-      p.strokeWidth = map(1, nRings, 0.3, 0.05, i)
-      let radius = baseRadius + Math.sin(0) * baseRadius * 0.1
-      p.moveTo(vec2(Math.cos(0) * radius, Math.sin(0) * radius).add(center))
+      // the stroke width gets thinner as the rings get closer to the edge
+      p.strokeWidth = map(1, nRings, 0.8, 0.1, i)
+
+      // the radius varies because the path is perturbated by a sine wave
+      const radius = (angle) => baseRadius + Math.sin(angle * 6) * sineInfluence
+      p.moveTo(
+        vec2(Math.cos(0) * radius(0), Math.sin(0) * radius(0)).add(svg.center),
+      )
+
+      // move our way around a circle to draw a smooth path
       for (let angle = 0; angle <= Math.PI * 2; angle += 0.05) {
-        radius = baseRadius + Math.sin(angle * 6) * sineInfluence //baseRadius * 0.1
-        p.lineTo(vec2(Math.cos(angle) * radius, Math.sin(angle) * radius).add(center))
+        p.lineTo(
+          vec2(
+            Math.cos(angle) * radius(angle),
+            Math.sin(angle) * radius(angle),
+          ).add(svg.center),
+        )
       }
       p.close()
     })
@@ -110,35 +148,54 @@ const config = {
   loopCount: 1,
 }
 
-let seed = 5318189853830211 // randomSeed()
-
 const colors = ['#B2D0DE', '#E0A0A5', '#9BB3E7', '#F1D1B8', '#D9A9D6']
 
+
 renderSvg(config, (svg) => {
+  // filenameMetadata will be added to the filename that is written to disk;
+  // this makes it easy to recall which seeds were used in a particular sketch
   svg.filenameMetadata = { seed }
+
+  // a seeded pseudo-random number generator provides controlled randomness for our sketch
   const rng = createRng(seed)
+
+  // black background 😎
   svg.setBackground('#000')
 
+  // set some basic SVG props
   svg.fill = null
   svg.stroke = ColorRgb.Black
   svg.strokeWidth = 0.25
   svg.numericPrecision = 3
 
-  const noise = createOscNoise(seed)
+  // create a 2D noise function using the built-in "oscillator noise"
+  const noiseFn = createOscNoise(seed)
+
+  // create a bunch of random start points within the svg boundaries
   const nPoints = 200
   const points = new Array(nPoints)
     .fill(0)
     .map(() => Vector2.random(0, svg.width, 0, svg.height, rng))
+
+  // define a color spectrum that can be indexed randomly for line colors
   const spectrum = ColorSequence.fromHexes(shuffle(colors, rng))
 
+  // noise functions usually require some type of scaling;
+  // here we randomize slightly to get the amount of "flowiness" that we want.
   const scale = random(0.05, 0.13, rng)
+
+  // each start point gets a line
   for (const point of points) {
     svg.path((path) => {
+      // choose a random stroke color for the line
       path.stroke = spectrum.at(random(0, 1, rng))
+
+      // move along the vector field defined by the 2D noise function.
+      // the line length is "100", which is totally arbitrary.
       path.moveTo(point)
       for (let i = 0; i < 100; i++) {
-        let noiseVal = noise(path.cursor.x * scale, path.cursor.y * scale)
-        let angle = map(-1, 1, -PI, PI, noiseVal)
+        let noise = noiseFn(path.cursor.x * scale, path.cursor.y * scale)
+        let angle = map(-1, 1, -PI, PI, noise)
         path.lineTo(path.cursor.add(vec2(cos(angle), sin(angle))))
       }
     })
@@ -155,9 +212,9 @@ renderSvg(config, (svg) => {
 
 ![oscillator noise example output](./examples/oscillator-noise.svg)
 
-## Guide
+## Getting Started
 
-[Please see the Wiki](https://github.com/ericyd/salamivg/wiki)
+[Please see the Wiki](https://github.com/ericyd/salamivg/wiki/Getting-Started)
 
 ## FAQ
 
@@ -215,9 +272,5 @@ Is this a problem? Feel free to open an issue if you need commonjs. I think it w
 
 ## TODO
 
+<!-- TODO@v1 -->
 1. Finish "guide"
-2. Set up CI
-    - npm test
-    - npm run check:format
-    - npm run check:types
-    - npm run lint

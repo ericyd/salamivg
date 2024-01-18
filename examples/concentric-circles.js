@@ -8,23 +8,26 @@ const config = {
 }
 
 renderSvg(config, (svg) => {
-  const center = vec2(svg.width, svg.height).div(2)
+  // set basic SVG props
   svg.setBackground('#fff')
   svg.fill = null
   svg.stroke = '#000'
   svg.numericPrecision = 3
 
+  // draw circle in middle of viewport
   svg.circle(
     circle({
-      x: center.x,
-      y: center.y,
+      x: svg.center.x,
+      y: svg.center.y,
       radius: hypot(svg.width, svg.height) * 0.04,
       'stroke-width': 1,
     }),
   )
 
+  // draw 14 concentric rings around the center. (14 is arbitrary)
   const nRings = 14
   for (let i = 1; i <= nRings; i++) {
+    // use `map` to linearly interpolate the radius on a log scale
     const baseRadius = map(
       0,
       Math.log(nRings),
@@ -32,6 +35,9 @@ renderSvg(config, (svg) => {
       hypot(svg.width, svg.height) * 0.3,
       Math.log(i),
     )
+
+    // as the rings get further from the center,
+    // the path is increasingly perturbated by the sine wave.
     const sineInfluence = map(
       0,
       Math.log(nRings),
@@ -39,14 +45,24 @@ renderSvg(config, (svg) => {
       baseRadius * 0.1,
       Math.log(i),
     )
+
     svg.path((p) => {
-      p.strokeWidth = map(1, nRings, 0.3, 0.05, i)
-      let radius = baseRadius + Math.sin(0) * baseRadius * 0.1
-      p.moveTo(vec2(Math.cos(0) * radius, Math.sin(0) * radius).add(center))
+      // the stroke width gets thinner as the rings get closer to the edge
+      p.strokeWidth = map(1, nRings, 0.8, 0.1, i)
+
+      // the radius varies because the path is perturbated by a sine wave
+      const radius = (angle) => baseRadius + Math.sin(angle * 6) * sineInfluence
+      p.moveTo(
+        vec2(Math.cos(0) * radius(0), Math.sin(0) * radius(0)).add(svg.center),
+      )
+
+      // move our way around a circle to draw a smooth path
       for (let angle = 0; angle <= Math.PI * 2; angle += 0.05) {
-        radius = baseRadius + Math.sin(angle * 6) * sineInfluence //baseRadius * 0.1
         p.lineTo(
-          vec2(Math.cos(angle) * radius, Math.sin(angle) * radius).add(center),
+          vec2(
+            Math.cos(angle) * radius(angle),
+            Math.sin(angle) * radius(angle),
+          ).add(svg.center),
         )
       }
       p.close()
