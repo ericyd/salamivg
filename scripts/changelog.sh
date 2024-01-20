@@ -26,7 +26,6 @@ git log \
   --decorate \
   --date=short \
   --format=format:'* %s (%ad, [%h](https://github.com/ericyd/salamivg/commit/%H))' \
-  --all \
   "$from"..."$to"
 
 # a nice one-liner that shows most of the useful info
