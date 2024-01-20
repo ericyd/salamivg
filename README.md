@@ -25,9 +25,9 @@ If you use yarn and you can't automatically convert the above to the correct yar
 
 ## Examples
 
-See [the /sketch folder in my personal generative art repo](https://github.com/ericyd/generative-art/tree/57c17efb12df78fa5f4b5ab73adc6352a543cbbc/homegrown-svg/sketch) for some examples. 
+There is [a Gallery page in the Wiki](https://github.com/ericyd/salamivg/wiki/Gallery) with some example renders and links to the code used to create them.
 
-Assuming you have configured your `package.json` to declare `"type": "module"`, you can simply run as a normal Node script:
+If you're the clone-n-run type, there are some additional examples in [the /sketch folder of this generative art repo](https://github.com/ericyd/generative-art/tree/57c17efb12df78fa5f4b5ab73adc6352a543cbbc/homegrown-svg/sketch). Assuming you have configured your `package.json` to declare `"type": "module"`, you can simply run as a normal Node script:
 
 ```js
 node example.js
