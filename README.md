@@ -178,7 +178,7 @@ renderSvg(config, (svg) => {
     .map(() => Vector2.random(0, svg.width, 0, svg.height, rng))
 
   // define a color spectrum that can be indexed randomly for line colors
-  const spectrum = ColorSequence.fromHexes(shuffle(colors, rng))
+  const spectrum = ColorSequence.fromColors(shuffle(colors, rng))
 
   // noise functions usually require some type of scaling;
   // here we randomize slightly to get the amount of "flowiness" that we want.
