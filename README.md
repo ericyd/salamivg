@@ -115,7 +115,7 @@ renderSvg(config, (svg) => {
 
 </details>
 
-![concentric circles example output](./examples/concentric-circles.svg)
+![Concentric circles example. 14 concentric circles are drawn around the center of the image. As the circle radius increases, the circles becomes increasingly perturbated by a sine wave, making the circle somewhat wavy.](./examples/concentric-circles.svg)
 
 <details>
 
@@ -149,7 +149,6 @@ const config = {
 }
 
 const colors = ['#B2D0DE', '#E0A0A5', '#9BB3E7', '#F1D1B8', '#D9A9D6']
-
 
 renderSvg(config, (svg) => {
   // filenameMetadata will be added to the filename that is written to disk;
@@ -210,21 +209,125 @@ renderSvg(config, (svg) => {
 
 </details>
 
-![oscillator noise example output](./examples/oscillator-noise.svg)
+![Oscillator noise example. Wavy multi-colored lines defined by a noisy vector field weave through the canvas.](./examples/oscillator-noise.svg)
 
-## Getting Started
+<details>
 
-[Please see the Wiki](https://github.com/ericyd/salamivg/wiki/Getting-Started)
+<summary>Recursive triangle subdivision</summary>
 
-## FAQ
+```js
+/*
+Rules
 
-[Please see the Wiki](https://github.com/ericyd/salamivg/wiki/FAQ)
+1. Draw an equilateral triangle in the center of the viewBox
+2. Subdivide the triangle into 4 equal-sized smaller triangles
+3. If less than max depth and <chance>, continue recursively subdividing
+4. Each triangle gets a different fun-colored fill, and a slightly-opacified stroke
+*/
+import {
+  renderSvg,
+  vec2,
+  randomSeed,
+  createRng,
+  Vector2,
+  random,
+  randomInt,
+  PI,
+  ColorSequence,
+  shuffle,
+  TAU,
+  ColorRgb,
+} from '@salamivg/core'
+
+const config = {
+  width: 100,
+  height: 100,
+  scale: 3,
+  loopCount: 1,
+}
+
+let seed = 8852037180828291 // or, randomSeed()
+
+const colors = [
+  '#974F7A',
+  '#D093C2',
+  '#6F9EB3',
+  '#E5AD5A',
+  '#EEDA76',
+  '#B5CE8D',
+  '#DAE7E8',
+  '#2E4163',
+]
+
+const bg = '#2E4163'
+const stroke = ColorRgb.fromHex('#DAE7E8')
+
+renderSvg(config, (svg) => {
+  const rng = createRng(seed)
+  const maxDepth = randomInt(5, 7, rng)
+  svg.filenameMetadata = { seed, maxDepth }
+  svg.setBackground(bg)
+  svg.numericPrecision = 3
+  svg.fill = bg
+  svg.stroke = stroke
+  svg.strokeWidth = 0.25
+  const spectrum = ColorSequence.fromColors(shuffle(colors, rng))
+
+  function drawTriangle(a, b, c, depth = 0) {
+    // always draw the first triangle; then, draw about half of the triangles
+    if (depth === 0 || random(0, 1, rng) < 0.5) {
+      // offset amount increases with depth
+      const offsetAmount = depth / 2
+      const offset = vec2(
+        random(-offsetAmount, offsetAmount, rng),
+        random(-offsetAmount, offsetAmount, rng),
+      )
+      // draw the triangle with some offset
+      svg.polygon({
+        points: [a.add(offset), b.add(offset), c.add(offset)],
+        fill: spectrum.at(random(0, 1, rng)).opacify(0.4).toHex(),
+        stroke: stroke.opacify(1 / (depth / 4 + 1)).toHex(),
+      })
+    }
+    // recurse if we're below maxDepth and "lady chance allows it"
+    if (depth < maxDepth && (depth < 2 || random(0, 1, rng) < 0.75)) {
+      const ab = Vector2.mix(a, b, 0.5)
+      const ac = Vector2.mix(a, c, 0.5)
+      const bc = Vector2.mix(b, c, 0.5)
+      drawTriangle(ab, ac, bc, depth + 1)
+      drawTriangle(a, ab, ac, depth + 1)
+      drawTriangle(b, bc, ab, depth + 1)
+      drawTriangle(c, bc, ac, depth + 1)
+    }
+  }
+
+  // construct an equilateral triangle from the center of the canvas with a random rotation
+  const angle = random(0, TAU, rng)
+  const a = svg.center.add(Vector2.fromAngle(angle).scale(45))
+  const b = svg.center.add(Vector2.fromAngle(angle + (PI * 2) / 3).scale(45))
+  const c = svg.center.add(Vector2.fromAngle(angle + (PI * 4) / 3).scale(45))
+  drawTriangle(a, b, c)
+
+  // when loopCount > 1, this will randomize the seed on each iteration
+  return () => {
+    seed = randomSeed()
+  }
+})
+```
+
+</details>
+
+![Recursive triangles example. A large equilateral triangle is drawn in the middle of the screen. The triangle is equally subdivided into 4 smaller triangles. Each triangle gets a random color. The subdivision continues for 6 iterations.](./examples/recursive-triangles.svg)
+
+## Getting Started, Documentation, and FAQ
+
+[Please see the project Wiki](https://github.com/ericyd/salamivg/wiki)
 
 ## Design Philosophy
 
 This lib is heavily inspired by [OPENRNDR](https://openrndr.org/), which means it utilizes the builder pattern extensively. My first attempt at writing my own SVG "framework" attempted to be much more functional, and I found the scripts to be really verbose and hard to follow. I think for the purpose of making art, imperative builder patterns are really nice.
 
-TypeScript is used extensively for typechecking the lib, but the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and I have to say it provides a lot of benefits. I didn't realize how much of my life I was losing to compilation times. That is time I could be spending looking at art!
+TypeScript is used extensively for typechecking the lib, but the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and I now believe that it provides a lot of benefits. I didn't realize how much of my life I was losing to compilation times. That is time I could be spending looking at art! In addition, shipping human-readable JS files means that it's much easier for a library user to modify the files locally, which can be a great way to lead to experimentation and PRs! Full TypeScript definition files are still included in the packaged library code.
 
 ## Development
 
