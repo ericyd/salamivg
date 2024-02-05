@@ -372,8 +372,3 @@ The one exception is the `renderSvg` function which uses `node` internal librari
 ### ES Modules only
 
 Is this a problem? Feel free to open an issue if you need commonjs. I think it would be trivial to set up rollup or similar to bundle into a commonjs package and include it in the exports, I just haven't done it because probably nobody will ever install this library.
-
-## TODO
-
-<!-- TODO@v1 -->
-1. Finish "guide"
