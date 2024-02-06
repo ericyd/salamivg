@@ -325,11 +325,11 @@ renderSvg(config, (svg) => {
 
 ## Design Philosophy
 
-This lib is heavily inspired by [OPENRNDR](https://openrndr.org/), which means it utilizes the builder pattern extensively. My first attempt at writing my own SVG "framework" attempted to be much more functional, and I found the scripts to be really verbose and hard to follow. I think for the purpose of making art, imperative builder patterns are really nice.
+1. **Imperative works better than declarative for art.** Though declarative/functional programming is awesome for production apps, imperative patterns work better for generative art. This is because a lot of sketches build up designs iteratively, and being able to easily modify the logic makes it easier to iterate on ideas and create art quickly. SalamiVG is heavily inspired by [OPENRNDR](https://openrndr.org/), and likewise utilizes the builder pattern extensively.
+2. **Type hints lead to better developer experience.** TypeScript is used for typechecking the library, and generating type declaration files for all classes and functions. This improves the developer experience by providing type hints as documentation. Note: although TypeScript is used for typechecking the lib, the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and it provides a lot of benefits such as reducing build tooling and speeding up test execution. In addition, shipping human-readable JS files means that it's much easier for a library user to modify the files locally, which can be a great way to lead to experimentation and PRs!
+3. **Creative coding should be fun.** Don't take yourself too seriously.
 
-TypeScript is used extensively for typechecking the lib, but the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and I now believe that it provides a lot of benefits. I didn't realize how much of my life I was losing to compilation times. That is time I could be spending looking at art! In addition, shipping human-readable JS files means that it's much easier for a library user to modify the files locally, which can be a great way to lead to experimentation and PRs! Full TypeScript definition files are still included in the packaged library code.
-
-## Development
+## Internal Development
 
 Install dependencies:
 
@@ -353,15 +353,15 @@ npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
 
-## Compatibility
+## NodeJS Compatibility
 
-I developed this with Node 20 but I'd bet money it works back to like Node 14 or so.
+SalamiVG was developed with Node 20 but it probably works back to Node 14 or so.
 
 This library has been tested against
 * Node 20.8.0
 * Node 18.19.0
 * Node 16.20.2
-* I tried to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on my M1 Mac and I didn't try to hard to fix it. Please open an issue if this is causing you problems.
+* Attempted to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on our M1 Mac. Please open an issue if this is causing you problems.
 
 ### Deno / Bun?
 
@@ -373,4 +373,4 @@ Please [see the FAQ](https://github.com/ericyd/salamivg/wiki/FAQ#do-you-support-
 
 SalamiVG ships ES Modules, and does not include CommonJS builds.
 
-Is this a problem? Feel free to open an issue if you need CommonJS. I think it would be trivial to set up rollup or similar to bundle into a CommonJS package and include it in the exports, I just haven't done it because I'm not sure it's necessary.
+Is this a problem? Feel free to open an issue if you need CommonJS. It would probably be trivial to set up Rollup or similar to bundle into a CommonJS package and include it in the exports, but it isn't clear if it is necessary for anyone.
