@@ -365,10 +365,12 @@ This library has been tested against
 
 ### Deno / Bun?
 
-Please open an issue if needed, although tbh I'd expect this to work fine with any JS runtime. The most modern JS feature this library uses is classes with private properties.
+TLDR: both runtimes work out of the box, with the exception of the `renderSvg()` function.
 
-The one exception is the `renderSvg` function which uses `node` internal libraries such as `node:fs` and `node:path`. Happy to add similar functions for Deno or Bun if there's demand.
+Please [see the FAQ](https://github.com/ericyd/salamivg/wiki/FAQ#do-you-support-deno-or-bun) for a more detailed answer and examples of using SalamiVG with Deno and Bun.
 
 ### ES Modules only
 
-Is this a problem? Feel free to open an issue if you need commonjs. I think it would be trivial to set up rollup or similar to bundle into a commonjs package and include it in the exports, I just haven't done it because probably nobody will ever install this library.
+SalamiVG ships ES Modules, and does not include CommonJS builds.
+
+Is this a problem? Feel free to open an issue if you need CommonJS. I think it would be trivial to set up rollup or similar to bundle into a CommonJS package and include it in the exports, I just haven't done it because I'm not sure it's necessary.
