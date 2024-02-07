@@ -4,16 +4,11 @@ A place to play with SVGs.
 
 SalamiVG is a creative coding framework for JavaScript with a single render target: SVG.
 
-<!-- TODO@v1 -->
-## Heads up
-
-This is in beta stage. I've been using it personally for a few weeks and it is pretty stable, but some things might change before v1.0
-
 ## Why?
 
 I love [OPENRNDR](https://openrndr.org/) and wanted to see if I could make a generative art framework that ran in an interpretted language. I've never been a JVM guy, and even though I like Kotlin, it sounded appealing to me to be able to write generative art in a language I used every day: JavaScript.
 
-Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" `¯\_(ツ)_/¯`. (There is a [more detailed answer to this question in the Wiki](https://github.com/ericyd/salamivg/wiki/FAQ#why-not-p5js).)
+Of course you may (reasonably) ask why I'm not just using p5.js, the dominant JavaScript framework for writing generative art. Well, I don't have a good answer to that. I suppose this is really "just for fun" `¯\_(ツ)_/¯`. (There is a [more detailed comparison with p5.js in the Wiki](https://github.com/ericyd/salamivg/wiki/FAQ#why-not-p5js).)
 
 ## Installation
 
@@ -27,10 +22,12 @@ If you use yarn and you can't automatically convert the above to the correct yar
 
 There is [a Gallery page in the Wiki](https://github.com/ericyd/salamivg/wiki/Gallery) with some example renders and links to the code used to create them.
 
-If you're the clone-n-run type, there are some additional examples in [the /sketch folder of this generative art repo](https://github.com/ericyd/generative-art/tree/57c17efb12df78fa5f4b5ab73adc6352a543cbbc/homegrown-svg/sketch). Assuming you have configured your `package.json` to declare `"type": "module"`, you can simply run as a normal Node script:
+If you're the clone-n-run type, you can use the examples from the [`/examples` directory](./examples/) in this repo:
 
 ```js
-node example.js
+git clone git@github.com:ericyd/salamivg
+cd salamivg
+node examples/oscillator-noise.js
 ```
 
 Here are some simple SVGs generated with SalamiVG
@@ -289,7 +286,7 @@ renderSvg(config, (svg) => {
         stroke: stroke.opacify(1 / (depth / 4 + 1)).toHex(),
       })
     }
-    // recurse if we're below maxDepth and "lady chance allows it"
+    // recurse if we're above maxDepth and "lady chance allows it"
     if (depth < maxDepth && (depth < 2 || random(0, 1, rng) < 0.75)) {
       const ab = Vector2.mix(a, b, 0.5)
       const ac = Vector2.mix(a, c, 0.5)
@@ -353,7 +350,7 @@ npm login --registry https://registry.npmjs.org --scope=@salamivg
 npm publish --access public
 ```
 
-## NodeJS Compatibility
+## NodeJS Version Compatibility
 
 SalamiVG was developed with Node 20 but it probably works back to Node 14 or so.
 
@@ -363,13 +360,13 @@ This library has been tested against
 * Node 16.20.2
 * Attempted to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on our M1 Mac. Please open an issue if this is causing you problems.
 
-### Deno / Bun?
+### Deno / Bun Support?
 
-TLDR: both runtimes work out of the box, with the exception of the `renderSvg()` function.
+Both Deno and Bun work out of the box, with the exception of the `renderSvg()` function.
 
 Please [see the FAQ](https://github.com/ericyd/salamivg/wiki/FAQ#do-you-support-deno-or-bun) for a more detailed answer and examples of using SalamiVG with Deno and Bun.
 
-### ES Modules only
+### ES Modules Only
 
 SalamiVG ships ES Modules, and does not include CommonJS builds.
 

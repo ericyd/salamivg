@@ -71,7 +71,7 @@ renderSvg(config, (svg) => {
         stroke: stroke.opacify(1 / (depth / 4 + 1)).toHex(),
       })
     }
-    // recurse if we're below maxDepth and "lady chance allows it"
+    // recurse if we're above maxDepth and "lady chance allows it"
     if (depth < maxDepth && (depth < 2 || random(0, 1, rng) < 0.75)) {
       const ab = Vector2.mix(a, b, 0.5)
       const ac = Vector2.mix(a, c, 0.5)
