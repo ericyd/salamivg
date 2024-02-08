@@ -322,9 +322,11 @@ renderSvg(config, (svg) => {
 
 ## Design Philosophy
 
-1. **Imperative works better than declarative for art.** Though declarative/functional programming is awesome for production apps, imperative patterns work better for generative art. This is because a lot of sketches build up designs iteratively, and being able to easily modify the logic makes it easier to iterate on ideas and create art quickly. SalamiVG is heavily inspired by [OPENRNDR](https://openrndr.org/), and likewise utilizes the builder pattern extensively.
-2. **Type hints lead to better developer experience.** TypeScript is used for typechecking the library, and generating type declaration files for all classes and functions. This improves the developer experience by providing type hints as documentation. Note: although TypeScript is used for typechecking the lib, the actual code is written in JavaScript with JSDocs. This was inspired by the SvelteKit team ([source 1](https://devclass.com/2023/05/11/typescript-is-not-worth-it-for-developing-libraries-says-svelte-author-as-team-switches-to-javascript-and-jsdoc/), [source 2](https://github.com/sveltejs/kit/discussions/4429)) and it provides a lot of benefits such as reducing build tooling and speeding up test execution. In addition, shipping human-readable JS files means that it's much easier for a library user to modify the files locally, which can be a great way to lead to experimentation and PRs!
-3. **Creative coding should be fun.** Don't take yourself too seriously.
+1. Inspired by the APIs of [OPENRNDR](https://openrndr.org/), expressed in idiomatic JavaScript.
+2. Local first
+3. Fully type-checked and thoroughly documented
+4. Small, fast, and focused
+3. Don't take yourself too seriously
 
 ## Internal Development
 
