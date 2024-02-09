@@ -56,8 +56,7 @@ renderSvg(config, (svg) => {
   // draw circle in middle of viewport
   svg.circle(
     circle({
-      x: svg.center.x,
-      y: svg.center.y,
+      center: svg.center,
       radius: hypot(svg.width, svg.height) * 0.04,
       'stroke-width': 1,
     }),
@@ -91,18 +90,15 @@ renderSvg(config, (svg) => {
 
       // the radius varies because the path is perturbated by a sine wave
       const radius = (angle) => baseRadius + Math.sin(angle * 6) * sineInfluence
-      p.moveTo(
-        vec2(Math.cos(0) * radius(0), Math.sin(0) * radius(0)).add(svg.center),
-      )
+      const start = Vector2.fromAngle(0).scale(radius(0)).add(svg.center)
+      p.moveTo(start)
 
       // move our way around a circle to draw a smooth path
       for (let angle = 0; angle <= Math.PI * 2; angle += 0.05) {
-        p.lineTo(
-          vec2(
-            Math.cos(angle) * radius(angle),
-            Math.sin(angle) * radius(angle),
-          ).add(svg.center),
-        )
+        const next = Vector2.fromAngle(angle)
+          .scale(radius(angle))
+          .add(svg.center)
+        p.lineTo(next)
       }
       p.close()
     })
