@@ -1,3 +1,8 @@
+import { LineSegment } from '../components/polyline'
+import { Path } from '../components/path'
+import { random, type Rng } from '../random'
+import { Vector2 } from '../vector2'
+
 /**
  * Based on the algorithm used here:
  * http://rectangleworld.com/blog/archives/462
@@ -10,30 +15,35 @@
  * That said, I could potentially implement a custom iterator if I wanted to use a linked list in the future.
  */
 
-import { LineSegment } from '../components/polyline'
-import { Path } from '../components/path'
-import { random } from '../random'
-import { Vector2 } from '../vector2'
-
 /**
- * @class FractalizedLine
- * @classdesc Represents a fractalized line based on a given set of points.
+ * Represents a fractalized line based on a given set of points.
  */
 export class FractalizedLine {
   /**
-   * @param {Vector2[]} points - The initial set of points.
-   * @param {import("../random.js").Rng} [rng] - The random number generator. Defaults to the default Random instance.
+   * The initial set of points.
    */
-  constructor(points, rng = Math.random) {
+  private points: Vector2[]
+
+  /**
+   * The random number generator.
+   */
+  private rng: Rng
+
+  /**
+   * @param {Vector2[]} points - The initial set of points.
+   * @param {Rng} [rng] - The random number generator. Defaults to the default Random instance.
+   */
+  constructor(points: Vector2[], rng: Rng = Math.random) {
     this.points = points
     this.rng = rng
   }
 
   /**
-   * @type {LineSegment[]} segments - The segments formed by connecting consecutive points.
+   * The segments formed by connecting consecutive points.
+   * @returns {LineSegment[]} - The array of LineSegments.
    */
-  get segments() {
-    const segments = []
+  get segments(): LineSegment[] {
+    const segments: LineSegment[] = []
     for (let i = 0; i < this.points.length - 1; i++) {
       segments.push(new LineSegment(this.points[i], this.points[i + 1]))
     }
@@ -41,20 +51,24 @@ export class FractalizedLine {
   }
 
   /**
-   * @param {boolean} closed
-   * @returns {Path}
+   * Creates a Path from the points.
+   * @param {boolean} closed - Whether to close the path.
+   * @returns {Path} - The created Path instance.
    */
-  path(closed = true) {
+  path(closed: boolean = true): Path {
     return Path.fromPoints(this.points, closed)
   }
 
   /**
    * Recursively subdivide the points using perpendicular offset.
    * @param {number} subdivisions - The number of times to subdivide.
-   * @param {number} [offsetPct=0.50] - The percentage of the offset.
+   * @param {number} [offsetPct=0.5] - The percentage of the offset.
    * @returns {FractalizedLine} - The updated FractalizedLine instance.
    */
-  perpendicularSubdivide(subdivisions, offsetPct = 0.5) {
+  perpendicularSubdivide(
+    subdivisions: number,
+    offsetPct: number = 0.5,
+  ): FractalizedLine {
     return this.subdivide(
       subdivisions,
       offsetPct,
@@ -71,12 +85,16 @@ export class FractalizedLine {
    * @returns {FractalizedLine} - The updated FractalizedLine instance.
    */
   subdivide(
-    subdivisions,
-    offsetPct = 0.5,
-    offsetFn = this.perpendicularOffset.bind(this),
-  ) {
+    subdivisions: number,
+    offsetPct: number = 0.5,
+    offsetFn: (
+      v1: Vector2,
+      v2: Vector2,
+      n: number,
+    ) => Vector2 = this.perpendicularOffset.bind(this),
+  ): FractalizedLine {
     for (let i = 0; i < subdivisions; i++) {
-      const newPoints = []
+      const newPoints: Vector2[] = []
 
       for (let j = 0; j < this.points.length - 1; j++) {
         const current = this.points[j]
@@ -99,7 +117,11 @@ export class FractalizedLine {
    * @param {number} offsetPct - The percentage of the offset.
    * @returns {Vector2} - The calculated offset point.
    */
-  perpendicularOffset(start, end, offsetPct) {
+  perpendicularOffset(
+    start: Vector2,
+    end: Vector2,
+    offsetPct: number,
+  ): Vector2 {
     const perpendicular =
       Math.atan2(end.y - start.y, end.x - start.x) - Math.PI / 2.0
     const maxDeviation = (start.subtract(end).length() / 2.0) * offsetPct

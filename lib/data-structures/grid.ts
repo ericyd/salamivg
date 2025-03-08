@@ -1,40 +1,69 @@
-/**
- * @typedef {object} GridAttributes
- * @property {number} [xMin=0] the minimum x value (inclusive), when used as an iterator
- * @property {number} [xMax=1] the maximum x value (exclusive), when used as an iterator
- * @property {number} [yMin=0] the minimum y value (inclusive), when used as an iterator
- * @property {number} [yMax=1] the maximum y value (exclusive), when used as an iterator
- * @property {number} [xStep=1] the step size in the x direction
- * @property {number} [yStep=1] the step size in the x direction
- * @property {number} [columnCount] the number of columnCount in the grid. This is more commonly defined when using the grid as a data store, but if `columnCount` is defined it will override `xMax` when used as an iterator.
- * @property {number} [rowCount] the number of rowCount in the grid. This is more commonly defined when using the grid as a data store, but if `rowCount` is defined it will override `yMax` when used as an iterator.
- * @property {'row major' | 'column major'} [order='row major'] of the grid. This is rarely necessary to define, but since the internal representation of the grid is a 1-D array, this defines the layout of the cells.
- * @property {*} [fill] the value to fill the grid with. This is only used when the grid is used as a data store.
- */
-
 import { error } from '../internal'
 import { Vector2, vec2 } from '../vector2'
 
-export class Grid {
-  /** @type {number} */
-  #xMin
-  /** @type {number} */
-  #xMax
-  /** @type {number} */
-  #yMin
-  /** @type {number} */
-  #yMax
-  /** @type {number} */
-  #xStep
-  /** @type {number} */
-  #yStep
-  /** @type {'row major' | 'column major'} */
-  #order
-  /** @type {number[]} */
-  #grid
+export type GridAttributes = {
   /**
-   * @param {GridAttributes} [attributes={}]
+   * the minimum x value (inclusive), when used as an iterator
+   * @default 0
    */
+  xMin?: number
+  /**
+   * the maximum x value (exclusive), when used as an iterator
+   * @default 1
+   */
+  xMax?: number
+  /**
+   * the minimum y value (inclusive), when used as an iterator
+   * @default 0
+   */
+  yMin?: number
+  /**
+   * the maximum y value (exclusive), when used as an iterator
+   * @default 1
+   */
+  yMax?: number
+  /**
+   * the step size in the x direction
+   * @default 1
+   */
+  xStep?: number
+  /**
+   * the step size in the x direction
+   * @default 1
+   */
+  yStep?: number
+  /**
+   * the number of columnCount in the grid. This is more commonly defined when using the grid as a data store, but if `columnCount` is defined it will override `xMax` when used as an iterator.
+   */
+  columnCount?: number
+  /**
+   * the number of rowCount in the grid. This is more commonly defined when using the grid as a data store, but if `rowCount` is defined it will override `yMax` when used as an iterator.
+   */
+  rowCount?: number
+  /**
+   * order of the grid. This is rarely necessary to define, but since the internal representation of the grid is a 1-D array, this defines the layout of the cells.
+   * @default 'row major'
+   */
+  order?: 'row major' | 'column major'
+  /**
+   * the value to fill the grid with. This is only used when the grid is used as a data store.
+   */
+  fill?: any
+}
+
+export class Grid<T = any> {
+  #xMin: number
+  #xMax: number
+  #yMin: number
+  #yMax: number
+  #xStep: number
+  #yStep: number
+  #order: 'row major' | 'column major'
+  #grid: T[]
+  columnCount: number
+  rowCount: number
+  length: number
+
   constructor({
     xMin = 0,
     xMax = 1,
@@ -46,7 +75,7 @@ export class Grid {
     columnCount,
     rowCount,
     fill,
-  } = {}) {
+  }: GridAttributes = {}) {
     this.#xMin = xMin
     this.#xMax = columnCount ? this.#xMin + columnCount : xMax
     this.#yMin = yMin
@@ -65,45 +94,29 @@ export class Grid {
     this.length = this.#grid.length
   }
 
-  get xMin() {
+  get xMin(): number {
     return this.#xMin
   }
-  get xMax() {
+  get xMax(): number {
     return this.#xMax
   }
-  get yMin() {
+  get yMin(): number {
     return this.#yMin
   }
-  get yMax() {
+  get yMax(): number {
     return this.#yMax
   }
-  get xStep() {
+  get xStep(): number {
     return this.#xStep
   }
-  get yStep() {
+  get yStep(): number {
     return this.#yStep
   }
-  get order() {
+  get order(): 'row major' | 'column major' {
     return this.#order
   }
 
-  /**
-   * @overload
-   * @param {Vector2} x
-   * @returns {Integer}
-   */
-  /**
-   * @overload
-   * @param {Integer} x
-   * @param {Integer} y
-   * @returns {Integer}
-   */
-  /**
-   * @param {Integer | Vector2} x
-   * @param {Integer} [y]
-   * @returns {Integer}
-   */
-  #index(x, y) {
+  #index(x: Vector2 | number, y?: number): number {
     const [i, j] =
       x instanceof Vector2
         ? [Math.round(x.x / this.#xStep), Math.round(x.y / this.#yStep)]
@@ -116,62 +129,17 @@ export class Grid {
     return this.rowCount * i + j
   }
 
-  /**
-   * @template T the datatype that has been set in the grid for this position
-   * @overload
-   * @param {Vector2} x
-   * @returns {T}
-   */
-  /**
-   * @template T the datatype that has been set in the grid for this position
-   * @overload
-   * @param {Integer} x
-   * @param {Integer} y
-   * @returns {T}
-   */
-  /**
-   * @template T the datatype that has been set in the grid for this position
-   * @param {Integer | Vector2} x
-   * @param {Integer} [y]
-   * @returns {T}
-   */
-  get(x, y) {
-    // @ts-expect-error TS can't handle overloads calling overloads
+  get(x: Vector2 | number, y?: number): T {
     return this.#grid[this.#index(x, y)]
   }
 
-  /**
-   * @template T the datatype to hold in this position
-   * @overload
-   * @param {Vector2} vec
-   * @param {T} value
-   * @returns {void}
-   */
-  /**
-   * @template T the datatype to hold in this position
-   * @overload
-   * @param {Integer} x
-   * @param {Integer} y
-   * @param {T} value
-   * @returns {void}
-   */
-  /**
-   * @param {[number, number, any] | [Vector2, any]} args
-   * @returns {void}
-   */
-  set(...args) {
-    // ugly (but concise) overloading 😐
+  set(...args: [Vector2, any] | [number, number, any]): void {
     const [x, y, value] =
       args[0] instanceof Vector2 ? [args[0].x, args[0].y, args[1]] : args
-    // @ts-expect-error TS can't handle overloads calling overloads
     this.#grid[this.#index(x, y)] = value
   }
 
-  /**
-   * @template T
-   * @returns {Generator<[Vector2, T, number], void>} each item is of type [position, value, index]
-   */
-  *[Symbol.iterator]() {
+  *[Symbol.iterator](): Generator<[Vector2, any, number], void> {
     if (this.#order === 'row major') {
       for (let y = this.#yMin; y < this.#yMax; y += this.#yStep) {
         for (let x = this.#xMin; x < this.#xMax; x += this.#xStep) {
@@ -188,10 +156,6 @@ export class Grid {
   }
 }
 
-/**
- * @param {GridAttributes} [attributes={}]
- * @returns {Grid}
- */
-export function grid(attributes = {}) {
+export function grid(attributes: GridAttributes = {}): Grid {
   return new Grid(attributes)
 }
