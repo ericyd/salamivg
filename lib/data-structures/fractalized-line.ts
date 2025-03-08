@@ -55,7 +55,7 @@ export class FractalizedLine {
    * @param {boolean} closed - Whether to close the path.
    * @returns {Path} - The created Path instance.
    */
-  path(closed: boolean = true): Path {
+  path(closed = true): Path {
     return Path.fromPoints(this.points, closed)
   }
 
@@ -67,7 +67,7 @@ export class FractalizedLine {
    */
   perpendicularSubdivide(
     subdivisions: number,
-    offsetPct: number = 0.5,
+    offsetPct = 0.5,
   ): FractalizedLine {
     return this.subdivide(
       subdivisions,
@@ -86,7 +86,7 @@ export class FractalizedLine {
    */
   subdivide(
     subdivisions: number,
-    offsetPct: number = 0.5,
+    offsetPct = 0.5,
     offsetFn: (
       v1: Vector2,
       v2: Vector2,

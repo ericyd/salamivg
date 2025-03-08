@@ -71,7 +71,7 @@ export class Oscillator {
     this.#compressor = new Compressor(options)
   }
 
-  frequency(x: number, y: number = 0): number {
+  frequency(x: number, y = 0): number {
     const modulated = this.#frequencyModulators.reduce(
       (sum, curr) => sum + curr.output(x, y),
       0,
@@ -79,7 +79,7 @@ export class Oscillator {
     return this.#frequency + modulated
   }
 
-  amplitude(x: number, y: number = 0): number {
+  amplitude(x: number, y = 0): number {
     const modulated = this.#amplitudeModulators.reduce(
       (sum, curr) => sum + curr.output(x, y),
       0,
@@ -91,7 +91,7 @@ export class Oscillator {
     return this.#amplitude * yModulation + modulated
   }
 
-  phase(x: number, y: number = 0): number {
+  phase(x: number, y = 0): number {
     const modulated = this.#phaseModulators.reduce(
       (sum, curr) => sum + curr.output(x, y),
       0,
@@ -118,7 +118,7 @@ export class Oscillator {
     return this.#compressor === null ? input : this.#compressor.compress(input)
   }
 
-  output(x: number, y: number = 0): number {
+  output(x: number, y = 0): number {
     return this.compress(
       this.#wave(x * this.frequency(x, y) + this.phase(x, y)) *
         this.amplitude(x, y),
