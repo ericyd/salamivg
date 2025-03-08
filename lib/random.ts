@@ -5,6 +5,8 @@
  * https://stackoverflow.com/a/47593316/3991555
  */
 
+import { ClosedInterval, Integer } from './types'
+
 export type Rng = () => number
 
 /**

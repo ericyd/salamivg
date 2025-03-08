@@ -1,11 +1,13 @@
 import { jitter, random } from './random'
 
 export class Vector2 {
+  x: number
+  y: number
   /**
    * @param {number} x coordinate
    * @param {number} [y] coordinate defaults to `x` if omitted.
    */
-  constructor(x, y) {
+  constructor(x: number, y?: number) {
     if (typeof x !== 'number') {
       throw new Error(
         `Vector2 constructor requires a number for x, got ${typeof x}`,
@@ -19,7 +21,7 @@ export class Vector2 {
    * @param {Vector2} other
    * @returns {Vector2}
    */
-  add(other) {
+  add(other: Vector2): Vector2 {
     return vec2(this.x + other.x, this.y + other.y)
   }
 
@@ -27,7 +29,7 @@ export class Vector2 {
    * @param {Vector2} other
    * @returns {Vector2}
    */
-  subtract(other) {
+  subtract(other: Vector2): Vector2 {
     return vec2(this.x - other.x, this.y - other.y)
   }
 
@@ -35,7 +37,7 @@ export class Vector2 {
    * @param {number} n
    * @returns {Vector2}
    */
-  divide(n) {
+  divide(n: number): Vector2 {
     return vec2(this.x / n, this.y / n)
   }
 
@@ -43,7 +45,7 @@ export class Vector2 {
    * @param {number} n
    * @returns {Vector2}
    */
-  multiply(n) {
+  multiply(n: number): Vector2 {
     return vec2(this.x * n, this.y * n)
   }
 
@@ -52,7 +54,7 @@ export class Vector2 {
    * @param {number} n
    * @returns {Vector2}
    */
-  scale(n) {
+  scale(n: number): Vector2 {
     return this.multiply(n)
   }
 
@@ -63,7 +65,7 @@ export class Vector2 {
    * @param {number} mix a mix percentage in range [0, 1] where 0 returns a and 1 returns b
    * @returns {Vector2}
    */
-  static mix(a, b, mix) {
+  static mix(a: Vector2, b: Vector2, mix: number): Vector2 {
     return a.multiply(1 - mix).add(b.multiply(mix))
   }
 
@@ -71,7 +73,7 @@ export class Vector2 {
    * @param {Vector2} other
    * @returns {number}
    */
-  distanceTo(other) {
+  distanceTo(other: Vector2): number {
     return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
   }
 
@@ -79,7 +81,7 @@ export class Vector2 {
    * The euclidean length of the vector
    * @returns {number}
    */
-  length() {
+  length(): number {
     return Math.sqrt(this.x ** 2 + this.y ** 2)
   }
 
@@ -87,7 +89,7 @@ export class Vector2 {
    * Dot product
    * @param {Vector2} other
    */
-  dot(other) {
+  dot(other: Vector2): number {
     return this.x * other.x + this.y * other.y
   }
 
@@ -95,7 +97,7 @@ export class Vector2 {
    * @param {Vector2} other
    * @returns {number}
    */
-  angleTo(other) {
+  angleTo(other: Vector2): number {
     return Math.atan2(other.y - this.y, other.x - this.x)
   }
 
@@ -104,7 +106,7 @@ export class Vector2 {
    * @param {Vector2} b
    * @returns {Vector2}
    */
-  static midpoint(a, b) {
+  static midpoint(a: Vector2, b: Vector2): Vector2 {
     return vec2((a.x + b.x) / 2, (a.y + b.y) / 2)
   }
 
@@ -117,7 +119,13 @@ export class Vector2 {
    * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
-  static random(xMin, xMax, yMin, yMax, rng) {
+  static random(
+    xMin: number,
+    xMax: number,
+    yMin: number,
+    yMax: number,
+    rng: import('./random').Rng,
+  ): Vector2 {
     return vec2(random(xMin, xMax, rng), random(yMin, yMax, rng))
   }
 
@@ -127,7 +135,10 @@ export class Vector2 {
    * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
-  static randomInCircle(circle, rng) {
+  static randomInCircle(
+    circle: import('./components/circle').Circle,
+    rng: import('./random').Rng,
+  ): Vector2 {
     const angle = random(0, Math.PI * 2, rng)
     const radius = random(0, circle.radius, rng)
     return circle.center.add(Vector2.fromAngle(angle).scale(radius))
@@ -138,7 +149,7 @@ export class Vector2 {
    * @param {Radians} angle
    * @returns {Vector2}
    */
-  static fromAngle(angle) {
+  static fromAngle(angle: number): Vector2 {
     return vec2(Math.cos(angle), Math.sin(angle))
   }
 
@@ -148,7 +159,7 @@ export class Vector2 {
    * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
-  jitter(amount, rng) {
+  jitter(amount: number, rng: import('./random').Rng): Vector2 {
     return vec2(jitter(amount, this.x, rng), jitter(amount, this.y, rng))
   }
 
@@ -157,11 +168,11 @@ export class Vector2 {
    * @param {Vector2} other
    * @returns {boolean}
    */
-  eq(other) {
+  eq(other: Vector2): boolean {
     return this.x === other.x && this.y === other.y
   }
 
-  toString() {
+  toString(): string {
     return `Vector2 { x: ${this.x}, y: ${this.y} }`
   }
 }
@@ -171,6 +182,6 @@ export class Vector2 {
  * @param {number} [y] defaults to `x` if omitted.
  * @returns Vector2
  */
-export function vec2(x, y) {
+export function vec2(x: number, y?: number): Vector2 {
   return new Vector2(x, y ?? x)
 }

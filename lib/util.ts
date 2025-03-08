@@ -4,13 +4,14 @@
  * @param {number} n length of array
  * @returns {number[]}
  */
-export function array(n) {
+export function array(n: number): number[] {
   try {
     return new Array(n).fill(0).map((_zero, i) => i)
   } catch (e) {
     const error = new Error(
-      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-      `Could not create an array with n: ${n}. Original error: ${e.message}`,
+      `Could not create an array with n: ${n}. Original error: ${
+        (e as Error).message
+      }`,
     )
     throw error
   }
@@ -22,13 +23,14 @@ export function array(n) {
  * @param {number} step
  * @returns {number[]}
  */
-export function range(min, max, step = 1) {
+export function range(min: number, max: number, step = 1): number[] {
   try {
     return new Array((max - min) / step).fill(0).map((_, i) => min + i * step)
   } catch (e) {
     const error = new Error(
-      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
+      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${
+        (e as Error).message
+      }`,
     )
     throw error
   }
@@ -40,15 +42,20 @@ export function range(min, max, step = 1) {
  * @param {number} step
  * @returns {[number, number][]}
  */
-export function rangeWithIndex(min, max, step = 1) {
+export function rangeWithIndex(
+  min: number,
+  max: number,
+  step = 1,
+): [number, number][] {
   try {
     return new Array((max - min) / step)
       .fill(0)
       .map((_, i) => [min + i * step, i])
   } catch (e) {
     const error = new Error(
-      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
+      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${
+        (e as Error).message
+      }`,
     )
     throw error
   }
@@ -59,7 +66,7 @@ export function rangeWithIndex(min, max, step = 1) {
  * @param {Degrees} degrees
  * @returns {Radians}
  */
-export function degToRad(degrees) {
+export function degToRad(degrees: number): number {
   return (degrees * Math.PI) / 180
 }
 
@@ -75,13 +82,13 @@ export function degToRad(degrees) {
  * @return {number} a value in the after range
  */
 export function map(
-  beforeLeft,
-  beforeRight,
-  afterLeft,
-  afterRight,
-  value,
-  shouldClamp = false,
-) {
+  beforeLeft: number,
+  beforeRight: number,
+  afterLeft: number,
+  afterRight: number,
+  value: number,
+  shouldClamp?: boolean,
+): number {
   const db = beforeRight - beforeLeft
   const da = afterRight - afterLeft
 
@@ -99,7 +106,8 @@ export function map(
  * @param {number} x
  * @returns number
  */
-export const clamp = (min, max, x) => Math.max(min, Math.min(max, x))
+export const clamp = (min: number, max: number, x: number): number =>
+  Math.max(min, Math.min(max, x))
 
 /**
  *
@@ -107,32 +115,25 @@ export const clamp = (min, max, x) => Math.max(min, Math.min(max, x))
  * @param {number} value
  * @returns {number}
  */
-export const quantize = (quantum, value) =>
+export const quantize = (quantum: number, value: number): number =>
   Math.round(value / quantum) * quantum
-
-/**
- * @template T
- * @callback PickByPredicate
- * @param {T} value
- * @param {string} key
- * @param {Record<string, T>} obj
- * @returns {boolean}
- */
 
 // maybe I should just import ramda? https://github.com/ramda/ramda/blob/96d601016b562e887e15efd894ec401672f73757/source/pickBy.js
 /**
  * Returns a partial copy of an object containing only the keys that satisfy
  * the supplied predicate.
  * @template T
- * @param {PickByPredicate<T>} test A predicate to determine whether or not a key
+ * @param {(value: T, key: string, obj: Record<string, T>): boolean} test A predicate to determine whether or not a key
  *        should be included on the output object.
  * @param {Record<string, T>} obj The object to copy from} test
  * @return {Record<string, T>} A new object with only properties that satisfy `pred`
  *         on it.
  */
-export function pickBy(test, obj) {
-  /** @type {Record<string, T>} */
-  const result = {}
+export function pickBy<T>(
+  test: (value: T, key: string, obj: Record<string, T>) => boolean,
+  obj: Record<string, T>,
+): Record<string, T> {
+  const result: Record<string, T> = {}
   for (const prop in obj) {
     if (test(obj[prop], prop, obj)) {
       result[prop] = obj[prop]

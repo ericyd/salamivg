@@ -7,31 +7,39 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { basename, extname, join } from 'node:path'
-import { Svg } from './components/index'
+import { Svg, SvgAttributes, SvgBuilder } from './components/index'
 
 const NOOP = () => {}
 
 /**
- * @typedef {object} RenderLoopOptions
- * @property {number} loopCount number of times the render loop will run. Each loop will write the SVG to a file and open it if `open` is true.
- * @property {boolean} openEveryFrame Opens the rendered SVG after every frame using the system `open` command
- * @property {boolean} logFilename Logs the filename to "console.log" after every frame
- * @property {string} [renderDirectory="screenshots"] The directory to write the rendered SVGs to
+ * RenderLoopOptions defines the options for the render loop.
  */
+export type RenderLoopOptions = {
+  /**
+   * Number of times the render loop will run. Each loop will write the SVG to a file and open it if `open` is true.
+   */
+  loopCount: number
+  /**
+   * Opens the rendered SVG after every frame using the system `open` command
+   */
+  openEveryFrame: boolean
+  /**
+   * Logs the filename to "console.log" after every frame
+   */
+  logFilename: boolean
+  /**
+   * The directory to write the rendered SVGs to, defaults to 'screenshots'
+   * @default: 'screenshots'
+   */
+  renderDirectory?: string
+}
 
-/**
- * @param {Date} [d=new Date()]
- * @returns {string}
- */
-export function timestamp(d = new Date()) {
+export function timestamp(d = new Date()): string {
   return d.toISOString().replace(/[^a-zA-Z0-9]/g, '-')
 }
 
 /**
- *
- * @param {import('./components/svg').SvgAttributes & RenderLoopOptions} config
- * @param {import('./components/svg').SvgBuilder} builder
- * @returns {string} the most recent rendered SVG
+ * @returns the most recent rendered SVG
  */
 export function renderSvg(
   {
@@ -40,9 +48,9 @@ export function renderSvg(
     logFilename = true,
     renderDirectory = 'screenshots',
     ...svgAttributes
-  },
-  builder,
-) {
+  }: SvgAttributes & RenderLoopOptions,
+  builder: SvgBuilder,
+): string {
   let loops = 0
   let rendered = ''
   while (loops < loopCount) {
@@ -73,6 +81,5 @@ export function renderSvg(
 /**
  * Turns the `render` function into a NOOP.
  * Useful if you want to explore multiple algorithms in the same sketch
- * @callback skip
  */
 renderSvg.skip = NOOP

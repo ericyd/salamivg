@@ -8,48 +8,66 @@ import { LinearGradient } from './linear-gradient'
 import { Defs } from './defs'
 import { Vector2, vec2 } from '../vector2'
 
-/**
- * @typedef {object} SvgAttributes
- * @property {number} [width=100]
- * @property {number} [height=100]
- * @property {number} [scale=1] Allows the resulting SVG to have larger dimensions, which still keeping the viewBox the same as the `width` and `height` attributes
- * @property {string} [viewBox] Defaults to `0 0 width height`
- * @property {string} [preserveAspectRatio] Defaults to `xMidYMid meet`
- */
+export type SvgAttributes = {
+  /**
+   * @default 100
+   */
+  width?: number
+  /**
+   * @default 100
+   */
+  height?: number
+  /**
+   * Allows the resulting SVG to have larger dimensions, which still keeping the viewBox the same as the `width` and `height` attributes
+   * @default 1
+   */
+  scale?: number
+  /**
+   * @default '0 0 width height'
+   */
+  viewBox?: string
+  /**
+   * @default 'xMidYMid meet'
+   */
+  preserveAspectRatio?: string
+}
 
 /**
- * @class Svg
- * @description The root of any SVG document.
+ * The root of any SVG document.
  * Although you can construct this class manually, it's much nicer to the the `svg` builder function,
  * or the `renderSvg` function if you're running this locally or on a server.
+ *
  * @example
  * import { svg, vec2 } from '@salamivg/core'
  *
  * const document = svg({ width: 100, height: 100, scale: 5 }, (doc) => {
- *   doc.fill = null
- *   doc.strokeWidth = 1
+ *   doc.fill = null;
+ *   doc.strokeWidth = 1;
  *   doc.path((p) => {
- *     p.fill = '#ab9342'
- *     p.stroke = '#000'
- *     p.strokeWidth = 2
- *     p.moveTo(vec2(0, 0))
- *     p.lineTo(vec2(doc.width, doc.height))
- *     p.lineTo(vec2(doc.width, 0))
- *     p.close()
- *   })
- * })
+ *     p.fill = '#ab9342';
+ *     p.stroke = '#000';
+ *     p.strokeWidth = 2;
+ *     p.moveTo(vec2(0, 0));
+ *     p.lineTo(vec2(doc.width, doc.height));
+ *     p.lineTo(vec2(doc.width, 0));
+ *     p.close();
+ *   });
+ * });
  *
- * console.log(document.render())
- * @extends Tag
+ * console.log(document.render());
  */
 export class Svg extends Tag {
-  /** @type {LinearGradient[]} */
-  #defs = []
+  #defs: LinearGradient[] = []
+  width: number
+  height: number
+  filenameMetadata: Record<string, string> | null
 
-  /**
-   * @param {SvgAttributes} [attributes={}]
-   */
-  constructor({ width = 100, height = 100, scale = 1, ...attributes } = {}) {
+  constructor({
+    width = 100,
+    height = 100,
+    scale = 1,
+    ...attributes
+  }: SvgAttributes = {}) {
     super('svg', {
       viewBox: attributes.viewBox ?? `0 0 ${width} ${height}`,
       preserveAspectRatio: attributes.preserveAspectRatio ?? 'xMidYMid meet',
@@ -61,153 +79,90 @@ export class Svg extends Tag {
     })
     this.width = width
     this.height = height
-    /** @type {Record<string, string | number> | null} */
     this.filenameMetadata = null
   }
 
-  /** @type {Vector2} */
-  get center() {
+  get center(): Vector2 {
     return vec2(this.width / 2, this.height / 2)
   }
 
-  /**
-   * @param {Path | ((path: Path) => void)} instanceOrBuilder
-   */
-  path(instanceOrBuilder) {
+  path(instanceOrBuilder: Path | ((path: Path) => void)): Tag {
     return instanceOrBuilder instanceof Path
       ? this.addChild(instanceOrBuilder)
       : this.addChild(path(instanceOrBuilder))
   }
 
-  /**
-   * @param {Path[]} ps
-   */
-  paths(ps) {
+  paths(ps: Path[]): void {
     for (const p of ps) {
       this.path(p)
     }
   }
 
-  /**
-   * @param {LineSegment} lineSegment
-   */
-  lineSegment(lineSegment) {
+  lineSegment(lineSegment: LineSegment): Tag {
     return this.addChild(lineSegment)
   }
 
-  /**
-   * @param {LineSegment[]} ls
-   */
-  lineSegments(ls) {
+  lineSegments(ls: LineSegment[]): void {
     for (const l of ls) {
       this.lineSegment(l)
     }
   }
 
-  /**
-   * @overload
-   * @param {Circle} instance
-   * @returns {Circle}
-   */
-  /**
-   * @overload
-   * @param {import('./circle').CircleAttributes} attributes
-   * @returns {Circle}
-   */
-  /**
-   * @overload
-   * @param {((circle: Circle) => void)} builder} builder
-   * @returns {Circle}
-   */
-  /**
-   * @param {Circle | import('./circle').CircleAttributes | ((circle: Circle) => void)} instanceOrBuilder
-   * @returns {Circle}
-   */
-  circle(instanceOrBuilder) {
-    // @ts-expect-error TS is complaining because the parent method returns a Tag, which isn't a Circle. What I mean to say is any subclass of Tag, not sure how to express that in JSDoc.
+  circle(instanceOrBuilder: Circle | ((circle: Circle) => void)): Tag {
     return instanceOrBuilder instanceof Circle
       ? this.addChild(instanceOrBuilder)
-      : // @ts-expect-error I can't figure out how to make TS compile with overloads calling other overloads
-        this.addChild(circle(instanceOrBuilder))
+      : this.addChild(circle(instanceOrBuilder))
   }
 
-  /**
-   * @param {Circle[]} cs
-   */
-  circles(cs) {
+  circles(cs: Circle[]): void {
     for (const c of cs) {
       this.circle(c)
     }
   }
 
-  /**
-   * @param {Rectangle | ((rect: Rectangle) => void)} instanceOrBuilder
-   */
-  rect(instanceOrBuilder) {
+  rect(instanceOrBuilder: Rectangle | ((rect: Rectangle) => void)): Tag {
     return instanceOrBuilder instanceof Rectangle
       ? this.addChild(instanceOrBuilder)
       : this.addChild(rect(instanceOrBuilder))
   }
 
-  /**
-   * @param {Rectangle[]} rs
-   */
-  rects(rs) {
+  rects(rs: Rectangle[]): void {
     for (const r of rs) {
       this.rect(r)
     }
   }
 
-  /**
-   * @param {Polygon | import('./polygon').PolygonAttributes} instanceOrBuilder
-   */
-  polygon(instanceOrBuilder) {
+  polygon(instanceOrBuilder: Polygon | ((polygon: Polygon) => void)): Tag {
     return instanceOrBuilder instanceof Polygon
       ? this.addChild(instanceOrBuilder)
       : this.addChild(new Polygon(instanceOrBuilder))
   }
 
-  /**
-   * @param {Array<Polygon | import('./polygon').PolygonAttributes>} ps
-   */
-  polygons(ps) {
+  polygons(ps: Array<Polygon | ((polygon: Polygon) => void)>): void {
     for (const p of ps) {
       this.polygon(p)
     }
   }
 
-  /**
-   * @param {Polyline | ((poly: Polyline) => void)} instanceOrBuilder
-   */
-  polyline(instanceOrBuilder) {
+  polyline(instanceOrBuilder: Polyline | ((polyline: Polyline) => void)): Tag {
     return instanceOrBuilder instanceof Polyline
       ? this.addChild(instanceOrBuilder)
       : this.addChild(polyline(instanceOrBuilder))
   }
 
-  /**
-   * @param {Polyline[]} ps
-   */
-  polylines(ps) {
+  polylines(ps: Polyline[]): void {
     for (const p of ps) {
       this.polyline(p)
     }
   }
 
-  /**
-   * Generates filename metadata when running in a render loop
-   * @returns {string}
-   */
-  formatFilenameMetadata() {
+  formatFilenameMetadata(): string {
     return Object.entries(this.filenameMetadata ?? {})
       .map(([key, value]) => `${key}-${value}`)
       .join('-')
   }
 
-  /**
-   * @param {import('./tag').SvgColor} color
-   */
-  setBackground(color) {
+  setBackground(color: SvgColor): void {
     const rect = new Rectangle({
       x: 0,
       y: 0,
@@ -219,13 +174,9 @@ export class Svg extends Tag {
     this.children.unshift(rect)
   }
 
-  /**
-   * @example
-   * const gradient = svg.defineLinearGradient({ colors: ['#444', '#678', '#8fe'] })
-   * svg.circle(circle({ x: 0, y: 0, radius: 10, fill: gradient }))
-   * @param {Omit<import('./linear-gradient').LinearGradientAttributes, 'id' | 'numericPrecision'>} props
-   */
-  defineLinearGradient(props) {
+  defineLinearGradient(
+    props: Omit<LinearGradientAttributes, 'id' | 'numericPrecision'>,
+  ): LinearGradient {
     const grad = new LinearGradient({
       ...props,
       numericPrecision: this.numericPrecision,
@@ -234,13 +185,7 @@ export class Svg extends Tag {
     return grad
   }
 
-  /**
-   * Checks if a point is within the viewBox.
-   * Logs a warning if viewBox is atypical.
-   * @param {Vector2} point
-   * @returns {boolean}
-   */
-  contains(point) {
+  contains(point: Vector2): boolean {
     if (
       typeof this.attributes.viewBox !== 'string' ||
       !this.attributes.viewBox.startsWith('0 0')
@@ -257,10 +202,7 @@ export class Svg extends Tag {
     )
   }
 
-  /**
-   * @returns {string}
-   */
-  render() {
+  render(): string {
     if (this.#defs.length > 0) {
       const defs = new Defs()
       for (const def of this.#defs) {
@@ -272,25 +214,15 @@ export class Svg extends Tag {
   }
 }
 
-/**
- * @callback SvgBuilder
- * @param {Svg} svg
- * @returns {void | SvgBuilderPostLoop}
- */
+export type SvgBuilder = (svg: Svg) => undefined | SvgBuilderPostLoop
 
-/**
- * @callback SvgBuilderPostLoop
- * @description A callback which will be run after ever render loop.
- * Useful to trigger side-effects like setting up new values for global variables such as seeds.
- * Similar to a "cleanup" function returned from React's useEffect hook.
- * @returns {void}
- */
+export type SvgBuilderPostLoop = () => void
 
 /**
  * @param {SvgAttributes} attributes
  * @param {SvgBuilder} builder
  */
-export function svg(attributes, builder) {
+export function svg(attributes: SvgAttributes, builder: SvgBuilder): Svg {
   const s = new Svg(attributes)
   builder(s)
   return s
