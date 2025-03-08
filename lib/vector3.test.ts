@@ -14,8 +14,8 @@ describe('Vector3', () => {
     })
 
     it('should throw error if x is not a number', () => {
-      // @ts-expect-error test data
       assert.throws(
+        // @ts-expect-error test data
         () => new Vector3('a'),
         /Vector3 constructor requires a number for x, got string/,
       )

@@ -85,13 +85,12 @@ export function map(
   const db = beforeRight - beforeLeft
   const da = afterRight - afterLeft
 
-  if (db != 0.0) {
+  if (db !== 0.0) {
     const n = (value - beforeLeft) / db
     return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da
-  } else {
-    const n = value - beforeLeft
-    return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da
   }
+  const n = value - beforeLeft
+  return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da
 }
 
 /**

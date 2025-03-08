@@ -72,9 +72,7 @@ export class Vector2 {
    * @returns {number}
    */
   distanceTo(other) {
-    return Math.sqrt(
-      Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2),
-    )
+    return Math.sqrt((other.x - this.x) ** 2 + (other.y - this.y) ** 2)
   }
 
   /**
@@ -82,7 +80,7 @@ export class Vector2 {
    * @returns {number}
    */
   length() {
-    return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
+    return Math.sqrt(this.x ** 2 + this.y ** 2)
   }
 
   /**

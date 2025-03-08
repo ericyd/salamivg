@@ -56,9 +56,9 @@ export class Vector3 {
 
   distanceTo(other: Vector3): number {
     return Math.sqrt(
-      Math.pow(other.x - this.x, 2) +
-        Math.pow(other.y - this.y, 2) +
-        Math.pow(other.z - this.z, 2),
+      (other.x - this.x) ** 2 +
+        (other.y - this.y) ** 2 +
+        (other.z - this.z) ** 2,
     )
   }
 
@@ -66,9 +66,7 @@ export class Vector3 {
    * The euclidean length of the vector
    */
   length(): number {
-    return Math.sqrt(
-      Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2),
-    )
+    return Math.sqrt(this.x ** 2 + this.y ** 2 + this.z ** 2)
   }
 
   /**

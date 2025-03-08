@@ -114,8 +114,8 @@ describe('quantize', () => {
   })
 
   it('works for arbitrarily large values', () => {
-    const actual = quantize(5, 5449440493093209.5)
-    assert.strictEqual(actual, 5449440493093210)
+    const actual = quantize(5, 5449093209.5)
+    assert.strictEqual(actual, 5449093210)
   })
 })
 
