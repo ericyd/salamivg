@@ -358,11 +358,17 @@ This library has been tested against
 * Node 16.20.2
 * Attempted to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on our M1 Mac. Please open an issue if this is causing you problems.
 
-### Deno / Bun Support?
+### Deno / Bun Support? Yes! 🎉
 
-Both Deno and Bun work out of the box, with the exception of the `renderSvg()` function.
+As of Deno v2.2.3 and Bun v1.2.4, SalamiVG is fully compatible with both Deno and Bun. You can check this claim yourself with the following commands, assuming you have `git` and `asdf` installed:
 
-Please [see the FAQ](https://github.com/ericyd/salamivg/wiki/FAQ#do-you-support-deno-or-bun) for a more detailed answer and examples of using SalamiVG with Deno and Bun.
+```shell
+git clone git@github.com:ericyd/salamivg
+cd salamivg
+asdf install
+deno examples/concentric-circles.js
+bun examples/concentric-circles.js
+```
 
 ### ES Modules Only
 
