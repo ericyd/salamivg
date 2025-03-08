@@ -1,4 +1,5 @@
 import { jitter, random, Rng } from './random'
+import { ClosedInterval } from './types'
 
 export class Vector3 {
   x: number
