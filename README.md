@@ -353,6 +353,7 @@ npm publish --access public
 SalamiVG was developed with Node 20 but it probably works back to Node 14 or so.
 
 This library has been tested against
+* Node 23.9.0
 * Node 20.8.0
 * Node 18.19.0
 * Node 16.20.2
