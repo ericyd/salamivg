@@ -6,42 +6,50 @@
  */
 export function array(n) {
   try {
-    return new Array(n).fill(0).map((_zero, i) => i);
+    return new Array(n).fill(0).map((_zero, i) => i)
   } catch (e) {
     // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-    const error = new Error(`Could not create an array with n: ${n}. Original error: ${e.message}`)
+    const error = new Error(
+      `Could not create an array with n: ${n}. Original error: ${e.message}`,
+    )
     throw error
   }
 }
 
 /**
- * @param {number} min 
- * @param {number} max 
- * @param {number} step 
+ * @param {number} min
+ * @param {number} max
+ * @param {number} step
  * @returns {number[]}
  */
 export function range(min, max, step = 1) {
   try {
-    return new Array((max - min) / step).fill(0).map((_, i) => min + i * step);
+    return new Array((max - min) / step).fill(0).map((_, i) => min + i * step)
   } catch (e) {
     // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-    const error = new Error(`Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`)
+    const error = new Error(
+      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
+    )
     throw error
   }
 }
 
 /**
- * @param {number} min 
- * @param {number} max 
- * @param {number} step 
+ * @param {number} min
+ * @param {number} max
+ * @param {number} step
  * @returns {[number, number][]}
  */
 export function rangeWithIndex(min, max, step = 1) {
   try {
-    return new Array((max - min) / step).fill(0).map((_, i) => ([min + i * step, i]));
+    return new Array((max - min) / step)
+      .fill(0)
+      .map((_, i) => [min + i * step, i])
   } catch (e) {
     // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
-    const error = new Error(`Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`)
+    const error = new Error(
+      `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
+    )
     throw error
   }
 }
@@ -52,7 +60,7 @@ export function rangeWithIndex(min, max, step = 1) {
  * @returns {Radians}
  */
 export function degToRad(degrees) {
-  return (degrees * Math.PI) / 180;
+  return (degrees * Math.PI) / 180
 }
 
 /**
@@ -72,17 +80,17 @@ export function map(
   afterLeft,
   afterRight,
   value,
-  shouldClamp = false
+  shouldClamp = false,
 ) {
-  const db = beforeRight - beforeLeft;
-  const da = afterRight - afterLeft;
+  const db = beforeRight - beforeLeft
+  const da = afterRight - afterLeft
 
   if (db != 0.0) {
-    const n = (value - beforeLeft) / db;
-    return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da;
+    const n = (value - beforeLeft) / db
+    return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da
   } else {
-    const n = value - beforeLeft;
-    return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da;
+    const n = value - beforeLeft
+    return afterLeft + (shouldClamp ? clamp(0.0, 1.0, n) : n) * da
   }
 }
 
@@ -92,7 +100,7 @@ export function map(
  * @param {number} x
  * @returns number
  */
-export const clamp = (min, max, x) => Math.max(min, Math.min(max, x));
+export const clamp = (min, max, x) => Math.max(min, Math.min(max, x))
 
 /**
  *
@@ -101,7 +109,7 @@ export const clamp = (min, max, x) => Math.max(min, Math.min(max, x));
  * @returns {number}
  */
 export const quantize = (quantum, value) =>
-  Math.round(value / quantum) * quantum;
+  Math.round(value / quantum) * quantum
 
 /**
  * @template T
@@ -119,17 +127,17 @@ export const quantize = (quantum, value) =>
  * @template T
  * @param {PickByPredicate<T>} test A predicate to determine whether or not a key
  *        should be included on the output object.
- * @param {Record<string, T>} obj The object to copy from} test  
+ * @param {Record<string, T>} obj The object to copy from} test
  * @return {Record<string, T>} A new object with only properties that satisfy `pred`
  *         on it.
  */
 export function pickBy(test, obj) {
   /** @type {Record<string, T>} */
-  const result = {};
+  const result = {}
   for (const prop in obj) {
     if (test(obj[prop], prop, obj)) {
-      result[prop] = obj[prop];
+      result[prop] = obj[prop]
     }
   }
-  return result;
-};
+  return result
+}

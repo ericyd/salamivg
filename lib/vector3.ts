@@ -11,7 +11,9 @@ export class Vector3 {
    */
   constructor(x: number, y?: number, z?: number) {
     if (typeof x !== 'number') {
-      throw new Error(`Vector3 constructor requires a number for x, got ${typeof x}`)
+      throw new Error(
+        `Vector3 constructor requires a number for x, got ${typeof x}`,
+      )
     }
     this.x = x
     this.y = y ?? x
@@ -43,8 +45,8 @@ export class Vector3 {
 
   /**
    * Returns a Vector3 that is a mix
-   * @param {Vector3} a 
-   * @param {Vector3} b 
+   * @param {Vector3} a
+   * @param {Vector3} b
    * @param {number} mix when 0, returns a; when 1, returns b
    * @returns {Vector3}
    */
@@ -53,14 +55,20 @@ export class Vector3 {
   }
 
   distanceTo(other: Vector3): number {
-    return Math.sqrt(Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2) + Math.pow(other.z - this.z, 2))
+    return Math.sqrt(
+      Math.pow(other.x - this.x, 2) +
+        Math.pow(other.y - this.y, 2) +
+        Math.pow(other.z - this.z, 2),
+    )
   }
 
   /**
    * The euclidean length of the vector
    */
   length(): number {
-    return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2))
+    return Math.sqrt(
+      Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2),
+    )
   }
 
   /**
@@ -77,8 +85,20 @@ export class Vector3 {
   /**
    * Returns a random point in the given bounds.
    */
-  static random(xMin: number, xMax: number, yMin: number, yMax: number, zMin: number, zMax: number, rng: Rng): Vector3 {
-    return vec3(random(xMin, xMax, rng), random(yMin, yMax, rng), random(zMin, zMax, rng));
+  static random(
+    xMin: number,
+    xMax: number,
+    yMin: number,
+    yMax: number,
+    zMin: number,
+    zMax: number,
+    rng: Rng,
+  ): Vector3 {
+    return vec3(
+      random(xMin, xMax, rng),
+      random(yMin, yMax, rng),
+      random(zMin, zMax, rng),
+    )
   }
 
   /**
@@ -105,9 +125,9 @@ export class Vector3 {
 }
 
 /**
- * @param {number} x 
- * @param {number} [y] defaults to `x` if omitted. 
- * @param {number} [z] defaults to `y` if omitted. 
+ * @param {number} x
+ * @param {number} [y] defaults to `x` if omitted.
+ * @param {number} [z] defaults to `y` if omitted.
  */
 export function vec3(x: number, y?: number, z?: number): Vector3 {
   return new Vector3(x, y ?? x, z ?? y ?? x)

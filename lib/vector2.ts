@@ -7,14 +7,16 @@ export class Vector2 {
    */
   constructor(x, y) {
     if (typeof x !== 'number') {
-      throw new Error(`Vector2 constructor requires a number for x, got ${typeof x}`)
+      throw new Error(
+        `Vector2 constructor requires a number for x, got ${typeof x}`,
+      )
     }
     this.x = x
     this.y = y ?? x
   }
 
   /**
-   * @param {Vector2} other 
+   * @param {Vector2} other
    * @returns {Vector2}
    */
   add(other) {
@@ -22,7 +24,7 @@ export class Vector2 {
   }
 
   /**
-   * @param {Vector2} other 
+   * @param {Vector2} other
    * @returns {Vector2}
    */
   subtract(other) {
@@ -56,8 +58,8 @@ export class Vector2 {
 
   /**
    * Returns a Vector2 that is a mix
-   * @param {Vector2} a 
-   * @param {Vector2} b 
+   * @param {Vector2} a
+   * @param {Vector2} b
    * @param {number} mix a mix percentage in range [0, 1] where 0 returns a and 1 returns b
    * @returns {Vector2}
    */
@@ -66,11 +68,13 @@ export class Vector2 {
   }
 
   /**
-   * @param {Vector2} other 
+   * @param {Vector2} other
    * @returns {number}
    */
   distanceTo(other) {
-    return Math.sqrt(Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2))
+    return Math.sqrt(
+      Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2),
+    )
   }
 
   /**
@@ -83,14 +87,14 @@ export class Vector2 {
 
   /**
    * Dot product
-   * @param {Vector2} other 
+   * @param {Vector2} other
    */
   dot(other) {
     return this.x * other.x + this.y * other.y
   }
 
   /**
-   * @param {Vector2} other 
+   * @param {Vector2} other
    * @returns {number}
    */
   angleTo(other) {
@@ -99,7 +103,7 @@ export class Vector2 {
 
   /**
    * @param {Vector2} a
-   * @param {Vector2} b 
+   * @param {Vector2} b
    * @returns {Vector2}
    */
   static midpoint(a, b) {
@@ -116,13 +120,13 @@ export class Vector2 {
    * @returns {Vector2}
    */
   static random(xMin, xMax, yMin, yMax, rng) {
-    return vec2(random(xMin, xMax, rng), random(yMin, yMax, rng));
+    return vec2(random(xMin, xMax, rng), random(yMin, yMax, rng))
   }
 
   /**
    * Returns a random point within the given circle.
-   * @param {import('./components/circle.js').Circle} circle 
-   * @param {import('./random.js').Rng} rng 
+   * @param {import('./components/circle.js').Circle} circle
+   * @param {import('./random.js').Rng} rng
    * @returns {Vector2}
    */
   static randomInCircle(circle, rng) {
@@ -133,7 +137,7 @@ export class Vector2 {
 
   /**
    * Constructs a Vector2 instance from the given angle, in Radians.
-   * @param {Radians} angle 
+   * @param {Radians} angle
    * @returns {Vector2}
    */
   static fromAngle(angle) {
@@ -142,20 +146,17 @@ export class Vector2 {
 
   /**
    * Returns a new Vector2, randomly offset by a maximum of `amount`
-   * @param {number} amount 
-   * @param {import('./random.js').Rng} rng 
+   * @param {number} amount
+   * @param {import('./random.js').Rng} rng
    * @returns {Vector2}
    */
   jitter(amount, rng) {
-    return vec2(
-      jitter(amount, this.x, rng),
-      jitter(amount, this.y, rng)
-    )
+    return vec2(jitter(amount, this.x, rng), jitter(amount, this.y, rng))
   }
 
   /**
    * Value equality check
-   * @param {Vector2} other 
+   * @param {Vector2} other
    * @returns {boolean}
    */
   eq(other) {
@@ -168,8 +169,8 @@ export class Vector2 {
 }
 
 /**
- * @param {number} x 
- * @param {number} [y] defaults to `x` if omitted. 
+ * @param {number} x
+ * @param {number} [y] defaults to `x` if omitted.
  * @returns Vector2
  */
 export function vec2(x, y) {

@@ -2,7 +2,7 @@
 
 /**
  * @template T
- * @param {string} message 
+ * @param {string} message
  * @param {T} defaultValue
  * @returns {T}
  */
@@ -13,7 +13,7 @@ export function warnWithDefault(message, defaultValue) {
 
 /**
  * more useful than an IIFE
- * @param {string} message 
+ * @param {string} message
  * @returns {never}
  */
 export function error(message) {

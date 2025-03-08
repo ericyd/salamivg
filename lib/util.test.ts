@@ -2,13 +2,14 @@ import { describe, it } from 'node:test'
 import assert from 'node:assert'
 import {
   array,
-range,
-rangeWithIndex,
-degToRad,
-map,
-clamp,
-quantize,
-pickBy } from './util.js'
+  range,
+  rangeWithIndex,
+  degToRad,
+  map,
+  clamp,
+  quantize,
+  pickBy,
+} from './util.js'
 
 describe('array', () => {
   it('returns an array of size n filled with the index', () => {
@@ -32,7 +33,12 @@ describe('range', () => {
 describe('rangeWithIndex', () => {
   it('returns an array in range [min, max) with index attached', () => {
     const actual = rangeWithIndex(2, 6)
-    assert.deepStrictEqual(actual, [[2, 0], [3, 1], [4, 2], [5, 3]])
+    assert.deepStrictEqual(actual, [
+      [2, 0],
+      [3, 1],
+      [4, 2],
+      [5, 3],
+    ])
   })
 
   // probably could be more graceful about this...
@@ -45,7 +51,7 @@ describe('degToRad', () => {
   const tests = [
     [90, Math.PI / 2],
     [180, Math.PI],
-    [270, Math.PI * 3 / 2],
+    [270, (Math.PI * 3) / 2],
     [360, Math.PI * 2],
   ]
   for (const [degrees, radians] of tests) {

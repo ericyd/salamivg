@@ -1,7 +1,6 @@
-import assert from "node:assert"
-import { describe, it } from "node:test"
+import assert from 'node:assert'
+import { describe, it } from 'node:test'
 import { randomFromObject, randomFromArray } from './random.js'
-
 
 describe('randomFromObject', () => {
   it('returns a value from the object', () => {
@@ -13,7 +12,7 @@ describe('randomFromObject', () => {
 
 describe('randomFromArray', () => {
   it('returns a value from the object', () => {
-    const arr = [1,2,3]
+    const arr = [1, 2, 3]
     const rng = () => 0.5
     assert.strictEqual(randomFromArray(arr, rng), 2)
   })

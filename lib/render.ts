@@ -1,6 +1,6 @@
 /**
  * Helper functions for running this framework locally as an art platform.
- * 
+ *
  * This file is exported separately from the rest of the lib to isolate Node.js dependencies.
  */
 
@@ -20,7 +20,7 @@ const NOOP = () => {}
  */
 
 /**
- * @param {Date} [d=new Date()] 
+ * @param {Date} [d=new Date()]
  * @returns {string}
  */
 export function timestamp(d = new Date()) {
@@ -28,12 +28,21 @@ export function timestamp(d = new Date()) {
 }
 
 /**
- * 
- * @param {import('./components/svg.js').SvgAttributes & RenderLoopOptions} config 
- * @param {import('./components/svg.js').SvgBuilder} builder 
+ *
+ * @param {import('./components/svg.js').SvgAttributes & RenderLoopOptions} config
+ * @param {import('./components/svg.js').SvgBuilder} builder
  * @returns {string} the most recent rendered SVG
  */
-export function renderSvg({ loopCount = 1, openEveryFrame = true, logFilename = true, renderDirectory = 'screenshots', ...svgAttributes}, builder) {
+export function renderSvg(
+  {
+    loopCount = 1,
+    openEveryFrame = true,
+    logFilename = true,
+    renderDirectory = 'screenshots',
+    ...svgAttributes
+  },
+  builder,
+) {
   let loops = 0
   let rendered = ''
   while (loops < loopCount) {
@@ -42,11 +51,15 @@ export function renderSvg({ loopCount = 1, openEveryFrame = true, logFilename = 
     const sketchFilename = basename(process.argv[1], extname(process.argv[1]))
     mkdirSync(join(renderDirectory, sketchFilename), { recursive: true })
     const postLoop = builder(svg) ?? NOOP
-    const filename = join(renderDirectory, sketchFilename, `${timestamp()}-${svg.formatFilenameMetadata()}.svg`)
+    const filename = join(
+      renderDirectory,
+      sketchFilename,
+      `${timestamp()}-${svg.formatFilenameMetadata()}.svg`,
+    )
     rendered = svg.render()
     writeFileSync(filename, rendered)
     if (openEveryFrame) {
-      const command = process.platform === "win32" ? 'start' : 'open'
+      const command = process.platform === 'win32' ? 'start' : 'open'
       execSync(`${command} "${filename}"`)
     }
     if (logFilename) {

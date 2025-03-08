@@ -1,4 +1,4 @@
-import { Vector2 } from "./vector2.js";
+import { Vector2 } from './vector2.js'
 
 // some helpers to avoid the `Math.` namespace everywhere
 export const cos = Math.cos
@@ -8,19 +8,19 @@ export const atan2 = Math.atan2
 
 /**
  * Hypotenuse of a right triangle
- * @param {number} x 
- * @param {number} y 
+ * @param {number} x
+ * @param {number} y
  * @returns number
  */
 export function hypot(x, y) {
-  return Math.sqrt(x * x + y * y);
+  return Math.sqrt(x * x + y * y)
 }
 
 /**
  * Returns if a number is in a range
- * @param {number} min 
- * @param {number} max 
- * @param {number} value 
+ * @param {number} min
+ * @param {number} max
+ * @param {number} value
  * @returns {boolean}
  */
 export function isWithin(min, max, value) {
@@ -29,13 +29,13 @@ export function isWithin(min, max, value) {
 
 /**
  * Returns if a number is in a range [target-error, target+error]
- * @param {number} target 
- * @param {number} error 
- * @param {number} value 
+ * @param {number} target
+ * @param {number} error
+ * @param {number} value
  * @returns {boolean}
  */
 export function isWithinError(target, error, value) {
-  return value > (target - error) && value < (target + error)
+  return value > target - error && value < target + error
 }
 
 /**
@@ -43,8 +43,8 @@ export function isWithinError(target, error, value) {
  * The result will always assume traveling from `angle1` to `angle2`;
  * that is, if angle1 is anti-clockwise of angle2, the result will be positive (traveling clockwise to reach angle2),
  * and if angle1 is clockwise of angle2, the result will be negative (traveling anti-clockwise to reach angle2).
- * @param {Radians} angle1 
- * @param {Radians} angle2 
+ * @param {Radians} angle1
+ * @param {Radians} angle2
  * @returns {Radians}
  */
 export function smallestAngularDifference(angle1, angle2) {
@@ -65,13 +65,13 @@ export function smallestAngularDifference(angle1, angle2) {
  * Three vertices define an angle.
  * Param `point2` is the vertex.
  * Params `point1` and `point3` are the two end points
- * 
+ *
  * Two formula for the same thing
  * cos-1 ( (a · b) / (|a| |b|) )
  * sin-1 ( |a × b| / (|a| |b|) )
- * @param {Vector2} point1 
- * @param {Vector2} point2 
- * @param {Vector2} point3 
+ * @param {Vector2} point1
+ * @param {Vector2} point2
+ * @param {Vector2} point3
  */
 export function angleOfVertex(point1, point2, point3) {
   const a = point1.subtract(point2)
@@ -81,8 +81,8 @@ export function angleOfVertex(point1, point2, point3) {
 }
 
 /**
- * @param {number} number1 
- * @param {number} number2 
+ * @param {number} number1
+ * @param {number} number2
  * @returns {boolean}
  */
 export function haveSameSign(number1, number2) {
