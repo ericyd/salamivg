@@ -1,14 +1,27 @@
-/**
- * @typedef {object} CompressorOptions
- * @property {number} W the knee. Should be proportionate to the signal being compressed, and greater than 0.
- * @property {number} T the threshold. Should be proportionate to the signal being compressed, and greater than 0.
- * @property {number} R the compression ratio. Should be in range [1, Infinity]
- */
+import { ClosedInterval } from '../types'
+
+export type CompressorOptions = {
+  /**
+   * the knee. Should be proportionate to the signal being compressed, and greater than 0.
+   */
+  W: number
+  /**
+   * the threshold. Should be proportionate to the signal being compressed, and greater than 0.
+   */
+  T: number
+  /**
+   * the compression ratio. Should be in range [1, Infinity]
+   */
+  R: ClosedInterval<1, typeof Infinity>
+}
 
 // based on https://dsp.stackexchange.com/questions/73619/how-to-derive-equation-for-second-order-interpolation-of-soft-knee-cutoff-in-a-c
 export class Compressor {
-  /** @param {CompressorOptions} options */
-  constructor({ W, T, R }) {
+  W: number
+  T: number
+  R: ClosedInterval<1, typeof Infinity>
+
+  constructor({ W, T, R }: CompressorOptions) {
     this.W = W
     this.T = T
     if (this.T < 0) {
@@ -21,10 +34,8 @@ export class Compressor {
   /**
    * This should be the only public function,
    * but while developing I need to have the other functions available for testing.
-   * @param {number} input
-   * @returns {number}
    */
-  compress(input) {
+  compress(input: number): number {
     if (this.belowKnee(input)) {
       return input
     }
@@ -34,28 +45,17 @@ export class Compressor {
     return this.compressAboveKnee(input)
   }
 
-  /**
-   * @param {number} input
-   * @returns {boolean}
-   */
-  belowKnee(input) {
+  belowKnee(input: number): boolean {
     // original formula
     // return 2 * (input - this.T) < -this.W
     return Math.abs(input) < this.T && 2 * (Math.abs(input) - this.T) < -this.W
   }
-  /**
-   * @param {number} input
-   * @returns {boolean}
-   */
-  insideKnee(input) {
+
+  insideKnee(input: number): boolean {
     return 2 * Math.abs(Math.abs(input) - this.T) <= this.W
   }
 
-  /**
-   * @param {number} input
-   * @returns {number}
-   */
-  compressInsideKnee(input) {
+  compressInsideKnee(input: number): number {
     const sign = input < 0 ? -1 : 1
     return (
       sign *
@@ -67,19 +67,16 @@ export class Compressor {
 
   /**
    * Above the knee, compression is same as "hard knee" compression formula
-   * @param {number} input
-   * @returns {number}
    */
-  compressAboveKnee(input) {
+  compressAboveKnee(input: number): number {
     const sign = input < 0 ? -1 : 1
     return sign * (this.T + (Math.abs(input) - this.T) / this.R)
   }
 
   /**
    * Returns current compressor options.
-   * @returns {{ W: number, T: number, R: number }}
    */
-  options() {
+  options(): CompressorOptions {
     return { W: this.W, T: this.T, R: this.R }
   }
 }

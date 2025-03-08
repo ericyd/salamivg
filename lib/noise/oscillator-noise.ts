@@ -1,25 +1,25 @@
 import { PI } from '../constants'
 import { createRng, random, randomInt } from '../random'
+import { ClosedInterval } from '../types'
 import { Vector2 } from '../vector2'
 import { Oscillator } from './oscillator'
 
 /**
- * @callback OscillatorNoiseFn
- * @param {number} x
- * @param {number} [y=0]
- * @returns {number} ideally in range [-1, 1]
+ * When `y` is omitted, it defaults to `x`
  */
+export type OscillatorNoiseFn = (x: number, y?: number) => ClosedInterval<-1, 1>
 
 /**
- * Creates a noise function based on oscillators
- * @param {string | number} seed
- * @param {number} [xyScale=1]
- *  When < 1, causes noise to oscillate over larger distances in the xy plane.
- *  When > 1, causes noise to oscillate over smaller distances in the xy plane.
- * @param {number} [outputScale=1] Scales the output value
- * @returns {OscillatorNoiseFn}
+ * Creates a noise function based on oscillators.
+ * @param {string | number} seed - The seed for the random number generator.
+ * @param {number} [xyScale=1] - Scales the x and y coordinates. When < 1, causes noise to oscillate over larger distances in the xy plane. When > 1, causes noise to oscillate over smaller distances in the xy plane.
+ * @param {number} [outputScale=1] - Scales the output value.
  */
-export function createOscNoise(seed, xyScale = 1, outputScale = 1) {
+export function createOscNoise(
+  seed: string | number,
+  xyScale = 1,
+  outputScale = 1,
+): OscillatorNoiseFn {
   const rng = createRng(seed)
   const osc = new Oscillator({
     amplitude: 1,
@@ -52,31 +52,28 @@ export function createOscNoise(seed, xyScale = 1, outputScale = 1) {
     osc.modulatePhase(modulator)
   }
 
-  return (x, y = 0) => osc.output(x * xyScale, y * xyScale) * outputScale
+  return (x: number, y = 0): number =>
+    osc.output(x * xyScale, y * xyScale) * outputScale
 }
 
 /**
- * @callback OscillatorCurlFn
- * @param {number} x
- * @param {number} [y=0]
- * @returns {Vector2}
+ * When `y` is omitted, it defaults to `x`
+ * @returns A vector representing the curl of the noise field at the given point.
  */
+export type OscillatorCurlFn = (x: number, y?: number) => Vector2
 
-// Straight from slide 29 of this:
-// https://raw.githubusercontent.com/petewerner/misc/master/Curl%20Noise%20Slides.pdf
-// Originally implemented here: https://github.com/ericyd/generative-art/blob/b9a1bc25ec60fb99e7e9a2bd9ba32c55da40da67/openrndr/src/main/kotlin/noise/curl.kt#L21
 /**
  * Creates a curl noise function based on oscillators.
  *
  * epsilon is the length of the differential (might be using wrong terminology there)
  * I think there is some room for experimentation here... I'm not sure what the "right" epsilonilon is
- * @param {string} seed
- * @param {number} [epsilon=0.1]
- * @returns {OscillatorCurlFn}
+ * @param {string} seed - The seed for the random number generator.
+ * @param {number} [epsilon=0.1] - The length of the differential.
+ * @returns {OscillatorCurlFn} The created curl noise function.
  */
-export function createOscCurl(seed, epsilon = 0.1) {
+export function createOscCurl(seed: string, epsilon = 0.1): OscillatorCurlFn {
   const noiseFn = createOscNoise(seed)
-  return (x, y = 0) => {
+  return (x: number, y = 0): Vector2 => {
     // a is the partial derivative of our field at point (x, y) in y direction
     // ∂ / ∂y
     // The slides describe this as "∂x1/∂y" but personally I understand it better as ∂/∂y
