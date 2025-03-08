@@ -5,16 +5,12 @@
  * https://stackoverflow.com/a/47593316/3991555
  */
 
-/**
- * @callback Rng
- * @returns {number} in range [0, 1)
- */
+export type Rng = () => number;
 
 /**
- * @param {string} str 
- * @returns {[number, number, number, number]}
+ * Credit: https://stackoverflow.com/a/47593316/3991555
  */
-export function cyrb128(str) {
+export function cyrb128(str: string): [number, number, number, number] {
   let h1 = 1779033703,
     h2 = 3144134277,
     h3 = 1013904242,
@@ -39,13 +35,9 @@ export function cyrb128(str) {
 }
 
 /**
- * @param {number} a
- * @param {number} b
- * @param {number} c
- * @param {number} d
- * @returns {Rng}
+ * Credit: https://stackoverflow.com/a/47593316/3991555
  */
-export function sfc32(a, b, c, d) {
+export function sfc32(a: number, b: number, c: number, d: number): Rng {
   return function () {
     a >>>= 0;
     b >>>= 0;
@@ -62,67 +54,42 @@ export function sfc32(a, b, c, d) {
   };
 }
 
-/**
- * @param {string | number} [seed]
- * @returns {Rng}
- */
-export function createRng(seed) {
+export function createRng(seed?: string | number): Rng {
   const cyrb128seed = cyrb128(String(seed ?? Date.now()));
   // Four 32-bit component hashes provide the seed for sfc32.
   return sfc32(cyrb128seed[0], cyrb128seed[1], cyrb128seed[2], cyrb128seed[3]);
 }
 
-/**
- * @param {number} min 
- * @param {number} max 
- * @param {Rng} rng 
- * @returns {number}
- */
-export function random(min, max, rng = Math.random) {
+export function random(min: number, max: number, rng: Rng = Math.random): number {
   if (min > max) {
     [min, max] = [max, min];
   } // swap values
   return min + rng() * (max - min);
 }
 
-/**
- * @param {number} min 
- * @param {number} max 
- * @param {Rng} rng 
- * @returns {number} an integer
- */
-export function randomInt(min, max, rng = Math.random) {
-  return Math.floor(random(min, max, rng))
+export function randomInt(min: number, max: number, rng: Rng = Math.random): Integer {
+  return Math.floor(random(min, max, rng));
 }
 
 /**
- * @param {Rng} rng 
  * @returns {number} an integer in range [0, Number.MAX_SAFE_INTEGER]
  */
-export function randomSeed(rng = Math.random) {
-  return Math.floor(random(0, Number.MAX_SAFE_INTEGER, rng))
+export function randomSeed(rng: Rng = Math.random): ClosedInterval<0, typeof Number.MAX_SAFE_INTEGER> {
+  return Math.floor(random(0, Number.MAX_SAFE_INTEGER, rng));
 }
 
 /**
  * Returns a random number in range [`value` - `amount`, `value` + `amount`]
- * @param {number} amount
- * @param {number} value
- * @param {Rng} rng 
- * @returns {number}
  */
-export function jitter(amount, value, rng) {
+export function jitter(amount: number, value: number, rng: Rng): number {
   return random(value - amount, value + amount, rng);
 }
 
 /**
  * Shuffle an array.
  * Returns a new array, does *not* modify in place.
- * @template T
- * @param {Array<T>} arr
- * @param {Rng} rng 
- * @returns {Array<T>}
  */
-export function shuffle(arr, rng = Math.random) {
+export function shuffle<T>(arr: Array<T>, rng: Rng = Math.random): Array<T> {
   const copy = [...arr]; // create a copy of original array
   for (let i = copy.length - 1; i; i--) {
     const randomIndex = Math.floor(random(0, i + 1, rng));
@@ -133,23 +100,15 @@ export function shuffle(arr, rng = Math.random) {
 
 /**
  * Returns a random value from an array
- * @template T
- * @param {Array<T>} array 
- * @param {Rng} rng 
- * @returns {T}
  */
-export function randomFromArray(array, rng = Math.random) {
+export function randomFromArray<T>(array: Array<T>, rng: Rng = Math.random): T {
   const index = randomInt(0, array.length, rng)
   return array[index]
 }
 
 /**
  * Returns a random value from an object
- * @template T
- * @param {Record<string, T>} obj
- * @param {Rng} rng 
- * @returns {T}
  */
-export function randomFromObject(obj, rng = Math.random) {
+export function randomFromObject<T>(obj: Record<string, T>, rng: Rng = Math.random): T {
   return obj[randomFromArray(Object.keys(obj), rng)]
 }

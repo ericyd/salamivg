@@ -1,12 +1,15 @@
-import { jitter, random } from './random.js'
+import { jitter, random, Rng } from './random.js'
 
 export class Vector3 {
+  x: number
+  y: number
+  z: number
   /**
    * @param {number} x coordinate
    * @param {number} [y] coordinate defaults to `x` if omitted.
    * @param {number} [z] coordinate defaults to `y` if omitted.
    */
-  constructor(x, y, z) {
+  constructor(x: number, y?: number, z?: number) {
     if (typeof x !== 'number') {
       throw new Error(`Vector3 constructor requires a number for x, got ${typeof x}`)
     }
@@ -15,44 +18,26 @@ export class Vector3 {
     this.z = z ?? this.y
   }
 
-  /**
-   * @param {Vector3} other 
-   * @returns {Vector3}
-   */
-  add(other) {
+  add(other: Vector3): Vector3 {
     return vec3(this.x + other.x, this.y + other.y, this.z + other.z)
   }
 
-  /**
-   * @param {Vector3} other 
-   * @returns {Vector3}
-   */
-  subtract(other) {
+  subtract(other: Vector3): Vector3 {
     return vec3(this.x - other.x, this.y - other.y, this.z - other.z)
   }
 
-  /**
-   * @param {number} n
-   * @returns {Vector3}
-   */
-  divide(n) {
+  divide(n: number): Vector3 {
     return vec3(this.x / n, this.y / n, this.z / n)
   }
 
-  /**
-   * @param {number} n
-   * @returns {Vector3}
-   */
-  multiply(n) {
+  multiply(n: number): Vector3 {
     return vec3(this.x * n, this.y * n, this.z * n)
   }
 
   /**
    * Alias for `multiply`
-   * @param {number} n
-   * @returns {Vector3}
    */
-  scale(n) {
+  scale(n: number): Vector3 {
     return this.multiply(n)
   }
 
@@ -60,68 +45,46 @@ export class Vector3 {
    * Returns a Vector3 that is a mix
    * @param {Vector3} a 
    * @param {Vector3} b 
-   * @param {number} mix a mix percentage in range [0, 1] where 0 returns a and 1 returns b
+   * @param {number} mix when 0, returns a; when 1, returns b
    * @returns {Vector3}
    */
-  static mix(a, b, mix) {
+  static mix(a: Vector3, b: Vector3, mix: ClosedInterval<0, 1>) {
     return a.multiply(1 - mix).add(b.multiply(mix))
   }
 
-  /**
-   * @param {Vector3} other 
-   * @returns {number}
-   */
-  distanceTo(other) {
+  distanceTo(other: Vector3): number {
     return Math.sqrt(Math.pow(other.x - this.x, 2) + Math.pow(other.y - this.y, 2) + Math.pow(other.z - this.z, 2))
   }
 
   /**
    * The euclidean length of the vector
-   * @returns {number}
    */
-  length() {
+  length(): number {
     return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2) + Math.pow(this.z, 2))
   }
 
   /**
    * Dot product
-   * @param {Vector3} other 
    */
-  dot(other) {
+  dot(other: Vector3): number {
     return this.x * other.x + this.y * other.y + this.z * other.z
   }
 
-  /**
-   * @param {Vector3} a
-   * @param {Vector3} b 
-   * @returns {Vector3}
-   */
-  static midpoint(a, b) {
+  static midpoint(a: Vector3, b: Vector3): Vector3 {
     return vec3((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2)
   }
 
   /**
    * Returns a random point in the given bounds.
-   * @param {number} xMin
-   * @param {number} xMax
-   * @param {number} yMin
-   * @param {number} yMax
-   * @param {number} zMin
-   * @param {number} zMax
-   * @param {import('./random.js').Rng} rng
-   * @returns {Vector3}
    */
-  static random(xMin, xMax, yMin, yMax, zMin, zMax, rng) {
+  static random(xMin: number, xMax: number, yMin: number, yMax: number, zMin: number, zMax: number, rng: Rng): Vector3 {
     return vec3(random(xMin, xMax, rng), random(yMin, yMax, rng), random(zMin, zMax, rng));
   }
 
   /**
    * Returns a new Vector3, randomly offset by a maximum of `amount`
-   * @param {number} amount 
-   * @param {import('./random.js').Rng} rng 
-   * @returns {Vector3}
    */
-  jitter(amount, rng) {
+  jitter(amount: number, rng: Rng): Vector3 {
     return vec3(
       jitter(amount, this.x, rng),
       jitter(amount, this.y, rng),
@@ -131,14 +94,12 @@ export class Vector3 {
 
   /**
    * Value equality check
-   * @param {Vector3} other 
-   * @returns {boolean}
    */
-  eq(other) {
+  eq(other: Vector3): boolean {
     return this.x === other.x && this.y === other.y && this.z === other.z
   }
 
-  toString() {
+  toString(): string {
     return `Vector3 { x: ${this.x}, y: ${this.y}, z: ${this.z} }`
   }
 }
@@ -147,8 +108,7 @@ export class Vector3 {
  * @param {number} x 
  * @param {number} [y] defaults to `x` if omitted. 
  * @param {number} [z] defaults to `y` if omitted. 
- * @returns Vector3
  */
-export function vec3(x, y, z) {
+export function vec3(x: number, y?: number, z?: number): Vector3 {
   return new Vector3(x, y ?? x, z ?? y ?? x)
 }

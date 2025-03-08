@@ -1,6 +1,4 @@
-// tests/test_vector3.js
-
-import  { Vector3, vec3 } from '../lib/vector3.js';
+import  { Vector3, vec3 } from './vector3';
 import  assert from 'node:assert';
 import { describe, it } from 'node:test'
 
@@ -16,6 +14,7 @@ describe('Vector3', () => {
     });
 
     it('should throw error if x is not a number', () => {
+      // @ts-expect-error test data
       assert.throws(() => new Vector3('a'), /Vector3 constructor requires a number for x, got string/);
     });
   });
