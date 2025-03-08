@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Grid, grid } from './grid.js'
-import { vec2 } from '../vector2.js'
+import { Grid, grid } from './grid'
+import { vec2 } from '../vector2'
 
 describe('grid', () => {
   it('should return an instance of Grid', () => {

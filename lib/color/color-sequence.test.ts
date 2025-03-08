@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { ColorSequence } from './color-sequence.js'
-import { ColorRgb, rgb } from './rgb.js'
-import { ColorHsl, hsl } from './hsl.js'
+import { ColorSequence } from './color-sequence'
+import { ColorRgb, rgb } from './rgb'
+import { ColorHsl, hsl } from './hsl'
 
 describe('ColorSequence', () => {
   describe('constructor', () => {

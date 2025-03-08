@@ -12,8 +12,8 @@
  * @property {*} [fill] the value to fill the grid with. This is only used when the grid is used as a data store.
  */
 
-import { error } from '../internal.js'
-import { Vector2, vec2 } from '../vector2.js'
+import { error } from '../internal'
+import { Vector2, vec2 } from '../vector2'
 
 export class Grid {
   /** @type {number} */

@@ -1,5 +1,5 @@
 import { describe, it } from 'node:test'
-import { Compressor } from './compressor.js'
+import { Compressor } from './compressor'
 import assert from 'node:assert'
 
 describe('Compressor', () => {

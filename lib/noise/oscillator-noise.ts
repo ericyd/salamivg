@@ -1,7 +1,7 @@
-import { PI } from '../constants.js'
-import { createRng, random, randomInt } from '../random.js'
-import { Vector2 } from '../vector2.js'
-import { Oscillator } from './oscillator.js'
+import { PI } from '../constants'
+import { createRng, random, randomInt } from '../random'
+import { Vector2 } from '../vector2'
+import { Oscillator } from './oscillator'
 
 /**
  * @callback OscillatorNoiseFn

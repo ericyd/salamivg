@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { FractalizedLine } from './fractalized-line.js'
-import { vec2 } from '../vector2.js'
+import { FractalizedLine } from './fractalized-line'
+import { vec2 } from '../vector2'
 
 /**
  *

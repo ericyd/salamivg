@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { ColorRgb, rgb } from './rgb.js'
+import { ColorRgb, rgb } from './rgb'
 
 describe('rgb', () => {
   it('returns instanceof ColorRgb', () => {

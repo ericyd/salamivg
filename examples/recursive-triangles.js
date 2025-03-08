@@ -19,7 +19,7 @@ import {
   shuffle,
   TAU,
   ColorRgb,
-} from '../lib/index.js'
+} from '../dist/index.js'
 
 const config = {
   width: 100,

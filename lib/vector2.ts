@@ -1,4 +1,4 @@
-import { jitter, random } from './random.js'
+import { jitter, random } from './random'
 
 export class Vector2 {
   /**
@@ -114,7 +114,7 @@ export class Vector2 {
    * @param {number} xMax
    * @param {number} yMin
    * @param {number} yMax
-   * @param {import('./random.js').Rng} rng
+   * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
   static random(xMin, xMax, yMin, yMax, rng) {
@@ -123,8 +123,8 @@ export class Vector2 {
 
   /**
    * Returns a random point within the given circle.
-   * @param {import('./components/circle.js').Circle} circle
-   * @param {import('./random.js').Rng} rng
+   * @param {import('./components/circle').Circle} circle
+   * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
   static randomInCircle(circle, rng) {
@@ -145,7 +145,7 @@ export class Vector2 {
   /**
    * Returns a new Vector2, randomly offset by a maximum of `amount`
    * @param {number} amount
-   * @param {import('./random.js').Rng} rng
+   * @param {import('./random').Rng} rng
    * @returns {Vector2}
    */
   jitter(amount, rng) {

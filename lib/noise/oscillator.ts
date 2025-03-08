@@ -4,7 +4,7 @@
  * Kinda similar to this (https://piterpasma.nl/articles/wobbly) although I had the idea independently
  */
 
-import { Compressor } from './compressor.js'
+import { Compressor } from './compressor'
 
 /**
  * @typedef {object} OscillatorAttributes
@@ -12,7 +12,7 @@ import { Compressor } from './compressor.js'
  * @property {number} amplitude
  * @property {(t: number) => number} [wave=Math.sin]
  * @property {number} [phase=0]
- * @property {boolean | import('./compressor.js').CompressorOptions} [compress=false] When `compress` is `true`, the compressor will default to { W: amplitude * 0.3, T: amplitude * 0.7, R: 2 }
+ * @property {boolean | import('./compressor').CompressorOptions} [compress=false] When `compress` is `true`, the compressor will default to { W: amplitude * 0.3, T: amplitude * 0.7, R: 2 }
  */
 
 export class Oscillator {
@@ -67,7 +67,7 @@ export class Oscillator {
   }
 
   /**
-   * @param {import('./compressor.js').CompressorOptions} options
+   * @param {import('./compressor').CompressorOptions} options
    */
   set compressor(options) {
     this.#compressor = new Compressor(options)

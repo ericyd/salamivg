@@ -1,7 +1,7 @@
-import { toFixedPrecision } from '../math.js'
-import { Vector2 } from '../vector2.js'
-import { Rectangle } from './rectangle.js'
-import { Tag } from './tag.js'
+import { toFixedPrecision } from '../math'
+import { Vector2 } from '../vector2'
+import { Rectangle } from './rectangle'
+import { Tag } from './tag'
 
 /**
  * @typedef {object} PolygonAttributes

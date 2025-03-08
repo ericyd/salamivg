@@ -1,6 +1,6 @@
-import { error } from '../internal.js'
-import { Vector2, vec2 } from '../vector2.js'
-import { Tag } from './tag.js'
+import { error } from '../internal'
+import { Vector2, vec2 } from '../vector2'
+import { Tag } from './tag'
 
 /**
  * @typedef {object} CircleAttributes

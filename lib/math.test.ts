@@ -1,11 +1,11 @@
 import assert from 'node:assert'
-import { vec2 } from './vector2.js'
+import { vec2 } from './vector2'
 import {
   smallestAngularDifference,
   angleOfVertex,
   isWithin,
   toFixedPrecision,
-} from './math.js'
+} from './math'
 import { describe, it } from 'node:test'
 
 // Note: due to floating point calculations, some tests need to test a range

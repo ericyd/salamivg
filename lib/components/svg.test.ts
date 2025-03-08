@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
-import { Svg } from './svg.js'
-import { LinearGradient } from './linear-gradient.js'
+import { Svg } from './svg'
+import { LinearGradient } from './linear-gradient'
 import assert from 'node:assert'
 
 describe('Svg', () => {

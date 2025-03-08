@@ -10,10 +10,10 @@
  * That said, I could potentially implement a custom iterator if I wanted to use a linked list in the future.
  */
 
-import { LineSegment } from '../components/polyline.js'
-import { Path } from '../components/path.js'
-import { random } from '../random.js'
-import { Vector2 } from '../vector2.js'
+import { LineSegment } from '../components/polyline'
+import { Path } from '../components/path'
+import { random } from '../random'
+import { Vector2 } from '../vector2'
 
 /**
  * @class FractalizedLine

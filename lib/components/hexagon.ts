@@ -1,7 +1,7 @@
-import { vec2 } from '../vector2.js'
-import { Polygon } from './polygon.js'
+import { vec2 } from '../vector2'
+import { Polygon } from './polygon'
 
-/** @typedef {import('../vector2.js').Vector2} Vector2 */
+/** @typedef {import('../vector2').Vector2} Vector2 */
 
 /**
  * @typedef {object} HexagonAttributes

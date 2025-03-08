@@ -1,7 +1,7 @@
-import { ColorHsl } from '../color/hsl.js'
-import { ColorRgb } from '../color/rgb.js'
-import { Vector2, vec2 } from '../vector2.js'
-import { Tag } from './tag.js'
+import { ColorHsl } from '../color/hsl'
+import { ColorRgb } from '../color/rgb'
+import { Vector2, vec2 } from '../vector2'
+import { Tag } from './tag'
 
 /** @typedef {import("../color/color-sequence.js").ColorStop} ColorStop */
 

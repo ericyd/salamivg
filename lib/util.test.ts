@@ -9,7 +9,7 @@ import {
   clamp,
   quantize,
   pickBy,
-} from './util.js'
+} from './util'
 
 describe('array', () => {
   it('returns an array of size n filled with the index', () => {

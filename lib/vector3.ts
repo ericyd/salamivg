@@ -1,4 +1,4 @@
-import { jitter, random, Rng } from './random.js'
+import { jitter, random, Rng } from './random'
 
 export class Vector3 {
   x: number

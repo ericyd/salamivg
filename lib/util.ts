@@ -8,8 +8,8 @@ export function array(n) {
   try {
     return new Array(n).fill(0).map((_zero, i) => i)
   } catch (e) {
-    // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
     const error = new Error(
+      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
       `Could not create an array with n: ${n}. Original error: ${e.message}`,
     )
     throw error
@@ -26,8 +26,8 @@ export function range(min, max, step = 1) {
   try {
     return new Array((max - min) / step).fill(0).map((_, i) => min + i * step)
   } catch (e) {
-    // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
     const error = new Error(
+      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
       `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
     )
     throw error
@@ -46,8 +46,8 @@ export function rangeWithIndex(min, max, step = 1) {
       .fill(0)
       .map((_, i) => [min + i * step, i])
   } catch (e) {
-    // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
     const error = new Error(
+      // @ts-expect-error I've never understood why errors in catch blocks are of type "unknown". I'm pretty sure it is known right???
       `Could not create an array with min: ${min}, max: ${max}, step: ${step}. Original error: ${e.message}`,
     )
     throw error

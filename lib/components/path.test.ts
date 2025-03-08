@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
-import { path } from './path.js'
+import { path } from './path'
 import assert from 'node:assert'
-import { vec2 } from '../vector2.js'
+import { vec2 } from '../vector2'
 
 describe('Path', () => {
   it('moveTo should add the correct path instruction', () => {

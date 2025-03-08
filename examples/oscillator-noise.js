@@ -13,7 +13,7 @@ import {
   ColorSequence,
   shuffle,
   createOscNoise,
-} from '../lib/index.js'
+} from '../dist/index.js'
 
 const config = {
   width: 100,

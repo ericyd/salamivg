@@ -28,10 +28,11 @@
   "scripts": {
     "prepublishOnly": "npm run typegen && npm run check:all",
     "preversion": "npm run typegen && npm run check:all",
+    "build": "echo TDOO",
     "format": "npx @biomejs/biome format lib/*.ts lib/**/*.ts examples/*.js --write",
     "lint": "npx @biomejs/biome lint lib/*.ts lib/**/*.ts",
     "lint:fix": "npx @biomejs/biome lint --apply-unsafe lib/*.ts lib/**/*.ts",
-    "test": "node --test",
+    "test": "node --import tsx --test",
     "check:types": "tsc --noEmit true --emitDeclarationOnly false",
     "check:format": "npx @biomejs/biome format lib/*.ts lib/**/*.ts",
     "check:all": "npm run check:format && npm run check:types && npm run lint && npm test",
@@ -50,6 +51,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.4.1",
     "@types/node": "^20.10.5",
+    "tsx": "^4.19.3",
     "typescript": "^5.3.3"
   }
 }

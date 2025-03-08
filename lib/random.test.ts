@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { describe, it } from 'node:test'
-import { randomFromObject, randomFromArray } from './random.js'
+import { randomFromObject, randomFromArray } from './random'
 
 describe('randomFromObject', () => {
   it('returns a value from the object', () => {

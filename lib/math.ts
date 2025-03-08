@@ -1,4 +1,4 @@
-import { Vector2 } from './vector2.js'
+import { Vector2 } from './vector2'
 
 // some helpers to avoid the `Math.` namespace everywhere
 export const cos = Math.cos

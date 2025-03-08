@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import { describe, it } from 'node:test'
-import { Circle } from './circle.js'
-import { vec2 } from '../vector2.js'
+import { Circle } from './circle'
+import { vec2 } from '../vector2'
 
 describe('Circle', () => {
   describe('constructor', () => {

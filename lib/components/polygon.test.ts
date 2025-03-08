@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
-import { Polygon } from './polygon.js'
+import { Polygon } from './polygon'
 import assert from 'node:assert'
-import { vec2 } from '../vector2.js'
+import { vec2 } from '../vector2'
 
 describe('Polygon', () => {
   describe('render', () => {

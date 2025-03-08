@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Tag } from './tag.js'
-import { LinearGradient } from './linear-gradient.js'
+import { Tag } from './tag'
+import { LinearGradient } from './linear-gradient'
 
 describe('Tag', () => {
   describe('render', () => {

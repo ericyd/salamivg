@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Rectangle, rect } from './rectangle.js'
+import { Rectangle, rect } from './rectangle'
 
 describe('rect', () => {
   it('returns a Rectangle', () => {

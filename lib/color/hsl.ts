@@ -1,6 +1,6 @@
-import { warnWithDefault } from '../internal.js'
-import { clamp } from '../util.js'
-import { ColorRgb } from './rgb.js'
+import { warnWithDefault } from '../internal'
+import { clamp } from '../util'
+import { ColorRgb } from './rgb'
 
 export class ColorHsl {
   /**

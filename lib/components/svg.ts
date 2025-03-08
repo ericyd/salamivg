@@ -1,12 +1,12 @@
-import { Tag } from './tag.js'
-import { Circle, circle } from './circle.js'
-import { Path, path } from './path.js'
-import { Rectangle, rect } from './rectangle.js'
-import { Polyline, LineSegment, polyline } from './polyline.js'
-import { Polygon } from './polygon.js'
-import { LinearGradient } from './linear-gradient.js'
-import { Defs } from './defs.js'
-import { Vector2, vec2 } from '../vector2.js'
+import { Tag } from './tag'
+import { Circle, circle } from './circle'
+import { Path, path } from './path'
+import { Rectangle, rect } from './rectangle'
+import { Polyline, LineSegment, polyline } from './polyline'
+import { Polygon } from './polygon'
+import { LinearGradient } from './linear-gradient'
+import { Defs } from './defs'
+import { Vector2, vec2 } from '../vector2'
 
 /**
  * @typedef {object} SvgAttributes
@@ -111,7 +111,7 @@ export class Svg extends Tag {
    */
   /**
    * @overload
-   * @param {import('./circle.js').CircleAttributes} attributes
+   * @param {import('./circle').CircleAttributes} attributes
    * @returns {Circle}
    */
   /**
@@ -120,7 +120,7 @@ export class Svg extends Tag {
    * @returns {Circle}
    */
   /**
-   * @param {Circle | import('./circle.js').CircleAttributes | ((circle: Circle) => void)} instanceOrBuilder
+   * @param {Circle | import('./circle').CircleAttributes | ((circle: Circle) => void)} instanceOrBuilder
    * @returns {Circle}
    */
   circle(instanceOrBuilder) {
@@ -159,7 +159,7 @@ export class Svg extends Tag {
   }
 
   /**
-   * @param {Polygon | import('./polygon.js').PolygonAttributes} instanceOrBuilder
+   * @param {Polygon | import('./polygon').PolygonAttributes} instanceOrBuilder
    */
   polygon(instanceOrBuilder) {
     return instanceOrBuilder instanceof Polygon
@@ -168,7 +168,7 @@ export class Svg extends Tag {
   }
 
   /**
-   * @param {Array<Polygon | import('./polygon.js').PolygonAttributes>} ps
+   * @param {Array<Polygon | import('./polygon').PolygonAttributes>} ps
    */
   polygons(ps) {
     for (const p of ps) {
@@ -205,7 +205,7 @@ export class Svg extends Tag {
   }
 
   /**
-   * @param {import('./tag.js').SvgColor} color
+   * @param {import('./tag').SvgColor} color
    */
   setBackground(color) {
     const rect = new Rectangle({
@@ -223,7 +223,7 @@ export class Svg extends Tag {
    * @example
    * const gradient = svg.defineLinearGradient({ colors: ['#444', '#678', '#8fe'] })
    * svg.circle(circle({ x: 0, y: 0, radius: 10, fill: gradient }))
-   * @param {Omit<import('./linear-gradient.js').LinearGradientAttributes, 'id' | 'numericPrecision'>} props
+   * @param {Omit<import('./linear-gradient').LinearGradientAttributes, 'id' | 'numericPrecision'>} props
    */
   defineLinearGradient(props) {
     const grad = new LinearGradient({

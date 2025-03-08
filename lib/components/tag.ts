@@ -1,8 +1,8 @@
-import { toFixedPrecision } from '../math.js'
-import { pickBy } from '../util.js'
-/** @typedef {import('./linear-gradient.js').LinearGradient} tag.LinearGradient */
-/** @typedef {import('../color/rgb.js').ColorRgb} tag.ColorRgb */
-/** @typedef {import('../color/hsl.js').ColorHsl} tag.ColorHsl */
+import { toFixedPrecision } from '../math'
+import { pickBy } from '../util'
+/** @typedef {import('./linear-gradient').LinearGradient} tag.LinearGradient */
+/** @typedef {import('../color/rgb').ColorRgb} tag.ColorRgb */
+/** @typedef {import('../color/hsl').ColorHsl} tag.ColorHsl */
 /** @typedef {'none' | string | null | tag.ColorRgb | tag.ColorHsl | tag.LinearGradient} SvgColor */
 
 /**

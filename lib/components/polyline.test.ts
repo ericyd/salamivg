@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { Polyline, lineSegment } from './polyline.js'
-import { vec2 } from '../vector2.js'
+import { Polyline, lineSegment } from './polyline'
+import { vec2 } from '../vector2'
 
 describe('Polyline', () => {
   describe('render', () => {

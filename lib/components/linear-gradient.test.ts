@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test'
-import { LinearGradient } from './linear-gradient.js'
-import { ColorRgb } from '../color/rgb.js'
-import { hsl } from '../color/hsl.js'
+import { LinearGradient } from './linear-gradient'
+import { ColorRgb } from '../color/rgb'
+import { hsl } from '../color/hsl'
 import assert from 'node:assert'
 
 describe('LinearGradient', () => {

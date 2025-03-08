@@ -1,4 +1,4 @@
-import { Tag } from './tag.js'
+import { Tag } from './tag'
 
 export class Defs extends Tag {
   constructor() {

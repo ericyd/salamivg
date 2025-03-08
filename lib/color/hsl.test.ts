@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
-import { ColorHsl, mixColorComponent } from './hsl.js'
-import { ColorRgb } from './rgb.js'
-import { isWithinError } from '../math.js'
+import { ColorHsl, mixColorComponent } from './hsl'
+import { ColorRgb } from './rgb'
+import { isWithinError } from '../math'
 
 describe('ColorHsl', () => {
   describe('fromRgb', () => {

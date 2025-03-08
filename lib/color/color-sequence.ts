@@ -1,5 +1,5 @@
-import { ColorRgb } from './rgb.js'
-import { ColorHsl } from './hsl.js'
+import { ColorRgb } from './rgb'
+import { ColorHsl } from './hsl'
 
 /** @typedef {string | ColorRgb | ColorHsl} Color */
 

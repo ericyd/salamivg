@@ -1,6 +1,6 @@
 import { describe, it } from 'node:test'
-import { createOscNoise } from './oscillator-noise.js'
-import { randomSeed } from '../random.js'
+import { createOscNoise } from './oscillator-noise'
+import { randomSeed } from '../random'
 import assert from 'node:assert'
 
 describe('OscillatorNoise', () => {

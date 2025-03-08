@@ -367,6 +367,8 @@ As of Deno v2.2.3 and Bun v1.2.4, SalamiVG is fully compatible with both Deno an
 git clone git@github.com:ericyd/salamivg
 cd salamivg
 asdf install
+npm ci
+npm run build
 deno examples/concentric-circles.js
 bun examples/concentric-circles.js
 ```

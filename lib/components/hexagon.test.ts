@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import { describe, it } from 'node:test'
-import { Hexagon } from './hexagon.js'
-import { vec2 } from '../vector2.js'
+import { Hexagon } from './hexagon'
+import { vec2 } from '../vector2'
 
 describe('Hexagon', () => {
   it('renders a hexagonal polygon', () => {

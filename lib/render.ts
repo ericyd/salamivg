@@ -7,7 +7,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { basename, extname, join } from 'node:path'
-import { Svg } from './components/index.js'
+import { Svg } from './components/index'
 
 const NOOP = () => {}
 
@@ -29,8 +29,8 @@ export function timestamp(d = new Date()) {
 
 /**
  *
- * @param {import('./components/svg.js').SvgAttributes & RenderLoopOptions} config
- * @param {import('./components/svg.js').SvgBuilder} builder
+ * @param {import('./components/svg').SvgAttributes & RenderLoopOptions} config
+ * @param {import('./components/svg').SvgBuilder} builder
  * @returns {string} the most recent rendered SVG
  */
 export function renderSvg(
