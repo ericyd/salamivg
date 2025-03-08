@@ -1,17 +1,18 @@
 import { ColorRgb } from './rgb'
 import { ColorHsl } from './hsl'
+import { ClosedInterval } from '../types'
 
-/** @typedef {string | ColorRgb | ColorHsl} Color */
+export type Color = string | ColorRgb | ColorHsl
 
 /**
  * `number` attribute is value in range [0, 1] that identifies the part of the spectrum where the color is present.
- * @typedef {[number, Color]} ColorStop
  */
+export type ColorStop = [ClosedInterval<0, 1>, Color]
 
 /**
  * The public interface can accept any type of color (string, rgb, hsl), but internally it is stored as Hsl
- * @typedef {[number, ColorHsl]} InternalColorStop
  */
+type InternalColorStop = [ClosedInterval<0, 1>, ColorHsl]
 
 /**
  * @description A sequence of colors that can be linearly interpolated together.
@@ -33,21 +34,16 @@ import { ColorHsl } from './hsl'
  * spectrum.at(1) // ColorHsl { h: 240, s: 1, l: 0.5, a: 1 }
  */
 export class ColorSequence {
-  /** @type {InternalColorStop[]} */
-  #pairs = []
+  #pairs: InternalColorStop[]
 
-  /**
-   * @param {ColorStop[]} pairs
-   */
-  constructor(pairs) {
+  constructor(pairs: ColorStop[]) {
     this.#pairs = pairs.map(([stopVal, color]) => [stopVal, colorToHsl(color)])
   }
 
   /**
    * @param {Color[]} colors list of colors (hex strings, ColorRgb instances, or ColorHsl instances)
-   * @returns {ColorSequence}
    */
-  static fromColors(colors) {
+  static fromColors(colors: Color[]): ColorSequence {
     return new ColorSequence(
       colors.map((color, i, array) => [
         i / (array.length - 1),
@@ -58,10 +54,8 @@ export class ColorSequence {
 
   /**
    * Returns a linearly interpolated color from the color sequence based on the `t` value.
-   * @param {number} t
-   * @returns {ColorHsl}
    */
-  at(t) {
+  at(t: number): ColorHsl {
     const stopB = this.#pairs.findIndex(([stopVal]) => stopVal >= t)
     if (stopB === 0 || this.#pairs.length === 1) {
       return this.#pairs[stopB][1]
@@ -76,11 +70,7 @@ export class ColorSequence {
   }
 }
 
-/**
- * @param {Color} color
- * @returns {ColorHsl}
- */
-function colorToHsl(color) {
+function colorToHsl(color: Color): ColorHsl {
   if (typeof color === 'string') {
     return ColorRgb.fromHex(color).toHsl()
   }

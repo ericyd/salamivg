@@ -1,38 +1,46 @@
 import { warnWithDefault } from '../internal'
+import { ClosedInterval } from '../types'
 import { clamp } from '../util'
 import { ColorHsl } from './hsl'
 
 export class ColorRgb {
-  /**
-   * @param {number} r red, in range [0, 1]
-   * @param {number} g green, in range [0, 1]
-   * @param {number} b blue, in range [0, 1]
-   * @param {number} a alpha, in range [0, 1]
-   */
-  constructor(r, g, b, a = 1) {
+  r: ClosedInterval<0, 1>
+  g: ClosedInterval<0, 1>
+  b: ClosedInterval<0, 1>
+  a: ClosedInterval<0, 1>
+
+  constructor(
+    red: ClosedInterval<0, 1>,
+    green: ClosedInterval<0, 1>,
+    blue: ClosedInterval<0, 1>,
+    alpha: ClosedInterval<0, 1> = 1,
+  ) {
     this.r =
-      r > 1 || r < 0
-        ? warnWithDefault(`clamping r '${r}' to [0, 1]`, clamp(0, 1, r))
-        : r
+      red > 1 || red < 0
+        ? warnWithDefault(`clamping r '${red}' to [0, 1]`, clamp(0, 1, red))
+        : red
     this.g =
-      g > 1 || g < 0
-        ? warnWithDefault(`clamping g '${g}' to [0, 1]`, clamp(0, 1, g))
-        : g
+      green > 1 || green < 0
+        ? warnWithDefault(`clamping g '${green}' to [0, 1]`, clamp(0, 1, green))
+        : green
     this.b =
-      b > 1 || b < 0
-        ? warnWithDefault(`clamping b '${b}' to [0, 1]`, clamp(0, 1, b))
-        : b
+      blue > 1 || blue < 0
+        ? warnWithDefault(`clamping b '${blue}' to [0, 1]`, clamp(0, 1, blue))
+        : blue
     this.a =
-      a > 1 || a < 0
-        ? warnWithDefault(`clamping a '${a}' to [0, 1]`, clamp(0, 1, a))
-        : a
+      alpha > 1 || alpha < 0
+        ? warnWithDefault(`clamping a '${alpha}' to [0, 1]`, clamp(0, 1, alpha))
+        : alpha
   }
+
+  static Black = new ColorRgb(0, 0, 0)
+  static White = new ColorRgb(1, 1, 1)
 
   /**
    * credit: https://github.com/openrndr/openrndr/blob/d184fed22e191df2860ed47f9f9354a142ad52b6/openrndr-color/src/commonMain/kotlin/org/openrndr/color/ColorRGBa.kt#L84-L131
    * @param {string} hex color hex string, e.g. '#000'
    */
-  static fromHex(hex) {
+  static fromHex(hex: string): ColorRgb {
     const raw = hex.replace(/^0x|#/, '')
     /**
      * @param {string} str
@@ -40,8 +48,12 @@ export class ColorRgb {
      * @param {number} end
      * @returns number
      */
-    const fromHex = (str, start, end, multiplier = 1) =>
-      (multiplier * parseInt(str.slice(start, end), 16)) / 255
+    const fromHex = (
+      str: string,
+      start: number,
+      end: number,
+      multiplier = 1,
+    ): number => (multiplier * parseInt(str.slice(start, end), 16)) / 255
 
     switch (raw.length) {
       case 3:
@@ -74,15 +86,15 @@ export class ColorRgb {
    * @param {number} [mix=0.5] the mix of the two colors. When 0, returns `this`. When 1, returns `other`
    * @returns {ColorRgb}
    */
-  mix(other, mix = 0.5) {
+  mix(other: ColorRgb, mix = 0.5): ColorRgb {
     return ColorHsl.fromRgb(this).mix(ColorHsl.fromRgb(other), mix).toRgb()
   }
 
-  toString() {
+  toString(): string {
     return `rgb(${this.r * 255}, ${this.g * 255}, ${this.b * 255}, ${this.a})`
   }
 
-  toHex() {
+  toHex(): string {
     return [
       '#',
       Math.round(this.r * 255)
@@ -104,7 +116,7 @@ export class ColorRgb {
    * Converts to HSL color space
    * @returns {ColorHsl}
    */
-  toHsl() {
+  toHsl(): ColorHsl {
     return ColorHsl.fromRgb(this)
   }
 
@@ -112,21 +124,16 @@ export class ColorRgb {
    * @param {number} a new alpha amount
    * @returns {ColorRgb}
    */
-  opacify(a) {
+  opacify(a: number): ColorRgb {
     return new ColorRgb(this.r, this.g, this.b, a)
   }
 }
 
-ColorRgb.Black = new ColorRgb(0, 0, 0)
-ColorRgb.White = new ColorRgb(1, 1, 1)
-
-/**
- * @param {number} r red, in range [0, 1]
- * @param {number} g green, in range [0, 1]
- * @param {number} b blue, in range [0, 1]
- * @param {number} a alpha, in range [0, 1]
- * @returns {ColorRgb}
- */
-export function rgb(r, g, b, a = 1) {
+export function rgb(
+  r: ClosedInterval<0, 1>,
+  g: ClosedInterval<0, 1>,
+  b: ClosedInterval<0, 1>,
+  a: ClosedInterval<0, 1> = 1,
+): ColorRgb {
   return new ColorRgb(r, g, b, a)
 }

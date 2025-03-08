@@ -1,32 +1,42 @@
 import { warnWithDefault } from '../internal'
+import { ClosedInterval } from '../types'
 import { clamp } from '../util'
 import { ColorRgb } from './rgb'
 
 export class ColorHsl {
-  /**
-   * @param {number} h hue, in range [0, 360]
-   * @param {number} s saturation, in range [0, 1]
-   * @param {number} l luminocity, in range [0, 1]
-   * @param {number} [a=1] alpha, in range [0, 1]
-   * @returns
-   */
-  constructor(h, s, l, a = 1) {
+  h: ClosedInterval<0, 360>
+  s: ClosedInterval<0, 1>
+  l: ClosedInterval<0, 1>
+  a: ClosedInterval<0, 1>
+
+  constructor(
+    hue: ClosedInterval<0, 360>,
+    saturation: ClosedInterval<0, 1>,
+    luminocity: ClosedInterval<0, 1>,
+    alpha: ClosedInterval<0, 1> = 1,
+  ) {
     this.h =
-      h > 360 || h < 0
-        ? warnWithDefault(`clamping h '${h}' to [0, 360]`, clamp(0, 360, h))
-        : h
+      hue > 360 || hue < 0
+        ? warnWithDefault(`clamping h '${hue}' to [0, 360]`, clamp(0, 360, hue))
+        : hue
     this.s =
-      s > 1 || s < 0
-        ? warnWithDefault(`clamping s '${s}' to [0, 1]`, clamp(0, 1, s))
-        : s
+      saturation > 1 || saturation < 0
+        ? warnWithDefault(
+            `clamping s '${saturation}' to [0, 1]`,
+            clamp(0, 1, saturation),
+          )
+        : saturation
     this.l =
-      l > 1 || l < 0
-        ? warnWithDefault(`clamping l '${l}' to [0, 1]`, clamp(0, 1, l))
-        : l
+      luminocity > 1 || luminocity < 0
+        ? warnWithDefault(
+            `clamping l '${luminocity}' to [0, 1]`,
+            clamp(0, 1, luminocity),
+          )
+        : luminocity
     this.a =
-      a > 1 || a < 0
-        ? warnWithDefault(`clamping a '${a}' to [0, 1]`, clamp(0, 1, a))
-        : a
+      alpha > 1 || alpha < 0
+        ? warnWithDefault(`clamping a '${alpha}' to [0, 1]`, clamp(0, 1, alpha))
+        : alpha
     return
   }
 
@@ -37,7 +47,7 @@ export class ColorHsl {
    * @param {ColorRgb} rgb
    * @returns {ColorHsl}
    */
-  static fromRgb(rgb) {
+  static fromRgb(rgb: ColorRgb): ColorHsl {
     const min = Math.min(rgb.r, rgb.g, rgb.b)
     const max = Math.max(rgb.r, rgb.g, rgb.b)
     const component = max === rgb.r ? 'r' : max === rgb.g ? 'g' : 'b'
@@ -50,7 +60,7 @@ export class ColorHsl {
     const l = (max + min) / 2
     const s = delta / (1 - Math.abs(2 * l - 1))
     // cheap pattern matching ¯\_(ツ)_/¯
-    const componentHueMap = {
+    const componentHueMap: Record<string, number> = {
       r: (rgb.g - rgb.b) / delta + (rgb.g < rgb.b ? 6 : 0),
       g: (rgb.b - rgb.r) / delta + 2,
       b: (rgb.r - rgb.g) / delta + 4,
@@ -68,7 +78,7 @@ export class ColorHsl {
   /**
    * @returns {ColorRgb}
    */
-  toRgb() {
+  toRgb(): ColorRgb {
     if (this.s === 0.0) {
       return new ColorRgb(this.l, this.l, this.l, this.a)
     }
@@ -81,7 +91,7 @@ export class ColorHsl {
     return new ColorRgb(r, g, b, this.a)
   }
 
-  toString() {
+  toString(): string {
     return `hsl(${this.h}, ${this.s * 100}%, ${this.l * 100}%, ${this.a})`
   }
 
@@ -92,7 +102,7 @@ export class ColorHsl {
    * @param {number} [mix=0.5] The mix of colors. When 0, returns `this`. When 1, returns `other`
    * @returns {ColorHsl}
    */
-  mix(other, mix = 0.5) {
+  mix(other: ColorHsl, mix = 0.5): ColorHsl {
     const h = mixColorComponent(this.h, other.h, mix)
     const s = lerp(this.s, other.s, mix)
     const l = lerp(this.l, other.l, mix)
@@ -103,7 +113,7 @@ export class ColorHsl {
   /**
    * @returns {string} hex representation of the color
    */
-  toHex() {
+  toHex(): string {
     return this.toRgb().toHex()
   }
 
@@ -111,7 +121,7 @@ export class ColorHsl {
    * @param {number} a new alpha amount
    * @returns {ColorHsl}
    */
-  opacify(a) {
+  opacify(a: number): ColorHsl {
     return new ColorHsl(this.h, this.s, this.l, a)
   }
 }
@@ -123,7 +133,7 @@ export class ColorHsl {
  * @param {number} [a=1] alpha, in range [0, 1]
  * @returns {ColorHsl} color in hsl format
  */
-export function hsl(h, s, l, a = 1) {
+export function hsl(h: number, s: number, l: number, a = 1): ColorHsl {
   return new ColorHsl(h, s, l, a)
 }
 
@@ -136,7 +146,7 @@ export function hsl(h, s, l, a = 1) {
  * @param {number} mix in range [0, 1]. When 0, returns `a`. When 1, returns `b`.
  * @returns {number}
  */
-export function mixColorComponent(a, b, mix) {
+export function mixColorComponent(a: number, b: number, mix: number): number {
   const aVal = a < b && b - a > 180 ? a + 360 : a
   const bVal = b < a && a - b > 180 ? b + 360 : b
   const aPct = 1 - mix
@@ -146,14 +156,11 @@ export function mixColorComponent(a, b, mix) {
 }
 
 // this should probably go in a utility file
-/**
- *
- * @param {number} a in range [0, 1]
- * @param {number} b in range [0, 1]
- * @param {number} mix in range [0, 1]
- * @returns {number}
- */
-function lerp(a, b, mix) {
+function lerp(
+  a: ClosedInterval<0, 1>,
+  b: ClosedInterval<0, 1>,
+  mix: ClosedInterval<0, 1>,
+): number {
   const aPct = 1 - mix
   const bPct = mix
   const result = a * aPct + b * bPct
@@ -163,12 +170,8 @@ function lerp(a, b, mix) {
 /**
  * Honestly not sure what this does
  * https://github.com/openrndr/openrndr/blob/71f233075e01ced7670963194e8730bc5c35c67c/openrndr-color/src/commonMain/kotlin/org/openrndr/color/ColorHSLa.kt#L123C10-L130C2
- * @param {number} p
- * @param {number} q
- * @param {number} ut
- * @returns {number}
  */
-function hue2rgb(p, q, ut) {
+function hue2rgb(p: number, q: number, ut: number): number {
   let t = ut
   while (t < 0) t += 1.0
   while (t > 1) t -= 1.0
