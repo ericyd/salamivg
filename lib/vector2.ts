@@ -1,4 +1,4 @@
-import { Circle } from './components'
+import { Circle } from './components/circle'
 import { jitter, random, Rng } from './random'
 
 export class Vector2 {
