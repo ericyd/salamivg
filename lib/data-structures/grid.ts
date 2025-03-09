@@ -133,6 +133,7 @@ export class Grid<T = any> {
     return this.#grid[this.#index(x, y)]
   }
 
+  // TODO: use proper overloads to avoid `any` types (should be `T`)
   set(...args: [Vector2, any] | [number, number, any]): void {
     const [x, y, value] =
       args[0] instanceof Vector2 ? [args[0].x, args[0].y, args[1]] : args

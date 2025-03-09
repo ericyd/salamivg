@@ -9,6 +9,9 @@ import { Oscillator } from './oscillator.js'
  */
 export type OscillatorNoiseFn = (x: number, y?: number) => ClosedInterval<-1, 1>
 
+// Straight from slide 29 of this:
+// https://raw.githubusercontent.com/petewerner/misc/master/Curl%20Noise%20Slides.pdf
+// Originally implemented here: https://github.com/ericyd/generative-art/blob/b9a1bc25ec60fb99e7e9a2bd9ba32c55da40da67/openrndr/src/main/kotlin/noise/curl.kt#L21
 /**
  * Creates a noise function based on oscillators.
  * @param {string | number} seed - The seed for the random number generator.

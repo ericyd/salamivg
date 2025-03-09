@@ -144,6 +144,7 @@ export class Rectangle extends Tag {
 
 type RectFunction = (rect: Rectangle) => void
 
+// TODO: add proper overloads
 /**
  * @param {RectangleAttributes | number | RectFunction} attrsOrBuilderOrX
  * @param {number} [y]
