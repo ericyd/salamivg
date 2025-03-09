@@ -13,10 +13,12 @@ export type OscillatorNoiseFn = (x: number, y?: number) => ClosedInterval<-1, 1>
 // https://raw.githubusercontent.com/petewerner/misc/master/Curl%20Noise%20Slides.pdf
 // Originally implemented here: https://github.com/ericyd/generative-art/blob/b9a1bc25ec60fb99e7e9a2bd9ba32c55da40da67/openrndr/src/main/kotlin/noise/curl.kt#L21
 /**
- * Creates a noise function based on oscillators.
- * @param {string | number} seed - The seed for the random number generator.
- * @param {number} [xyScale=1] - Scales the x and y coordinates. When < 1, causes noise to oscillate over larger distances in the xy plane. When > 1, causes noise to oscillate over smaller distances in the xy plane.
- * @param {number} [outputScale=1] - Scales the output value.
+ * Creates a noise function based on oscillators
+ * @param {string | number} seed
+ * @param {number} [xyScale=1]
+ *  When < 1, causes noise to oscillate over larger distances in the xy plane.
+ *  When > 1, causes noise to oscillate over smaller distances in the xy plane.
+ * @param {number} [outputScale=1] Scales the output value
  */
 export function createOscNoise(
   seed: string | number,
