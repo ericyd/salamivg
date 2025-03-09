@@ -318,7 +318,7 @@ renderSvg(config, (svg) => {
 
 ## Design Philosophy
 
-1. Inspired by the APIs of [OPENRNDR](https://openrndr.org/), expressed in idiomatic JavaScript.
+1. Inspired by the APIs of [OPENRNDR](https://openrndr.org/), expressed in idiomatic TypeScript
 2. Local first
 3. Fully type-checked and thoroughly documented
 4. Small, fast, and focused
@@ -350,7 +350,7 @@ npm publish --access public
 
 ## NodeJS Version Compatibility
 
-SalamiVG was developed with Node 20 but it probably works back to Node 14 or so.
+SalamiVG was developed with Node 23 but it probably works back to Node 14 or so.
 
 This library has been tested against
 * Node 23.9.0
