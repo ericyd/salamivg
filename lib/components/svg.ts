@@ -1,10 +1,10 @@
-import { Tag } from './tag'
+import { SvgColor, Tag } from './tag'
 import { Circle, circle } from './circle'
 import { Path, path } from './path'
 import { Rectangle, rect } from './rectangle'
 import { Polyline, LineSegment, polyline } from './polyline'
-import { Polygon } from './polygon'
-import { LinearGradient } from './linear-gradient'
+import { polygon, Polygon } from './polygon'
+import { LinearGradient, LinearGradientAttributes } from './linear-gradient'
 import { Defs } from './defs'
 import { Vector2, vec2 } from '../vector2'
 
@@ -135,7 +135,7 @@ export class Svg extends Tag {
   polygon(instanceOrBuilder: Polygon | ((polygon: Polygon) => void)): Tag {
     return instanceOrBuilder instanceof Polygon
       ? this.addChild(instanceOrBuilder)
-      : this.addChild(new Polygon(instanceOrBuilder))
+      : this.addChild(polygon(instanceOrBuilder))
   }
 
   polygons(ps: Array<Polygon | ((polygon: Polygon) => void)>): void {

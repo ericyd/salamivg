@@ -104,19 +104,19 @@ describe('Vector3', () => {
   describe('static random', () => {
     it('should generate a random vector within specified bounds', () => {
       const v = Vector3.random(0, 1, 0, 1, 0, 1, rng)
-      assert.ok(v.x >= 0 && v.x <= 1)
-      assert.ok(v.y >= 0 && v.y <= 1)
-      assert.ok(v.z >= 0 && v.z <= 1)
+      assert.strictEqual(v.x, 0.5)
+      assert.strictEqual(v.y, 0.5)
+      assert.strictEqual(v.z, 0.5)
     })
   })
 
   describe('jitter', () => {
     it('should jitter a vector by the specified amount', () => {
       const v = vec3(5, 5, 5)
-      const result = v.jitter(1, rng)
-      assert.ok(result.x >= 4 && result.x <= 6)
-      assert.ok(result.y >= 4 && result.y <= 6)
-      assert.ok(result.z >= 4 && result.z <= 6)
+      const result = v.jitter(1, () => 0.75)
+      assert.strictEqual(result.x, 5.5)
+      assert.strictEqual(result.y, 5.5)
+      assert.strictEqual(result.z, 5.5)
     })
   })
 

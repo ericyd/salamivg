@@ -1,28 +1,33 @@
+import { ColorHsl } from '../color/hsl'
+import { ColorRgb } from '../color/rgb'
 import { toFixedPrecision } from '../math'
 import { pickBy } from '../util'
-/** @typedef {import('./linear-gradient').LinearGradient} tag.LinearGradient */
-/** @typedef {import('../color/rgb').ColorRgb} tag.ColorRgb */
-/** @typedef {import('../color/hsl').ColorHsl} tag.ColorHsl */
-/** @typedef {'none' | string | null | tag.ColorRgb | tag.ColorHsl | tag.LinearGradient} SvgColor */
+import { LinearGradient } from './linear-gradient'
 
-/**
- * @property {string} tagName
- * @property {object} attributes
- * @property {Array<Tag>} children
- */
+export type SvgColor =
+  | 'none'
+  | string
+  | null
+  | ColorRgb
+  | ColorHsl
+  | LinearGradient
+
 export class Tag {
+  tagName: string
+  attributes: Record<string, any>
+  children: Tag[]
   /**
    * When < Infinity, will drop decimal values beyond this precision.
    * For example, when numericPrecision = 3, 12.34567 will be rounded to 12.345
    * @type {number}
    */
-  numericPrecision = Infinity
+  numericPrecision: number = Infinity
 
   /**
    * @param {string} tagName
    * @param {Record<string, unknown>} attributes
    */
-  constructor(tagName, attributes = {}) {
+  constructor(tagName: string, attributes: Record<string, unknown> = {}) {
     this.tagName = tagName
     this.attributes = attributes
     /** @type {Array<Tag>} */
@@ -32,27 +37,24 @@ export class Tag {
   /**
    * @param {Record<string, unknown>} attributes
    */
-  setAttributes(attributes) {
+  setAttributes(attributes: Record<string, unknown>): void {
     this.attributes = {
       ...this.attributes,
       ...attributes,
     }
   }
 
-  /** @param {SvgColor} value */
-  set fill(value) {
+  set fill(value: SvgColor) {
     const fill = value === null ? 'none' : value
     this.setAttributes({ fill })
   }
 
-  /** @param {SvgColor} value */
-  set stroke(value) {
+  set stroke(value: SvgColor) {
     const stroke = value === null ? 'none' : value
     this.setAttributes({ stroke })
   }
 
-  /** @param {number} value */
-  set strokeWidth(value) {
+  set strokeWidth(value: number) {
     this.setAttributes({ 'stroke-width': value })
   }
 
@@ -61,7 +63,7 @@ export class Tag {
    * @param {*} key
    * @returns {boolean}
    */
-  #visualAttributesTestFn(value, key) {
+  #visualAttributesTestFn(value: unknown, key: string): boolean {
     return (
       ['fill', 'stroke', 'stroke-width'].includes(key) && value !== undefined
     )
@@ -73,7 +75,7 @@ export class Tag {
    * as children are added to the document.
    * @returns {Record<string, unknown>}
    */
-  visualAttributes() {
+  visualAttributes(): Record<string, unknown> {
     return pickBy(this.#visualAttributesTestFn, {
       fill: this.attributes.fill,
       stroke: this.attributes.stroke,
@@ -87,7 +89,7 @@ export class Tag {
    * @param {Record<string, unknown>} incoming
    * @returns {void}
    */
-  setVisualAttributes(incoming = {}) {
+  setVisualAttributes(incoming: Record<string, unknown> = {}): void {
     this.setAttributes({
       ...pickBy(this.#visualAttributesTestFn, incoming),
       ...this.visualAttributes(),
@@ -98,7 +100,7 @@ export class Tag {
    * @protected
    * @param {Tag} child
    */
-  addChild(child) {
+  addChild(child: Tag): Tag {
     child.setVisualAttributes(this.visualAttributes())
     // Future enhancement: There should be a more generalized concept of "inheritable attributes".
     // The idea here is if the parent's precision has never been set, then use the child's precision, else use the parent's precision.
@@ -110,7 +112,7 @@ export class Tag {
     return child
   }
 
-  #formatAttributes() {
+  #formatAttributes(): string {
     return Object.entries(pickBy((v) => v !== undefined, this.attributes))
       .map(([key, value]) => {
         if (typeof value === 'number') {
@@ -124,7 +126,7 @@ export class Tag {
   /**
    * @returns {string}
    */
-  render() {
+  render(): string {
     // this would be much more elegant as `this.attributes.fill instanceof LinearGradient`,
     // but doing so would result in a circular dependency that I don't want to resolve
     // with additional abstractions
@@ -155,7 +157,7 @@ export class Tag {
  * @param {(tag: Tag) => void} builder
  * @returns {Tag}
  */
-export function tag(tagName, builder) {
+export function tag(tagName: string, builder: (tag: Tag) => void): Tag {
   const t = new Tag(tagName)
   builder(t)
   return t

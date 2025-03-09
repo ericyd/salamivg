@@ -2,34 +2,36 @@ import { error } from '../internal'
 import { Vector2, vec2 } from '../vector2'
 import { Tag } from './tag'
 
-/**
- * @typedef {object} CircleAttributes
- * @property {number} [x]
- * @property {number} [y]
- * @property {Vector2} [center]
- * @property {number} [radius=1]
- */
+export type CircleAttributes = {
+  x?: number
+  y?: number
+  center?: Vector2
+  /**
+   * @default 1
+   */
+  radius?: number
+}
+
+type Bitangent = [Vector2, Vector2, number, 'inner' | 'outer']
+type InnerBitangent = [Vector2, Vector2, number, 'inner']
+type OuterBitangent = [Vector2, Vector2, number, 'outer']
 
 /**
  * @class Circle
- * @property {number} x
- * @property {number} y
- * @property {number} radius
- * @extends Tag
  */
 export class Circle extends Tag {
-  /** @type {number} */
-  #x
-  /** @type {number} */
-  #y
-  /** @type {number} */
-  #radius
-  /** @type {Vector2} */
-  #center
-  /**
-   * @param {CircleAttributes} [attributes={}]
-   */
-  constructor({ x, y, radius = 1, center, ...attributes } = {}) {
+  #x: number
+  #y: number
+  #radius: number
+  #center: Vector2
+
+  constructor({
+    x,
+    y,
+    radius = 1,
+    center,
+    ...attributes
+  }: CircleAttributes = {}) {
     const [i, j] =
       x !== undefined && y !== undefined
         ? [x, y]
@@ -53,40 +55,40 @@ export class Circle extends Tag {
   /**
    * @param {number} value
    */
-  set x(value) {
+  set x(value: number) {
     this.setAttributes({ cx: value })
     this.#x = value
   }
-  get x() {
+  get x(): number {
     return this.#x
   }
 
   /**
    * @param {number} value
    */
-  set y(value) {
+  set y(value: number) {
     this.setAttributes({ cy: value })
     this.#y = value
   }
-  get y() {
+  get y(): number {
     return this.#y
   }
 
   /**
    * @param {number} value
    */
-  set radius(value) {
+  set radius(value: number) {
     this.setAttributes({ r: value })
     this.#radius = value
   }
-  get radius() {
+  get radius(): number {
     return this.#radius
   }
 
   /**
    * @returns {Vector2}
    */
-  get center() {
+  get center(): Vector2 {
     return this.#center
   }
 
@@ -95,7 +97,7 @@ export class Circle extends Tag {
    * @param {Vector2} point
    * @returns {boolean}
    */
-  contains(point) {
+  contains(point: Vector2): boolean {
     return point.distanceTo(this.#center) <= this.#radius
   }
 
@@ -104,7 +106,7 @@ export class Circle extends Tag {
    * @parram {number} [padding=0] optional padding; allows using this method to check for "close to circle" instead of strict intersections
    * @returns {boolean}
    */
-  intersectsCircle(other, padding = 0) {
+  intersectsCircle(other: Circle, padding = 0): boolean {
     return (
       this.center.distanceTo(other.center) <
       this.radius + other.radius + padding
@@ -115,23 +117,24 @@ export class Circle extends Tag {
    * Returns a list of all bitangents, i.e. lines that are tangent to both circles.
    * Thanks SO! https://math.stackexchange.com/questions/719758/inner-tangent-between-two-circles-formula
    * @param {Circle} other
-   * @returns {[Vector2, Vector2, number, 'inner' | 'outer'][]} a list of tangents,
+   * @returns {Bitangent[]} a list of tangents,
    * where the first value is the point on `small` and the second value is the point on `large`,
    * and the third value is the angle of the tangent points relative to 0 radians
    */
-  bitangents(other) {
+  bitangents(other: Circle): Bitangent[] {
     // there is some duplicated calculations in outer and inner tangents; consider refactoring
-    // @ts-expect-error TS can't handle that 'outer' concatenated with 'inner' becomes 'outer' | 'inner'
-    return this.outerTangents(other).concat(this.innerTangents(other))
+    return (<Bitangent[]>this.outerTangents(other)).concat(
+      this.innerTangents(other),
+    )
   }
 
   /**
    * @param {Circle} other
-   * @returns {[Vector2, Vector2, number, 'outer'][]} outer tangent lines
+   * @returns {OuterBitangent[]} outer tangent lines
    * where the first value is the point on `small` and the second value is the point on `large`,
    * and the third value is the angle of the tangent points relative to 0 radians
    */
-  outerTangents(other) {
+  outerTangents(other: Circle): OuterBitangent[] {
     const small = this.radius > other.radius ? other : this
     const large = this.radius > other.radius ? this : other
     const hypotenuse = small.center.distanceTo(large.center)
@@ -170,11 +173,11 @@ export class Circle extends Tag {
 
   /**
    * @param {Circle} other
-   * @returns {[Vector2, Vector2, number, 'inner'][]} inner tangent lines,
+   * @returns {InnerBitangent[]} inner tangent lines,
    * where the first value is the point on `small` and the second value is the point on `large`,
    * and the third value is the angle of the tangent points relative to 0 radians
    */
-  innerTangents(other) {
+  innerTangents(other: Circle): InnerBitangent[] {
     if (this.intersectsCircle(other)) {
       return []
     }
@@ -216,41 +219,26 @@ export class Circle extends Tag {
     ]
   }
 
-  toString() {
+  toString(): string {
     return `Circle { x: ${this.#x}, y: ${this.#y}, radius: ${this.#radius} }`
   }
 }
 
-/**
- * @overload
- * @param {CircleAttributes} attrsOrBuilderOrX
- * @returns {Circle}
- */
-/**
- * @overload
- * @param {number} attrsOrBuilderOrX
- * @param {number} y
- * @param {number} radius
- * @returns {Circle}
- */
-/**
- * @overload
- * @param {(circle: Circle) => void} attrsOrBuilderOrX
- * @returns {Circle}
- */
-/**
- * @param {CircleAttributes | number | ((circle: Circle) => void)} attrsOrBuilderOrX
- * @param {number} [y]
- * @param {number} [radius]
- */
-export function circle(attrsOrBuilderOrX, y, radius) {
+export function circle(attrs: CircleAttributes): Circle
+export function circle(x: number, y: number, radius: number): Circle
+export function circle(builder: (c: Circle) => void): Circle
+export function circle(
+  attrsOrBuilderOrX: CircleAttributes | number | ((circle: Circle) => void),
+  y?: number,
+  radius?: number,
+): Circle {
   if (typeof attrsOrBuilderOrX === 'function') {
     const c = new Circle()
     attrsOrBuilderOrX(c)
     return c
   }
   if (typeof attrsOrBuilderOrX === 'object') {
-    return new Circle(attrsOrBuilderOrX)
+    return new Circle(attrsOrBuilderOrX as CircleAttributes)
   }
   if (
     typeof attrsOrBuilderOrX === 'number' &&

@@ -1,4 +1,5 @@
-import { jitter, random } from './random'
+import { Circle } from './components'
+import { jitter, random, Rng } from './random'
 
 export class Vector2 {
   x: number
@@ -116,7 +117,7 @@ export class Vector2 {
    * @param {number} xMax
    * @param {number} yMin
    * @param {number} yMax
-   * @param {import('./random').Rng} rng
+   * @param {Rng} rng
    * @returns {Vector2}
    */
   static random(
@@ -124,21 +125,18 @@ export class Vector2 {
     xMax: number,
     yMin: number,
     yMax: number,
-    rng: import('./random').Rng,
+    rng: Rng,
   ): Vector2 {
     return vec2(random(xMin, xMax, rng), random(yMin, yMax, rng))
   }
 
   /**
    * Returns a random point within the given circle.
-   * @param {import('./components/circle').Circle} circle
-   * @param {import('./random').Rng} rng
+   * @param {Circle} circle
+   * @param {Rng} rng
    * @returns {Vector2}
    */
-  static randomInCircle(
-    circle: import('./components/circle').Circle,
-    rng: import('./random').Rng,
-  ): Vector2 {
+  static randomInCircle(circle: Circle, rng: Rng): Vector2 {
     const angle = random(0, Math.PI * 2, rng)
     const radius = random(0, circle.radius, rng)
     return circle.center.add(Vector2.fromAngle(angle).scale(radius))
@@ -156,10 +154,10 @@ export class Vector2 {
   /**
    * Returns a new Vector2, randomly offset by a maximum of `amount`
    * @param {number} amount
-   * @param {import('./random').Rng} rng
+   * @param {Rng} rng
    * @returns {Vector2}
    */
-  jitter(amount: number, rng: import('./random').Rng): Vector2 {
+  jitter(amount: number, rng: Rng): Vector2 {
     return vec2(jitter(amount, this.x, rng), jitter(amount, this.y, rng))
   }
 

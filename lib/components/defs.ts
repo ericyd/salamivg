@@ -5,10 +5,7 @@ export class Defs extends Tag {
     super('defs')
   }
 
-  /**
-   * @param {Tag} child
-   */
-  addDefinition(child) {
+  addDefinition(child: Tag) {
     return super.addChild(child)
   }
 }

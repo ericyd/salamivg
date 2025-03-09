@@ -3,37 +3,27 @@ import { Vector2 } from '../vector2'
 import { Rectangle } from './rectangle'
 import { Tag } from './tag'
 
-/**
- * @typedef {object} PolylineAttributes
- * @property {Vector2[]} [points=[]]
- */
+type PolylineAttributes = {
+  points?: Vector2[]
+}
 
-/**
- * @class Polyline
- * @extends Tag
- */
 export class Polyline extends Tag {
-  /** @type {Vector2} */
   cursor = new Vector2(0, 0)
-  /** @type {Vector2[]} */
-  points = []
+  points: Vector2[] = []
+
   /**
    * Initialize to "empty" rectangle
-   * @type {Rectangle}
    */
   #boundingBox = new Rectangle({ x: 0, y: 0, width: 0, height: 0 })
 
-  /**
-   * @param {PolylineAttributes} attributes
-   */
-  constructor({ points = [], ...attributes } = { points: [] }) {
+  constructor({ points = [], ...attributes }: PolylineAttributes = {}) {
     super('polyline', attributes)
     this.points = points
     this.cursor = points[points.length - 1] ?? new Vector2(0, 0)
   }
 
   /** @returns {Rectangle} */
-  get boundingBox() {
+  get boundingBox(): Rectangle {
     if (this.#boundingBox.empty()) {
       const xs = this.points.map(({ x }) => x)
       const ys = this.points.map(({ y }) => y)
@@ -55,7 +45,7 @@ export class Polyline extends Tag {
    * Adds a point to the points of the polyline.
    * @param {Vector2} point
    */
-  push(point) {
+  push(point: Vector2) {
     this.points.push(point)
     this.cursor = point
   }
@@ -63,11 +53,11 @@ export class Polyline extends Tag {
   /**
    * @returns {boolean}
    */
-  empty() {
+  empty(): boolean {
     return this.points.length === 0
   }
 
-  render() {
+  render(): string {
     if (!Array.isArray(this.points) || this.points.length === 0) {
       throw new Error('Cannot render a Polyline without points')
     }
@@ -85,21 +75,11 @@ export class Polyline extends Tag {
   }
 }
 
-/**
- * @overload
- * @param {PolylineAttributes} attrsOrBuilder
- * @returns {Polyline}
- */
-/**
- * @overload
- * @param {(Polyline: Polyline) => void} attrsOrBuilder
- * @returns {Polyline}
- */
-/**
- * @param {PolylineAttributes | ((Polyline: Polyline) => void)} attrsOrBuilder
- * @returns {Polyline}
- */
-export function polyline(attrsOrBuilder) {
+export function polyline(atts: PolylineAttributes): Polyline
+export function polyline(builder: (p: Polyline) => void): Polyline
+export function polyline(
+  attrsOrBuilder: PolylineAttributes | ((poly: Polyline) => void),
+): Polyline {
   if (typeof attrsOrBuilder === 'function') {
     const poly = new Polyline()
     attrsOrBuilder(poly)
@@ -114,7 +94,7 @@ export class LineSegment extends Polyline {
    * @param {Vector2} start
    * @param {Vector2} end
    */
-  constructor(start, end) {
+  constructor(start: Vector2, end: Vector2) {
     super({
       points: [start, end],
     })
@@ -126,6 +106,6 @@ export class LineSegment extends Polyline {
  * @param {Vector2} end
  * @returns {LineSegment}
  */
-export function lineSegment(start, end) {
+export function lineSegment(start: Vector2, end: Vector2): LineSegment {
   return new LineSegment(start, end)
 }

@@ -21,37 +21,34 @@ import { Tag } from './tag'
 import { vec2, Vector2 } from '../vector2'
 import { toFixedPrecision } from '../math'
 
-/**
- * @typedef CoordinateType
- * @type {'absolute' | 'relative'}
- */
-
-/**
- * @typedef {Record<string, unknown>} PathAttributes
- * TODO: consider adding definitions for shared attributes like fill, stroke, etc
- */
-
-/**
- * @class Path
- * @extends Tag
- */
-export class Path extends Tag {
-  /** @type {PathInstruction[]} */
-  #d = []
+export type CoordinateType = 'absolute' | 'relative'
+// TODO: consider adding definitions for shared attributes like fill, stroke, etc
+export type PathAttributes = Record<string, unknown>
+export type ArcProps = {
+  rx: number
+  ry: number
   /**
-   * @param {PathAttributes} [attributes={}]
+   * @default 0
    */
-  constructor(attributes = {}) {
+  xAxisRotation?: number
+  /**
+   * @default false
+   */
+  largeArcFlag?: boolean
+  /**
+   * @default false
+   */
+  sweepFlag?: boolean
+  end: Vector2
+}
+
+export class Path extends Tag {
+  #d: PathInstruction[] = []
+  cursor: Vector2
+
+  constructor(attributes: PathAttributes = {}) {
     super('path', attributes)
     this.cursor = vec2(0, 0)
-  }
-
-  /**
-   * This only works when the path is only made up of straight lines...
-   * @type {Vector2[]}
-   */
-  get points() {
-    return this.#d.map((p) => p.endPoint)
   }
 
   /**
@@ -59,7 +56,7 @@ export class Path extends Tag {
    * @param {Vector2} endPoint
    * @param {CoordinateType} coordinateType
    */
-  moveTo(endPoint, coordinateType = 'absolute') {
+  moveTo(endPoint: Vector2, coordinateType: CoordinateType = 'absolute'): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'M' : 'm', [
         endPoint,
@@ -73,7 +70,7 @@ export class Path extends Tag {
    * @param {Vector2} endPoint
    * @param {CoordinateType} coordinateType
    */
-  lineTo(endPoint, coordinateType = 'absolute') {
+  lineTo(endPoint: Vector2, coordinateType: CoordinateType = 'absolute'): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'L' : 'l', [
         endPoint,
@@ -93,11 +90,11 @@ export class Path extends Tag {
    * @param {CoordinateType} coordinateType
    */
   cubicBezier(
-    controlPoint1,
-    controlPoint2,
-    endPoint,
-    coordinateType = 'absolute',
-  ) {
+    controlPoint1: Vector2,
+    controlPoint2: Vector2,
+    endPoint: Vector2,
+    coordinateType: CoordinateType = 'absolute',
+  ): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'C' : 'c', [
         controlPoint1,
@@ -117,7 +114,11 @@ export class Path extends Tag {
    * @param {Vector2} endPoint
    * @param {'absolute' | 'relative'} coordinateType
    */
-  smoothBezier(controlPoint, endPoint, coordinateType = 'absolute') {
+  smoothBezier(
+    controlPoint: Vector2,
+    endPoint: Vector2,
+    coordinateType: CoordinateType = 'absolute',
+  ): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'S' : 's', [
         controlPoint,
@@ -133,7 +134,11 @@ export class Path extends Tag {
    * @param {Vector2} endPoint
    * @param {'absolute' | 'relative'} coordinateType
    */
-  quadraticBezier(controlPoint, endPoint, coordinateType = 'absolute') {
+  quadraticBezier(
+    controlPoint: Vector2,
+    endPoint: Vector2,
+    coordinateType: CoordinateType = 'absolute',
+  ): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'Q' : 'q', [
         controlPoint,
@@ -149,7 +154,11 @@ export class Path extends Tag {
    * @param {Vector2} endPoint
    * @param {'absolute' | 'relative'} coordinateType
    */
-  smoothQuadraticBezier(controlPoint, endPoint, coordinateType = 'absolute') {
+  smoothQuadraticBezier(
+    controlPoint: Vector2,
+    endPoint: Vector2,
+    coordinateType: CoordinateType = 'absolute',
+  ): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'T' : 't', [
         controlPoint,
@@ -159,24 +168,17 @@ export class Path extends Tag {
     this.cursor = endPoint
   }
 
-  /**
-   * @typedef {object} ArcProps
-   * @property {number} rx
-   * @property {number} ry
-   * @property {number} [xAxisRotation=0]
-   * @property {boolean} [largeArcFlag=false]
-   * @property {boolean} [sweepFlag=false]
-   * @property {Vector2} end
-   */
-  /**
-   *
-   * @param {ArcProps} props
-   * @param {'absolute' | 'relative'} coordinateType
-   */
   arc(
-    { rx, ry, xAxisRotation = 0, largeArcFlag = false, sweepFlag = false, end },
-    coordinateType = 'absolute',
-  ) {
+    {
+      rx,
+      ry,
+      xAxisRotation = 0,
+      largeArcFlag = false,
+      sweepFlag = false,
+      end,
+    }: ArcProps,
+    coordinateType: CoordinateType = 'absolute',
+  ): void {
     this.#d.push(
       new PathInstruction(coordinateType === 'absolute' ? 'A' : 'a', [
         vec2(rx, ry),
@@ -188,7 +190,7 @@ export class Path extends Tag {
     )
   }
 
-  close() {
+  close(): void {
     this.#d.push(new PathInstruction('Z', []))
     this.cursor = this.#d[0].endPoint
   }
@@ -198,7 +200,11 @@ export class Path extends Tag {
    * @param {boolean} [closed=true]
    * @param {CoordinateType} [coordinateType='absolute']
    */
-  static fromPoints(points, closed = true, coordinateType = 'absolute') {
+  static fromPoints(
+    points: Vector2[],
+    closed = true,
+    coordinateType: CoordinateType = 'absolute',
+  ): Path {
     return path((p) => {
       p.moveTo(points[0], coordinateType)
       for (let i = 1; i < points.length; i++) {
@@ -210,7 +216,7 @@ export class Path extends Tag {
     })
   }
 
-  render() {
+  render(): string {
     this.setAttributes({
       d: this.#d.map((p) => p.render(this.numericPrecision)).join(' '),
     })
@@ -218,26 +224,20 @@ export class Path extends Tag {
   }
 }
 
-/** @typedef {PathAttributes | ((Path: Path) => void)} PathAttributesOrBuilder */
+export type PathAttributesOrBuilder = PathAttributes | ((Path: Path) => void)
 
-/**
- * @overload
- * @param {PathAttributes} attrsOrBuilder
- * @param {PathAttributes} [attributes={}]
- * @returns {Path}
- */
-/**
- * @overload
- * @param {(Path: Path) => void} attrsOrBuilder
- * @param {PathAttributes} [attributes={}]
- * @returns {Path}
- */
-/**
- * @param {PathAttributesOrBuilder} attrsOrBuilder
- * @param {PathAttributes} [attributes={}]
- * @returns {Path}
- */
-export const path = (attrsOrBuilder, attributes = {}) => {
+export function path(
+  attrsOrBuilder: PathAttributes,
+  attributes?: PathAttributes,
+): Path
+export function path(
+  attrsOrBuilder: (Path: Path) => void,
+  attributes?: PathAttributes,
+): Path
+export function path(
+  attrsOrBuilder: PathAttributesOrBuilder,
+  attributes: PathAttributes = {},
+): Path {
   if (typeof attrsOrBuilder === 'function') {
     const c = new Path(attributes)
     attrsOrBuilder(c)
@@ -249,13 +249,28 @@ export const path = (attrsOrBuilder, attributes = {}) => {
   throw new Error(`Unable to construct Path from "${attrsOrBuilder}"`)
 }
 
+type PathCommand =
+  | 'l'
+  | 'L'
+  | 'm'
+  | 'M'
+  | 'c'
+  | 'C'
+  | 's'
+  | 'S'
+  | 'Z'
+  | 'A'
+  | 'a'
+  | 'Q'
+  | 'q'
+  | 'T'
+  | 't'
+
 class PathInstruction {
-  /**
-   *
-   * @param {'l' | 'L' | 'm' | 'M' | 'c' | 'C' | 's' | 'S' | 'Z' | 'A' | 'a' | 'Q' | 'q' | 'T' | 't'} commandType
-   * @param {(Vector2 | number)[]} points
-   */
-  constructor(commandType, points) {
+  endPoint: Vector2
+  points: (Vector2 | number)[]
+  commandType: PathCommand
+  constructor(commandType: PathCommand, points: (Vector2 | number)[]) {
     // This isn't super resilient, but this class should never be instantiated manually so it should be fine
     this.endPoint = typeof points?.[0] === 'number' ? vec2(0, 0) : points[0]
     this.points = points
@@ -266,7 +281,7 @@ class PathInstruction {
    * @param {number} [precision=Infinity]
    * @returns {string}
    */
-  render(precision = Infinity) {
+  render(precision: number = Infinity): string {
     return [
       this.commandType,
       ...this.points.map((pt) =>
@@ -275,7 +290,7 @@ class PathInstruction {
               toFixedPrecision(pt.x, precision),
               toFixedPrecision(pt.y, precision),
             ].join(' ')
-          : toFixedPrecision(pt, precision).toString(),
+          : toFixedPrecision(pt as number, precision).toString(),
       ),
     ].join(' ')
   }

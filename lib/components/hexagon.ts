@@ -1,41 +1,43 @@
-import { vec2 } from '../vector2'
+import { Radians } from '../types'
+import { vec2, Vector2 } from '../vector2'
 import { Polygon } from './polygon'
 
-/** @typedef {import('../vector2').Vector2} Vector2 */
-
-/**
- * @typedef {object} HexagonAttributes
- * @property {Vector2} center
- * @property {number} [circumradius] the radius of the circumscribed circle. Either the apothem or the circumradius must be defined.
- * @property {number} [apothem] the radius of the inscribed circle. Either the apothem or the circumradius must be defined.
- * @property {Radians} [rotation=0]
- */
-
-/**
- * @class Hexagon
- * @extends Polygon
- */
-export class Hexagon extends Polygon {
-  /** @type {number} */
-  #rotation = 0
-  /** @type {number} */
-  #circumradius
-  /** @type {number} */
-  #apothem
-  /** @type {Vector2} */
-  center
-
+type HexagonAttributes = {
+  center: Vector2
   /**
-   * @param {HexagonAttributes} attributes
+   * the radius of the circumscribed circle. Either the apothem or the circumradius must be defined.
    */
-  constructor({ center, circumradius, apothem, rotation = 0, ...attributes }) {
+  circumradius?: number
+  /**
+   * the radius of the inscribed circle. Either the apothem or the circumradius must be defined.
+   */
+  apothem?: number
+  /**
+   * @default 0
+   */
+  rotation?: Radians
+}
+
+export class Hexagon extends Polygon {
+  #rotation = 0
+  #circumradius: number | undefined
+  #apothem: number | undefined
+  center: Vector2
+
+  constructor({
+    center,
+    circumradius,
+    apothem,
+    rotation = 0,
+    ...attributes
+  }: HexagonAttributes) {
     if (typeof circumradius !== 'number' && typeof apothem !== 'number') {
       throw new Error('Must provide either circumradius or apothem')
     }
 
     // @ts-expect-error either circumradius or apothem is defined at this point
     const cr = circumradius ?? (apothem * 2) / Math.sqrt(3)
-    const points = new Array(6)
+    const points: Vector2[] = []
     for (let i = 0; i < 6; i++) {
       const angle = (Math.PI / 3) * i + rotation
       points[i] = center.add(
@@ -52,16 +54,18 @@ export class Hexagon extends Polygon {
   /**
    * @returns {Hexagon[]} the list of neighboring hexagons, assuming a hexagonal grid
    */
-  neighbors() {
-    const hexagons = new Array(6)
+  neighbors(): Hexagon[] {
+    const hexagons: Hexagon[] = []
     for (let i = 0; i < 6; i++) {
       const angle = (Math.PI / 3) * i + this.#rotation + Math.PI / 6
       const center = this.center.add(
-        vec2(Math.cos(angle), Math.sin(angle)).multiply(this.#apothem * 2),
+        vec2(Math.cos(angle), Math.sin(angle)).multiply(
+          (this.#apothem ?? 1) * 2,
+        ),
       )
       hexagons[i] = new Hexagon({
         center,
-        circumradius: this.#circumradius,
+        circumradius: this.#circumradius ?? 1,
         rotation: this.#rotation,
         ...this.attributes,
       })

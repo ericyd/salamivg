@@ -17,19 +17,22 @@ const NOOP = () => {}
 export type RenderLoopOptions = {
   /**
    * Number of times the render loop will run. Each loop will write the SVG to a file and open it if `open` is true.
+   * @default 1
    */
-  loopCount: number
+  loopCount?: number
   /**
-   * Opens the rendered SVG after every frame using the system `open` command
+   * Opens the rendered SVG after every frame using the system `open` command.
+   * @default true
    */
-  openEveryFrame: boolean
+  openEveryFrame?: boolean
   /**
-   * Logs the filename to "console.log" after every frame
+   * Logs the filename to "console.log" after every frame.
+   * @default true
    */
-  logFilename: boolean
+  logFilename?: boolean
   /**
-   * The directory to write the rendered SVGs to, defaults to 'screenshots'
-   * @default: 'screenshots'
+   * The directory to write the rendered SVGs to.
+   * @default 'screenshots'
    */
   renderDirectory?: string
 }

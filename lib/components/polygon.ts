@@ -1,34 +1,25 @@
 import { toFixedPrecision } from '../math'
+import { Decimal } from '../types'
 import { Vector2 } from '../vector2'
 import { Rectangle } from './rectangle'
 import { Tag } from './tag'
 
-/**
- * @typedef {object} PolygonAttributes
- * @property {Vector2[]} [points=[]]
- */
+type PolygonAttributes = {
+  points?: Vector2[]
+}
 
-/**
- * @class Polygon
- * @extends Tag
- */
 export class Polygon extends Tag {
-  /** @type {Vector2[]} */
-  points = []
+  points: Vector2[] = []
   /**
    * Initialize to "empty" rectangle
-   * @type {Rectangle}
    */
-  #boundingBox = new Rectangle({ x: 0, y: 0, width: 0, height: 0 })
-  /** @type {Decimal[]} */
-  #xs
-  /** @type {Decimal[]} */
-  #ys
+  #boundingBox: Rectangle = new Rectangle({ x: 0, y: 0, width: 0, height: 0 })
+  #xs: Decimal[] = []
+  #ys: Decimal[] = []
 
-  /**
-   * @param {PolygonAttributes} attributes
-   */
-  constructor({ points = [], ...attributes } = { points: [] }) {
+  constructor(
+    { points = [], ...attributes }: PolygonAttributes = { points: [] },
+  ) {
     super('polygon', attributes)
     this.points = points
     this.#xs = points.map(({ x }) => x)
@@ -36,7 +27,7 @@ export class Polygon extends Tag {
   }
 
   /** @returns {Rectangle} */
-  get boundingBox() {
+  get boundingBox(): Rectangle {
     if (this.#boundingBox.empty()) {
       const minX = Math.min(...this.#xs)
       const maxX = Math.max(...this.#xs)
@@ -59,7 +50,7 @@ export class Polygon extends Tag {
    * Original: https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html
    * @param {Vector2} point
    */
-  contains(point) {
+  contains(point: Vector2): boolean {
     let i
     let j
     let c = false
@@ -77,7 +68,7 @@ export class Polygon extends Tag {
     return c
   }
 
-  render() {
+  render(): string {
     if (!Array.isArray(this.points) || this.points.length === 0) {
       throw new Error('Cannot render a Polygon without points')
     }
@@ -93,4 +84,17 @@ export class Polygon extends Tag {
     })
     return super.render()
   }
+}
+
+export function polygon(atts: PolygonAttributes): Polygon
+export function polygon(builder: (p: Polygon) => void): Polygon
+export function polygon(
+  attrsOrBuilder: PolygonAttributes | ((poly: Polygon) => void),
+): Polygon {
+  if (typeof attrsOrBuilder === 'function') {
+    const poly = new Polygon()
+    attrsOrBuilder(poly)
+    return poly
+  }
+  return new Polygon(attrsOrBuilder)
 }
