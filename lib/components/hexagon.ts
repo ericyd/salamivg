@@ -55,7 +55,7 @@ export class Hexagon extends Polygon {
    * @returns {Hexagon[]} the list of neighboring hexagons, assuming a hexagonal grid
    */
   neighbors(): Hexagon[] {
-    const hexagons: Hexagon[] = new Array(6);
+    const hexagons: Hexagon[] = new Array(6)
     for (let i = 0; i < 6; i++) {
       const angle = (Math.PI / 3) * i + this.#rotation + Math.PI / 6
       const center = this.center.add(
