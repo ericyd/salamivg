@@ -4,7 +4,7 @@
  * Kinda similar to this (https://piterpasma.nl/articles/wobbly) although I had the idea independently
  */
 
-import { Compressor, CompressorOptions } from './compressor'
+import { Compressor, CompressorOptions } from './compressor.js'
 
 export type OscillatorAttributes = {
   period: number

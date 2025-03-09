@@ -1,8 +1,8 @@
-import { PI } from '../constants'
-import { createRng, random, randomInt } from '../random'
-import { ClosedInterval } from '../types'
-import { Vector2 } from '../vector2'
-import { Oscillator } from './oscillator'
+import { PI } from '../constants.js'
+import { createRng, random, randomInt } from '../random.js'
+import { ClosedInterval } from '../types.js'
+import { Vector2 } from '../vector2.js'
+import { Oscillator } from './oscillator.js'
 
 /**
  * When `y` is omitted, it defaults to `x`

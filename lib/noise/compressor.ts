@@ -1,4 +1,4 @@
-import { ClosedInterval } from '../types'
+import { ClosedInterval } from '../types.js'
 
 export type CompressorOptions = {
   /**

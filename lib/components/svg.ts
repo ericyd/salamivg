@@ -1,12 +1,12 @@
-import { SvgColor, Tag } from './tag'
-import { Circle, circle } from './circle'
-import { Path, path } from './path'
-import { Rectangle, rect } from './rectangle'
-import { Polyline, LineSegment, polyline } from './polyline'
-import { polygon, Polygon } from './polygon'
-import { LinearGradient, LinearGradientAttributes } from './linear-gradient'
-import { Defs } from './defs'
-import { Vector2, vec2 } from '../vector2'
+import { SvgColor, Tag } from './tag.js'
+import { Circle, circle } from './circle.js'
+import { Path, path } from './path.js'
+import { Rectangle, rect } from './rectangle.js'
+import { Polyline, LineSegment, polyline } from './polyline.js'
+import { polygon, Polygon } from './polygon.js'
+import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
+import { Defs } from './defs.js'
+import { Vector2, vec2 } from '../vector2.js'
 
 export type SvgAttributes = {
   /**

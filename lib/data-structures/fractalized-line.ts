@@ -1,7 +1,7 @@
-import { LineSegment } from '../components/polyline'
-import { Path } from '../components/path'
-import { random, type Rng } from '../random'
-import { Vector2 } from '../vector2'
+import { LineSegment } from '../components/polyline.js'
+import { Path } from '../components/path.js'
+import { random, type Rng } from '../random.js'
+import { Vector2 } from '../vector2.js'
 
 /**
  * Based on the algorithm used here:

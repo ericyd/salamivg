@@ -1,6 +1,6 @@
-import { Vector2, vec2 } from '../vector2'
-import { LineSegment } from './polyline'
-import { Tag } from './tag'
+import { Vector2, vec2 } from '../vector2.js'
+import { LineSegment } from './polyline.js'
+import { Tag } from './tag.js'
 
 type RectangleAttributes = {
   /**

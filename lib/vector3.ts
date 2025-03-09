@@ -1,5 +1,5 @@
-import { jitter, random, Rng } from './random'
-import { ClosedInterval } from './types'
+import { jitter, random, Rng } from './random.js'
+import { ClosedInterval } from './types.js'
 
 export class Vector3 {
   x: number

@@ -1,5 +1,5 @@
-import { error } from '../internal'
-import { Vector2, vec2 } from '../vector2'
+import { error } from '../internal.js'
+import { Vector2, vec2 } from '../vector2.js'
 
 export type GridAttributes = {
   /**

@@ -1,8 +1,8 @@
-import { toFixedPrecision } from '../math'
-import { Decimal } from '../types'
-import { Vector2 } from '../vector2'
-import { Rectangle } from './rectangle'
-import { Tag } from './tag'
+import { toFixedPrecision } from '../math.js'
+import { Decimal } from '../types.js'
+import { Vector2 } from '../vector2.js'
+import { Rectangle } from './rectangle.js'
+import { Tag } from './tag.js'
 
 type PolygonAttributes = {
   points?: Vector2[]

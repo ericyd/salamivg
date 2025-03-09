@@ -1,8 +1,8 @@
-import { ColorHsl } from '../color/hsl'
-import { ColorRgb } from '../color/rgb'
-import { toFixedPrecision } from '../math'
-import { pickBy } from '../util'
-import { LinearGradient } from './linear-gradient'
+import { ColorHsl } from '../color/hsl.js'
+import { ColorRgb } from '../color/rgb.js'
+import { toFixedPrecision } from '../math.js'
+import { pickBy } from '../util.js'
+import { LinearGradient } from './linear-gradient.js'
 
 export type SvgColor =
   | 'none'

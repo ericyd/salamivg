@@ -7,7 +7,7 @@
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { execSync } from 'node:child_process'
 import { basename, extname, join } from 'node:path'
-import { Svg, SvgAttributes, SvgBuilder } from './components/index'
+import { Svg, SvgAttributes, SvgBuilder } from './components/index.js'
 
 const NOOP = () => {}
 

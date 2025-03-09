@@ -5,7 +5,7 @@
  * https://stackoverflow.com/a/47593316/3991555
  */
 
-import { ClosedInterval, Integer } from './types'
+import { ClosedInterval, Integer } from './types.js'
 
 export type Rng = () => number
 

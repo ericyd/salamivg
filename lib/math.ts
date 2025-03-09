@@ -1,5 +1,5 @@
-import { Radians } from './types'
-import { Vector2 } from './vector2'
+import { Radians } from './types.js'
+import { Vector2 } from './vector2.js'
 
 // some helpers to avoid the `Math.` namespace everywhere
 export const cos = Math.cos

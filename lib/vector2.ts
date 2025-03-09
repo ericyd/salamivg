@@ -1,5 +1,5 @@
-import { Circle } from './components/circle'
-import { jitter, random, Rng } from './random'
+import { Circle } from './components/circle.js'
+import { jitter, random, Rng } from './random.js'
 
 export class Vector2 {
   x: number

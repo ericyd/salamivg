@@ -17,9 +17,9 @@
 //   absolute negative x and y values are interpreted as negative coordinates;
 //   relative negative x values move to the left, and relative negative y values move upwards.
 
-import { Tag } from './tag'
-import { vec2, Vector2 } from '../vector2'
-import { toFixedPrecision } from '../math'
+import { Tag } from './tag.js'
+import { vec2, Vector2 } from '../vector2.js'
+import { toFixedPrecision } from '../math.js'
 
 export type CoordinateType = 'absolute' | 'relative'
 // TODO: consider adding definitions for shared attributes like fill, stroke, etc

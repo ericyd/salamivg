@@ -1,8 +1,8 @@
-import { type ColorStop } from '../color/color-sequence'
-import { ColorHsl } from '../color/hsl'
-import { ColorRgb } from '../color/rgb'
-import { Vector2, vec2 } from '../vector2'
-import { Tag } from './tag'
+import { type ColorStop } from '../color/color-sequence.js'
+import { ColorHsl } from '../color/hsl.js'
+import { ColorRgb } from '../color/rgb.js'
+import { Vector2, vec2 } from '../vector2.js'
+import { Tag } from './tag.js'
 
 export type LinearGradientAttributes = {
   stops?: ColorStop[]

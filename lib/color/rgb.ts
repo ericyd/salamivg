@@ -1,7 +1,7 @@
-import { warnWithDefault } from '../internal'
-import { ClosedInterval } from '../types'
-import { clamp } from '../util'
-import { ColorHsl } from './hsl'
+import { warnWithDefault } from '../internal.js'
+import { ClosedInterval } from '../types.js'
+import { clamp } from '../util.js'
+import { ColorHsl } from './hsl.js'
 
 export class ColorRgb {
   r: ClosedInterval<0, 1>

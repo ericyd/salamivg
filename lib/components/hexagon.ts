@@ -1,6 +1,6 @@
-import { Radians } from '../types'
-import { vec2, Vector2 } from '../vector2'
-import { Polygon } from './polygon'
+import { Radians } from '../types.js'
+import { vec2, Vector2 } from '../vector2.js'
+import { Polygon } from './polygon.js'
 
 type HexagonAttributes = {
   center: Vector2
