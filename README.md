@@ -27,6 +27,8 @@ If you're the clone-n-run type, you can use the examples from the [`/examples` d
 ```js
 git clone git@github.com:ericyd/salamivg
 cd salamivg
+npm ci
+npm build
 node examples/oscillator-noise.js
 ```
 
@@ -326,10 +328,18 @@ renderSvg(config, (svg) => {
 
 ## Internal Development
 
+Recommended: [install `asdf` version manager](https://asdf-vm.com/guide/getting-started.html). Then:
+
+```shell
+asdf plugin-add deno https://github.com/asdf-community/asdf-deno.git
+asdf plugin add bun
+asdf install
+```
+
 Install dependencies:
 
 ```shell
-npm i
+npm ci
 ```
 
 Before committing:
@@ -359,13 +369,15 @@ This library has been tested against
 * Node 16.20.2
 * Attempted to test against Node 14 but [asdf](https://asdf-vm.com/) wouldn't install it on our M1 Mac. Please open an issue if this is causing you problems.
 
-### Deno / Bun Support? Yes! 🎉
+## Deno / Bun Support? Yes! 🎉
 
 As of Deno v2.2.3 and Bun v1.2.4, SalamiVG is fully compatible with both Deno and Bun. You can check this claim yourself with the following commands, assuming you have `git` and `asdf` installed:
 
 ```shell
 git clone git@github.com:ericyd/salamivg
 cd salamivg
+asdf plugin-add deno https://github.com/asdf-community/asdf-deno.git
+asdf plugin add bun
 asdf install
 npm ci
 npm run build
@@ -373,8 +385,8 @@ deno examples/concentric-circles.js
 bun examples/concentric-circles.js
 ```
 
-### ES Modules Only
+## ES Modules Only
 
 SalamiVG ships ES Modules, and does not include CommonJS builds.
 
-Is this a problem? Feel free to open an issue if you need CommonJS. It would probably be trivial to set up Rollup or similar to bundle into a CommonJS package and include it in the exports, but it isn't clear if it is necessary for anyone.
+Is this a problem? Feel free to open an issue if you need CommonJS. It would probably be trivial to ship both ES Modules and CommonJS, but I'm not going to do this until it is requested.
