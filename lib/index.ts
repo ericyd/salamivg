@@ -13,3 +13,11 @@ export * from './render.js'
 export * from './util.js'
 export { Vector2, vec2 } from './vector2.js'
 export { Vector3, vec3 } from './vector3.js'
+export {
+  contoursFromTIN,
+  type IntersectingLine,
+  type Triangle3,
+  type TIN,
+  type Contour,
+  type ContourParams,
+} from './algorithms/walking-triangles.js'

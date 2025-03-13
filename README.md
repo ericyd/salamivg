@@ -27,7 +27,7 @@ If you're the clone-n-run type, you can use the examples from the [`/examples` d
 ```js
 git clone git@github.com:ericyd/salamivg
 cd salamivg
-npm ci
+npm i
 npm build
 node examples/oscillator-noise.js
 ```
@@ -339,7 +339,7 @@ asdf install
 Install dependencies:
 
 ```shell
-npm ci
+npm i
 ```
 
 Before committing:
@@ -379,7 +379,7 @@ cd salamivg
 asdf plugin-add deno https://github.com/asdf-community/asdf-deno.git
 asdf plugin add bun
 asdf install
-npm ci
+npm i
 npm run build
 deno examples/concentric-circles.js
 bun examples/concentric-circles.js
