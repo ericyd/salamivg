@@ -44,7 +44,7 @@ export function timestamp(d = new Date()): string {
 /**
  * @returns the most recent rendered SVG
  */
-export function renderSvg(
+export async function renderSvg(
   {
     loopCount = 1,
     openEveryFrame = true,
@@ -53,7 +53,7 @@ export function renderSvg(
     ...svgAttributes
   }: SvgAttributes & RenderLoopOptions,
   builder: SvgBuilder,
-): string {
+): Promise<string> {
   let loops = 0
   let rendered = ''
   while (loops < loopCount) {
@@ -61,7 +61,7 @@ export function renderSvg(
     loops++
     const sketchFilename = basename(process.argv[1], extname(process.argv[1]))
     mkdirSync(join(renderDirectory, sketchFilename), { recursive: true })
-    const postLoop = builder(svg) ?? NOOP
+    const postLoop = (await builder(svg)) ?? NOOP
     const filename = join(
       renderDirectory,
       sketchFilename,
