@@ -1,7 +1,7 @@
 {
   "name": "@salamivg/core",
   "type": "module",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A creative coding framework for generating SVGs",
   "main": "dist/index.js",
   "module": "dist/index.js",
