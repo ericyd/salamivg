@@ -12,6 +12,16 @@ export type SvgColor =
   | ColorHsl
   | LinearGradient
 
+export type CommonAttributes = {
+  stroke?: SvgColor
+  fill?: SvgColor
+  'stroke-width'?: number
+  id?: string
+  class?: string
+  style?: string
+  [key: string]: unknown
+}
+
 export class Tag {
   tagName: string
   attributes: Record<string, any>

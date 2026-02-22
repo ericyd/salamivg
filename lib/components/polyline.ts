@@ -1,9 +1,9 @@
 import { toFixedPrecision } from '../math.js'
 import { Vector2 } from '../vector2.js'
 import { Rectangle } from './rectangle.js'
-import { Tag } from './tag.js'
+import { CommonAttributes, Tag } from './tag.js'
 
-type PolylineAttributes = {
+type PolylineAttributes = CommonAttributes & {
   points?: Vector2[]
 }
 

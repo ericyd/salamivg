@@ -1,8 +1,9 @@
 import { Radians } from '../types.js'
 import { vec2, Vector2 } from '../vector2.js'
+import { CommonAttributes } from './tag.js'
 import { Polygon } from './polygon.js'
 
-type HexagonAttributes = {
+type HexagonAttributes = CommonAttributes & {
   center: Vector2
   /**
    * the radius of the circumscribed circle. Either the apothem or the circumradius must be defined.

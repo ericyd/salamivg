@@ -17,13 +17,12 @@
 //   absolute negative x and y values are interpreted as negative coordinates;
 //   relative negative x values move to the left, and relative negative y values move upwards.
 
-import { Tag } from './tag.js'
+import { CommonAttributes, Tag } from './tag.js'
 import { vec2, Vector2 } from '../vector2.js'
 import { toFixedPrecision } from '../math.js'
 
 export type CoordinateType = 'absolute' | 'relative'
-// TODO: consider adding definitions for shared attributes like fill, stroke, etc
-export type PathAttributes = Record<string, unknown>
+export type PathAttributes = CommonAttributes & Record<string, unknown>
 export type ArcProps = {
   rx: number
   ry: number

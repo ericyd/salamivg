@@ -1,4 +1,4 @@
-import { Tag } from './tag.js'
+import { CommonAttributes, Tag } from './tag.js'
 import { Circle, circle } from './circle.js'
 import { Path, path } from './path.js'
 import { Rectangle, rect } from './rectangle.js'
@@ -24,8 +24,10 @@ import { polygon, Polygon } from './polygon.js'
  *   });
  * });
  */
+export type LayerAttributes = CommonAttributes & Record<string, unknown>
+
 export class Layer extends Tag {
-  constructor(attributes: Record<string, unknown> = {}) {
+  constructor(attributes: LayerAttributes = {}) {
     super('g', attributes)
   }
 

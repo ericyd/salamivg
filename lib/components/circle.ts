@@ -1,8 +1,8 @@
 import { error } from '../internal.js'
 import { Vector2, vec2 } from '../vector2.js'
-import { Tag } from './tag.js'
+import { CommonAttributes, Tag } from './tag.js'
 
-export type CircleAttributes = {
+export type CircleAttributes = CommonAttributes & {
   x?: number
   y?: number
   center?: Vector2

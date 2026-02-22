@@ -1,4 +1,4 @@
-import { SvgColor, Tag } from './tag.js'
+import { CommonAttributes, SvgColor, Tag } from './tag.js'
 import { Circle, circle } from './circle.js'
 import { Path, path } from './path.js'
 import { Rectangle, rect } from './rectangle.js'
@@ -9,7 +9,7 @@ import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
 import { Defs } from './defs.js'
 import { Vector2, vec2 } from '../vector2.js'
 
-export type SvgAttributes = {
+export type SvgAttributes = CommonAttributes & {
   /**
    * @default 100
    */

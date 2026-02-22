@@ -1,8 +1,8 @@
 import { Vector2, vec2 } from '../vector2.js'
 import { LineSegment } from './polyline.js'
-import { Tag } from './tag.js'
+import { CommonAttributes, Tag } from './tag.js'
 
-type RectangleAttributes = {
+type RectangleAttributes = CommonAttributes & {
   /**
    * @default 0
    */
