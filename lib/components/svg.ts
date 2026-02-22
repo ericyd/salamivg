@@ -1,14 +1,9 @@
 import { CommonAttributes, SvgColor, Tag } from './tag.js'
-import { Circle, circle } from './circle.js'
-import { Path, path } from './path.js'
-import { Rectangle, rect } from './rectangle.js'
-import { Polyline, LineSegment, polyline, lineSegment } from './polyline.js'
-import { polygon, Polygon } from './polygon.js'
-import { Layer, layer } from './layer.js'
+import { ShapeContainer } from './layer.js'
+import { Rectangle } from './rectangle.js'
 import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
 import { Defs } from './defs.js'
 import { Vector2, vec2 } from '../vector2.js'
-import { error } from '../internal.js'
 
 export type SvgAttributes = CommonAttributes & {
   /**
@@ -58,7 +53,7 @@ export type SvgAttributes = CommonAttributes & {
  *
  * console.log(document.render());
  */
-export class Svg extends Tag {
+export class Svg extends ShapeContainer {
   #defs: LinearGradient[] = []
   width: number
   height: number
@@ -86,90 +81,6 @@ export class Svg extends Tag {
 
   get center(): Vector2 {
     return vec2(this.width / 2, this.height / 2)
-  }
-
-  path(instanceOrBuilder: Path | Parameters<typeof path>[0]): Tag {
-    return instanceOrBuilder instanceof Path
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(path(instanceOrBuilder))
-  }
-
-  paths(ps: Path[]): void {
-    for (const p of ps) {
-      this.path(p)
-    }
-  }
-
-  lineSegment(start: Vector2, end: Vector2): Tag
-  lineSegment(segment: LineSegment): Tag
-  lineSegment(segment: LineSegment | Vector2, end?: Vector2): Tag {
-    return segment instanceof LineSegment
-      ? this.addChild(segment)
-      : end
-        ? this.addChild(lineSegment(segment, end))
-        : error(
-            'Invalid line segment, must be an instance of LineSegment or include both start and end points',
-          )
-  }
-
-  lineSegments(ls: LineSegment[]): void {
-    for (const l of ls) {
-      this.lineSegment(l)
-    }
-  }
-
-  circle(instanceOrBuilder: Circle | Parameters<typeof circle>[0]): Tag {
-    return instanceOrBuilder instanceof Circle
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(circle(instanceOrBuilder))
-  }
-
-  circles(cs: Circle[]): void {
-    for (const c of cs) {
-      this.circle(c)
-    }
-  }
-
-  rect(instanceOrBuilder: Rectangle | Parameters<typeof rect>[0]): Tag {
-    return instanceOrBuilder instanceof Rectangle
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(rect(instanceOrBuilder))
-  }
-
-  rects(rs: Rectangle[]): void {
-    for (const r of rs) {
-      this.rect(r)
-    }
-  }
-
-  polygon(instanceOrBuilder: Polygon | Parameters<typeof polygon>[0]): Tag {
-    return instanceOrBuilder instanceof Polygon
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(polygon(instanceOrBuilder))
-  }
-
-  polygons(ps: Array<Polygon | Parameters<typeof polygon>[0]>): void {
-    for (const p of ps) {
-      this.polygon(p)
-    }
-  }
-
-  polyline(instanceOrBuilder: Polyline | Parameters<typeof polyline>[0]): Tag {
-    return instanceOrBuilder instanceof Polyline
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(polyline(instanceOrBuilder))
-  }
-
-  layer(instanceOrBuilder: Layer | Parameters<typeof layer>[0]): Tag {
-    return instanceOrBuilder instanceof Layer
-      ? this.addChild(instanceOrBuilder)
-      : this.addChild(layer(instanceOrBuilder))
-  }
-
-  polylines(ps: Polyline[]): void {
-    for (const p of ps) {
-      this.polyline(p)
-    }
   }
 
   formatFilenameMetadata(): string {
