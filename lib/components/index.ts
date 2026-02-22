@@ -1,5 +1,7 @@
 export * from './circle.js'
 export * from './defs.js'
+export * from './linear-gradient.js'
+export * from './layer.js'
 export * from './hexagon.js'
 export * from './path.js'
 export * from './polygon.js'

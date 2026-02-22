@@ -4,6 +4,7 @@ import { Path, path } from './path.js'
 import { Rectangle, rect } from './rectangle.js'
 import { Polyline, LineSegment, polyline } from './polyline.js'
 import { polygon, Polygon } from './polygon.js'
+import { Layer, layer } from './layer.js'
 import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
 import { Defs } from './defs.js'
 import { Vector2, vec2 } from '../vector2.js'
@@ -148,6 +149,12 @@ export class Svg extends Tag {
     return instanceOrBuilder instanceof Polyline
       ? this.addChild(instanceOrBuilder)
       : this.addChild(polyline(instanceOrBuilder))
+  }
+
+  layer(instanceOrBuilder: Layer | ((layer: Layer) => void)): Tag {
+    return instanceOrBuilder instanceof Layer
+      ? this.addChild(instanceOrBuilder)
+      : this.addChild(layer(instanceOrBuilder))
   }
 
   polylines(ps: Polyline[]): void {
