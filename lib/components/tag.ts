@@ -15,7 +15,7 @@ export type SvgColor =
 export type CommonAttributes = {
   stroke?: SvgColor
   fill?: SvgColor
-  'stroke-width'?: number
+  strokeWidth?: number
   id?: string
   class?: string
   style?: string
@@ -75,7 +75,8 @@ export class Tag {
    */
   #visualAttributesTestFn(value: unknown, key: string): boolean {
     return (
-      ['fill', 'stroke', 'stroke-width'].includes(key) && value !== undefined
+      ['fill', 'stroke', 'stroke-width', 'strokeWidth'].includes(key) &&
+      value !== undefined
     )
   }
 
@@ -89,7 +90,8 @@ export class Tag {
     return pickBy(this.#visualAttributesTestFn, {
       fill: this.attributes.fill,
       stroke: this.attributes.stroke,
-      'stroke-width': this.attributes['stroke-width'],
+      strokeWidth:
+        this.attributes['stroke-width'] || this.attributes.strokeWidth,
     })
   }
 
@@ -100,9 +102,18 @@ export class Tag {
    * @returns {void}
    */
   setVisualAttributes(incoming: Record<string, unknown> = {}): void {
+    const normalized = (obj: Record<string, unknown>) => {
+      const result = { ...obj }
+      if ('strokeWidth' in result && result.strokeWidth !== undefined) {
+        result['stroke-width'] = result.strokeWidth
+        // biome-ignore lint/performance/noDelete: normalize strokeWidth to stroke-width for consistent attribute storage
+        delete result.strokeWidth
+      }
+      return result
+    }
     this.setAttributes({
-      ...pickBy(this.#visualAttributesTestFn, incoming),
-      ...this.visualAttributes(),
+      ...normalized(pickBy(this.#visualAttributesTestFn, incoming)),
+      ...normalized(this.visualAttributes()),
     })
   }
 
@@ -125,12 +136,43 @@ export class Tag {
   #formatAttributes(): string {
     return Object.entries(pickBy((v) => v !== undefined, this.attributes))
       .map(([key, value]) => {
+        const normalizeKey = this.#normalizeKey(key)
         if (typeof value === 'number') {
-          return `${key}="${toFixedPrecision(value, this.numericPrecision)}"`
+          return `${normalizeKey}="${toFixedPrecision(
+            value,
+            this.numericPrecision,
+          )}"`
         }
-        return `${key}="${value}"`
+        return `${normalizeKey}="${value}"`
       })
       .join(' ')
+  }
+
+  #normalizeKey(key: string): string {
+    // These are keys which may be camelCased in the lib, but should be kebab-cased in the SVG output.
+    const kebabCaseKeys = new Set([
+      'strokeWidth',
+      'strokeLinecap',
+      'strokeLinejoin',
+      'strokeMiterlimit',
+      'strokeDasharray',
+      'strokeDashoffset',
+      'fillOpacity',
+      'strokeOpacity',
+      'stopColor',
+      'stopOpacity',
+      'clipPath',
+      'clipRule',
+      'colorInterpolation',
+      'colorInterpolationFilters',
+      'fontFamily',
+      'fontSize',
+    ])
+
+    if (kebabCaseKeys.has(key)) {
+      return key.replace(/([A-Z])/g, '-$1').toLowerCase()
+    }
+    return key
   }
 
   /**

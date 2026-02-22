@@ -2,12 +2,13 @@ import { CommonAttributes, SvgColor, Tag } from './tag.js'
 import { Circle, circle } from './circle.js'
 import { Path, path } from './path.js'
 import { Rectangle, rect } from './rectangle.js'
-import { Polyline, LineSegment, polyline } from './polyline.js'
+import { Polyline, LineSegment, polyline, lineSegment } from './polyline.js'
 import { polygon, Polygon } from './polygon.js'
 import { Layer, layer } from './layer.js'
 import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
 import { Defs } from './defs.js'
 import { Vector2, vec2 } from '../vector2.js'
+import { error } from '../internal.js'
 
 export type SvgAttributes = CommonAttributes & {
   /**
@@ -87,7 +88,7 @@ export class Svg extends Tag {
     return vec2(this.width / 2, this.height / 2)
   }
 
-  path(instanceOrBuilder: Path | ((path: Path) => void)): Tag {
+  path(instanceOrBuilder: Path | Parameters<typeof path>[0]): Tag {
     return instanceOrBuilder instanceof Path
       ? this.addChild(instanceOrBuilder)
       : this.addChild(path(instanceOrBuilder))
@@ -99,8 +100,16 @@ export class Svg extends Tag {
     }
   }
 
-  lineSegment(lineSegment: LineSegment): Tag {
-    return this.addChild(lineSegment)
+  lineSegment(start: Vector2, end: Vector2): Tag
+  lineSegment(segment: LineSegment): Tag
+  lineSegment(segment: LineSegment | Vector2, end?: Vector2): Tag {
+    return segment instanceof LineSegment
+      ? this.addChild(segment)
+      : end
+        ? this.addChild(lineSegment(segment, end))
+        : error(
+            'Invalid line segment, must be an instance of LineSegment or include both start and end points',
+          )
   }
 
   lineSegments(ls: LineSegment[]): void {
@@ -109,7 +118,7 @@ export class Svg extends Tag {
     }
   }
 
-  circle(instanceOrBuilder: Circle | ((circle: Circle) => void)): Tag {
+  circle(instanceOrBuilder: Circle | Parameters<typeof circle>[0]): Tag {
     return instanceOrBuilder instanceof Circle
       ? this.addChild(instanceOrBuilder)
       : this.addChild(circle(instanceOrBuilder))
@@ -121,7 +130,7 @@ export class Svg extends Tag {
     }
   }
 
-  rect(instanceOrBuilder: Rectangle | ((rect: Rectangle) => void)): Tag {
+  rect(instanceOrBuilder: Rectangle | Parameters<typeof rect>[0]): Tag {
     return instanceOrBuilder instanceof Rectangle
       ? this.addChild(instanceOrBuilder)
       : this.addChild(rect(instanceOrBuilder))
@@ -133,25 +142,25 @@ export class Svg extends Tag {
     }
   }
 
-  polygon(instanceOrBuilder: Polygon | ((polygon: Polygon) => void)): Tag {
+  polygon(instanceOrBuilder: Polygon | Parameters<typeof polygon>[0]): Tag {
     return instanceOrBuilder instanceof Polygon
       ? this.addChild(instanceOrBuilder)
       : this.addChild(polygon(instanceOrBuilder))
   }
 
-  polygons(ps: Array<Polygon | ((polygon: Polygon) => void)>): void {
+  polygons(ps: Array<Polygon | Parameters<typeof polygon>[0]>): void {
     for (const p of ps) {
       this.polygon(p)
     }
   }
 
-  polyline(instanceOrBuilder: Polyline | ((polyline: Polyline) => void)): Tag {
+  polyline(instanceOrBuilder: Polyline | Parameters<typeof polyline>[0]): Tag {
     return instanceOrBuilder instanceof Polyline
       ? this.addChild(instanceOrBuilder)
       : this.addChild(polyline(instanceOrBuilder))
   }
 
-  layer(instanceOrBuilder: Layer | ((layer: Layer) => void)): Tag {
+  layer(instanceOrBuilder: Layer | Parameters<typeof layer>[0]): Tag {
     return instanceOrBuilder instanceof Layer
       ? this.addChild(instanceOrBuilder)
       : this.addChild(layer(instanceOrBuilder))

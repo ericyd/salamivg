@@ -1,6 +1,8 @@
 import { describe, it } from 'node:test'
 import { Svg } from './svg'
 import { LinearGradient } from './linear-gradient'
+import { LineSegment } from './polyline'
+import { vec2 } from '../vector2'
 import assert from 'node:assert'
 
 describe('Svg', () => {
@@ -42,6 +44,23 @@ describe('Svg', () => {
       const center = new Svg({ width: 50, height: 50 }).center
       assert.strictEqual(center.x, 25)
       assert.strictEqual(center.y, 25)
+    })
+  })
+
+  describe('lineSegment', () => {
+    it('adds a line segment from start and end Vector2', () => {
+      const svg = new Svg({})
+      svg.lineSegment(vec2(0, 0), vec2(10, 20))
+      const actual = svg.render()
+      assert.ok(actual.includes('<polyline points="0,0 10,20"></polyline>'))
+    })
+
+    it('adds an existing LineSegment instance', () => {
+      const svg = new Svg({})
+      const segment = new LineSegment(vec2(5, 5), vec2(15, 25))
+      svg.lineSegment(segment)
+      const actual = svg.render()
+      assert.ok(actual.includes('<polyline points="5,5 15,25"></polyline>'))
     })
   })
 })
