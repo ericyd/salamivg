@@ -147,16 +147,25 @@ export class Svg extends ShapeContainer {
   }
 }
 
-export type SvgBuilder = (svg: Svg) => undefined | SvgBuilderPostLoop
+export type SvgBuilder = (
+  svg: Svg,
+) =>
+  | undefined
+  | SvgBuilderPostLoop
+  | Promise<undefined>
+  | Promise<SvgBuilderPostLoop>
 
-export type SvgBuilderPostLoop = () => void
+export type SvgBuilderPostLoop = (() => void) | (() => Promise<void>)
 
 /**
  * @param {SvgAttributes} attributes
  * @param {SvgBuilder} builder
  */
-export function svg(attributes: SvgAttributes, builder: SvgBuilder): Svg {
+export async function svg(
+  attributes: SvgAttributes,
+  builder: SvgBuilder,
+): Promise<Svg> {
   const s = new Svg(attributes)
-  builder(s)
+  await builder(s)
   return s
 }
