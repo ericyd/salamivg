@@ -37,11 +37,14 @@ export class Tag {
   #colorFormat: ColorFormat | undefined
 
   /**
-   * Set the color format for the tag.
-   * By default, colors will match the format of the value being set.
-   * For example, using a ColorRgb will result in a `rgb(r, g, b, a)` string.
-   * Setting the color format to 'hex' will result in a `#rrggbb` string.
+   * The color format for the tag. When undefined, colors use their native format
+   * (ColorRgb → rgb, ColorHsl → hsl).
+   * When set to 'hex' | 'hsl' | 'rgb', all colors are rendered in that format.
    */
+  get colorFormat(): ColorFormat | undefined {
+    return this.#colorFormat
+  }
+
   set colorFormat(value: ColorFormat | undefined) {
     this.#colorFormat = value
   }

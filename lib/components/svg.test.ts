@@ -4,6 +4,7 @@ import { LinearGradient } from './linear-gradient'
 import { LineSegment } from './polyline'
 import { vec2 } from '../vector2'
 import assert from 'node:assert'
+import { rgb } from '../color/rgb'
 
 describe('Svg', () => {
   describe('defineLinearGradient', () => {
@@ -36,6 +37,18 @@ describe('Svg', () => {
         t.render(),
         '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100" height="100" fill="url(#grad-id)"></svg>',
       )
+    })
+
+    it('inherits colorFormat when SVG has colorFormat set', () => {
+      const svg = new Svg({})
+      svg.colorFormat = 'hex'
+      svg.defineLinearGradient({
+        colors: [rgb(0, 0, 0, 1), rgb(1, 1, 1, 1)],
+        id: 'abc',
+      })
+      const actual = svg.render()
+      assert.ok(actual.includes('stop-color="#000000ff"'))
+      assert.ok(actual.includes('stop-color="#ffffffff"'))
     })
   })
 

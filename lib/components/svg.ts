@@ -108,6 +108,12 @@ export class Svg extends ShapeContainer {
       ...props,
       numericPrecision: this.numericPrecision,
     })
+    if (this.colorFormat !== undefined) {
+      grad.colorFormat = this.colorFormat
+      for (const stop of grad.children) {
+        stop.colorFormat = this.colorFormat
+      }
+    }
     this.#defs.push(grad)
     return grad
   }
