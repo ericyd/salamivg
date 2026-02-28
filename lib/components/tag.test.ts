@@ -1,5 +1,7 @@
 import { describe, it } from 'node:test'
 import assert from 'node:assert'
+import { ColorRgb } from '../color/rgb'
+import { hsl } from '../color/hsl'
 import { Tag } from './tag'
 import { LinearGradient } from './linear-gradient'
 
@@ -103,6 +105,50 @@ describe('Tag', () => {
     it('should leave non-camelCase keys like viewBox unchanged', () => {
       const t = new Tag('svg', { viewBox: '0 0 100 100' })
       assert.ok(t.render().includes('viewBox="0 0 100 100"'))
+    })
+  })
+
+  describe('colorFormat', () => {
+    it('renders ColorRgb in rgb format by default', () => {
+      const t = new Tag('rect', { fill: new ColorRgb(0.2, 0.3, 0.4, 1) })
+      assert.ok(t.render().includes('fill="rgb(51, 76.5, 102, 1)"'))
+    })
+
+    it('renders ColorHsl in hsl format by default', () => {
+      const t = new Tag('rect', { fill: hsl(45, 0.3, 0.9) })
+      assert.ok(t.render().includes('fill="hsl(45, 30%, 90%, 1)"'))
+    })
+
+    it('renders colors in hex format when colorFormat is "hex"', () => {
+      const t = new Tag('rect', { fill: new ColorRgb(0.2, 0.3, 0.4, 1) })
+      t.colorFormat = 'hex'
+      assert.ok(t.render().includes('fill="#334d66ff"'))
+    })
+
+    it('renders ColorHsl in rgb format when colorFormat is "rgb"', () => {
+      const t = new Tag('rect', { fill: hsl(45, 0.3, 0.9) })
+      t.colorFormat = 'rgb'
+      assert.ok(
+        t
+          .render()
+          .includes(
+            'fill="rgb(237.14999999999998, 233.32500000000002, 221.85000000000002, 1)"',
+          ),
+      )
+    })
+
+    it('renders ColorRgb in hsl format when colorFormat is "hsl"', () => {
+      const t = new Tag('rect', { fill: new ColorRgb(0.2, 0.3, 0.4, 1) })
+      t.colorFormat = 'hsl'
+      assert.match(t.render(), /fill="hsl\(210,\s*[\d.]+%,\s*[\d.]+%,\s*1\)"/)
+    })
+
+    it('propagates colorFormat to children in addChild', () => {
+      const parent = new Tag('g')
+      parent.colorFormat = 'hex'
+      const child = new Tag('rect', { fill: new ColorRgb(0.2, 0.3, 0.4, 1) })
+      parent.addChild(child)
+      assert.ok(parent.render().includes('fill="#334d66ff"'))
     })
   })
 

@@ -1,6 +1,7 @@
 import { ColorHsl } from '../color/hsl.js'
 import { ColorRgb } from '../color/rgb.js'
 import { toFixedPrecision } from '../math.js'
+import type { ColorFormat } from '../types.js'
 import { pickBy } from '../util.js'
 import { LinearGradient } from './linear-gradient.js'
 
@@ -32,6 +33,18 @@ export class Tag {
    * @type {number}
    */
   numericPrecision: number = Infinity
+
+  #colorFormat: ColorFormat | undefined
+
+  /**
+   * Set the color format for the tag.
+   * By default, colors will match the format of the value being set.
+   * For example, using a ColorRgb will result in a `rgb(r, g, b, a)` string.
+   * Setting the color format to 'hex' will result in a `#rrggbb` string.
+   */
+  set colorFormat(value: ColorFormat | undefined) {
+    this.#colorFormat = value
+  }
 
   /**
    * @param {string} tagName
@@ -129,6 +142,7 @@ export class Tag {
       this.numericPrecision === Infinity
         ? child.numericPrecision
         : this.numericPrecision
+    child.colorFormat = this.#colorFormat
     this.children.push(child)
     return child
   }
@@ -142,6 +156,9 @@ export class Tag {
             value,
             this.numericPrecision,
           )}"`
+        }
+        if (value instanceof ColorRgb || value instanceof ColorHsl) {
+          return `${normalizeKey}="${value.toString(this.#colorFormat)}"`
         }
         return `${normalizeKey}="${value}"`
       })

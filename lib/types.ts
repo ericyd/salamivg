@@ -17,3 +17,8 @@ export type ClosedInterval<i, j> = number
  * A number in range (i, j), i.e. greater than i and less than j.
  */
 export type OpenInterval<i, j> = number
+
+/**
+ * Supported color output formats for SVG attributes.
+ */
+export type ColorFormat = 'hex' | 'hsl' | 'rgb'

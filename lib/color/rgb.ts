@@ -1,4 +1,5 @@
 import { warnWithDefault } from '../internal.js'
+import type { ColorFormat } from '../types.js'
 import { ClosedInterval } from '../types.js'
 import { clamp } from '../util.js'
 import { ColorHsl } from './hsl.js'
@@ -90,8 +91,17 @@ export class ColorRgb {
     return ColorHsl.fromRgb(this).mix(ColorHsl.fromRgb(other), mix).toRgb()
   }
 
-  toString(): string {
-    return `rgb(${this.r * 255}, ${this.g * 255}, ${this.b * 255}, ${this.a})`
+  toString(colorFormat: ColorFormat = 'rgb'): string {
+    switch (colorFormat) {
+      case 'hex':
+        return this.toHex()
+      case 'hsl':
+        return this.toHsl().toString('hsl')
+      default:
+        return `rgb(${this.r * 255}, ${this.g * 255}, ${this.b * 255}, ${
+          this.a
+        })`
+    }
   }
 
   toHex(): string {
