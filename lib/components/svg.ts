@@ -1,5 +1,5 @@
 import { CommonAttributes, SvgColor, Tag } from './tag.js'
-import { ShapeContainer } from './layer.js'
+import { ShapeContainer } from './group.js'
 import { Rectangle } from './rectangle.js'
 import { LinearGradient, LinearGradientAttributes } from './linear-gradient.js'
 import { Defs } from './defs.js'

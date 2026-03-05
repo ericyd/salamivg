@@ -9,7 +9,7 @@ import { error } from '../internal.js'
 
 /**
  * Base class for SVG elements that can contain shapes (paths, circles, etc.).
- * Provides the shared shape-adding API used by both Svg and Layer.
+ * Provides the shared shape-adding API used by both Svg and Group.
  * Svg is the source of truth for method signatures and behavior.
  */
 export abstract class ShapeContainer extends Tag {
@@ -91,36 +91,36 @@ export abstract class ShapeContainer extends Tag {
     }
   }
 
-  layer(instanceOrBuilder: Layer | Parameters<typeof layer>[0]): Tag {
-    return instanceOrBuilder instanceof Layer
+  group(instanceOrBuilder: Group | Parameters<typeof group>[0]): Tag {
+    return instanceOrBuilder instanceof Group
       ? this.addChild(instanceOrBuilder)
-      : this.addChild(layer(instanceOrBuilder))
+      : this.addChild(group(instanceOrBuilder))
   }
 }
 
 /**
- * An SVG group (`<g>`) element for organizing elements into layers.
- * Supports the builder pattern via the `layer()` function.
+ * An SVG group (`<g>`) element for organizing elements.
+ * Supports the builder pattern via the `group()` function.
  *
  * @example
  * svg({ width: 100, height: 100 }, (doc) => {
- *   doc.layer((l) => {
- *     l.fill = '#333';
- *     l.path((p) => {
+ *   doc.group((g) => {
+ *     g.fill = '#333';
+ *     g.path((p) => {
  *       p.moveTo(vec2(0, 0));
  *       p.lineTo(vec2(100, 100));
  *     });
- *     l.circle((c) => {
+ *     g.circle((c) => {
  *       c.center = doc.center;
  *       c.radius = 10;
  *     });
  *   });
  * });
  */
-export type LayerAttributes = CommonAttributes & Record<string, unknown>
+export type GroupAttributes = CommonAttributes & Record<string, unknown>
 
-export class Layer extends ShapeContainer {
-  constructor(attributes: LayerAttributes = {}) {
+export class Group extends ShapeContainer {
+  constructor(attributes: GroupAttributes = {}) {
     super('g', attributes)
   }
 }
@@ -128,11 +128,11 @@ export class Layer extends ShapeContainer {
 /**
  * Creates an SVG group (`<g>`) element using a builder callback.
  *
- * @param builder Callback that receives the layer for building content
- * @returns The built Layer
+ * @param builder Callback that receives the group for building content
+ * @returns The built Group
  */
-export function layer(builder: (layer: Layer) => void): Layer {
-  const l = new Layer()
-  builder(l)
-  return l
+export function group(builder: (group: Group) => void): Group {
+  const g = new Group()
+  builder(g)
+  return g
 }
