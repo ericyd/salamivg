@@ -127,10 +127,16 @@ export class Tag {
       }
       return result
     }
-    this.setAttributes({
+    const attrs = {
       ...normalized(pickBy(this.#visualAttributesTestFn, incoming)),
       ...normalized(this.visualAttributes()),
-    })
+    }
+    this.setAttributes(attrs)
+    // Prevent duplicate stroke-width / strokeWidth (invalid SVG); use canonical stroke-width
+    if ('stroke-width' in attrs) {
+      // biome-ignore lint/performance/noDelete: prevent duplicate SVG attribute
+      delete this.attributes.strokeWidth
+    }
   }
 
   /**

@@ -3,7 +3,7 @@ import assert from 'node:assert'
 import { ColorRgb } from '../color/rgb'
 import { hsl } from '../color/hsl'
 import { Tag } from './tag'
-import { LinearGradient } from './linear-gradient'
+import { Svg } from './svg'
 
 describe('Tag', () => {
   describe('render', () => {
@@ -83,6 +83,27 @@ describe('Tag', () => {
       t.fill = '#0f0'
       t.setVisualAttributes({ 'stroke-width': 5 })
       assert.strictEqual(t.attributes.stroke, undefined)
+    })
+  })
+
+  describe('strokeWidth inheritance', () => {
+    it('child rect strokeWidth overrides parent and does not produce duplicate stroke-width attribute', () => {
+      const svg = new Svg({})
+      svg.strokeWidth = 2
+      svg.rect({ strokeWidth: 3 })
+      const actual = svg.render()
+      const rectTag = actual.match(/<rect[^>]*>/)?.[0] ?? ''
+      const strokeWidthMatches = rectTag.match(/stroke-width="[^"]*"/g) ?? []
+      assert.strictEqual(
+        strokeWidthMatches.length,
+        1,
+        'rect must have exactly one stroke-width attribute (duplicate would be invalid SVG)',
+      )
+      assert.strictEqual(
+        strokeWidthMatches[0],
+        'stroke-width="3"',
+        'child explicit strokeWidth should override parent',
+      )
     })
   })
 
