@@ -104,7 +104,7 @@ export class ColorRgb {
     }
   }
 
-  toHex(): string {
+  toHex(includeAlpha = true): string {
     return [
       '#',
       Math.round(this.r * 255)
@@ -116,9 +116,11 @@ export class ColorRgb {
       Math.round(this.b * 255)
         .toString(16)
         .padStart(2, '0'),
-      Math.round(this.a * 255)
-        .toString(16)
-        .padStart(2, '0'),
+      includeAlpha
+        ? Math.round(this.a * 255)
+            .toString(16)
+            .padStart(2, '0')
+        : '',
     ].join('')
   }
 

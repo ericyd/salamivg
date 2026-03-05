@@ -60,7 +60,12 @@ export class LinearGradient extends Tag {
       []
     this.children =
       colorStops?.map(
-        (stop) => new LinearGradientStop(stop, this.numericPrecision),
+        (stop, index) =>
+          new LinearGradientStop(
+            stop,
+            this.numericPrecision,
+            `${this.id}_${index}`,
+          ),
       ) ?? []
   }
 
@@ -71,11 +76,33 @@ export class LinearGradient extends Tag {
 
 class LinearGradientStop extends Tag {
   /** @param {ColorStop} stop */
-  constructor(stop: ColorStop, numericPrecision = Infinity) {
+  constructor(
+    stop: ColorStop,
+    numericPrecision = Infinity,
+    id = Math.random().toString(16).replace(/^0\./, ''),
+  ) {
+    const color = stop[1]
+    // This is used to maintain compatibility with Inkscape
+    const stopColor = deriveStopColor(color)
     super('stop', {
+      id,
       offset: stop[0],
       'stop-color': stop[1],
+      style: [
+        `stop-color:${stopColor.toHex(false)}`,
+        `stop-opacity:${stopColor.a};`,
+      ].join(';'),
     })
     this.numericPrecision = numericPrecision
   }
+}
+
+function deriveStopColor(color: ColorRgb | ColorHsl | string): ColorRgb {
+  if (color instanceof ColorRgb) {
+    return color
+  }
+  if (color instanceof ColorHsl) {
+    return color.toRgb()
+  }
+  return ColorRgb.fromHex(color)
 }
