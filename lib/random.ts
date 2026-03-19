@@ -129,3 +129,62 @@ export function randomFromObject<T>(
 ): T {
   return obj[randomFromArray(Object.keys(obj), rng)]
 }
+
+/**
+ * The `Random` class is a wrapper around the `Rng` function that provides a
+ * more convenient API for generating random numbers.
+ * Rather than passing the `Rng` function around, you can create a `Random`
+ * instance and use its methods to generate random numbers.
+ * @example
+ * const rnd = Random.create()
+ * const value = rnd.value(0, 100)
+ * const int = rnd.int(0, 100)
+ * const seed = rnd.seed()
+ * const jitter = rnd.jitter(5, 50)
+ * const shuffle = rnd.shuffle([1, 2, 3])
+ * const fromArray = rnd.fromArray([1, 2, 3])
+ * const fromObject = rnd.fromObject({ a: 1, b: 2, c: 3 })
+ */
+export class Random {
+  #rng: Rng
+
+  private constructor(rng: Rng) {
+    this.#rng = rng
+  }
+
+  get rng(): Rng {
+    return this.#rng
+  }
+
+  static create(seed?: string | number): Random {
+    return new Random(createRng(seed))
+  }
+
+  int(min: number, max: number): Integer {
+    return randomInt(min, max, this.#rng)
+  }
+
+  seed(): ClosedInterval<0, typeof Number.MAX_SAFE_INTEGER> {
+    return randomSeed(this.#rng)
+  }
+
+  value(min: number, max: number): number {
+    return random(min, max, this.#rng)
+  }
+
+  jitter(amount: number, value: number): number {
+    return jitter(amount, value, this.#rng)
+  }
+
+  shuffle<T>(arr: Array<T>): Array<T> {
+    return shuffle(arr, this.#rng)
+  }
+
+  fromArray<T>(array: Array<T>): T {
+    return randomFromArray(array, this.#rng)
+  }
+
+  fromObject<T>(obj: Record<string, T>): T {
+    return randomFromObject(obj, this.#rng)
+  }
+}
