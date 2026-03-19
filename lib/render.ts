@@ -4,8 +4,8 @@
  * This file is exported separately from the rest of the lib to isolate Node.js dependencies.
  */
 
-import { mkdirSync, writeFileSync } from 'node:fs'
-import { execSync } from 'node:child_process'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { exec } from 'node:child_process'
 import { basename, extname, join } from 'node:path'
 import { Svg, SvgAttributes, SvgBuilder } from './components/index.js'
 
@@ -60,7 +60,7 @@ export async function renderSvg(
     const svg = new Svg(svgAttributes)
     loops++
     const sketchFilename = basename(process.argv[1], extname(process.argv[1]))
-    mkdirSync(join(renderDirectory, sketchFilename), { recursive: true })
+    await mkdir(join(renderDirectory, sketchFilename), { recursive: true })
     const postLoop = (await builder(svg)) ?? NOOP
     const filename = join(
       renderDirectory,
@@ -68,10 +68,10 @@ export async function renderSvg(
       `${timestamp()}-${svg.formatFilenameMetadata()}.svg`,
     )
     rendered = svg.render()
-    writeFileSync(filename, rendered)
+    await writeFile(filename, rendered)
     if (openEveryFrame) {
       const command = process.platform === 'win32' ? 'start' : 'open'
-      execSync(`${command} "${filename}"`)
+      exec(`${command} "${filename}"`)
     }
     if (logFilename) {
       console.log(filename)
