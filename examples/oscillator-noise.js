@@ -2,17 +2,14 @@ import {
   renderSvg,
   map,
   vec2,
-  randomSeed,
-  createRng,
   Vector2,
-  random,
   ColorRgb,
   PI,
   cos,
   sin,
   ColorSequence,
-  shuffle,
   createOscNoise,
+  Random,
 } from '../dist/index.js'
 
 const config = {
@@ -32,7 +29,7 @@ renderSvg(config, (svg) => {
   svg.filenameMetadata = { seed }
 
   // a seeded pseudo-random number generator provides controlled randomness for our sketch
-  const rng = createRng(seed)
+  const rnd = Random.create(seed)
 
   // black background 😎
   svg.setBackground('#000')
@@ -50,20 +47,20 @@ renderSvg(config, (svg) => {
   const nPoints = 200
   const points = new Array(nPoints)
     .fill(0)
-    .map(() => Vector2.random(0, svg.width, 0, svg.height, rng))
+    .map(() => Vector2.random(0, svg.width, 0, svg.height, rnd.rng))
 
   // define a color spectrum that can be indexed randomly for line colors
-  const spectrum = ColorSequence.fromColors(shuffle(colors, rng))
+  const spectrum = ColorSequence.fromColors(rnd.shuffle(colors))
 
   // noise functions usually require some type of scaling;
   // here we randomize slightly to get the amount of "flowiness" that we want.
-  const scale = random(0.05, 0.13, rng)
+  const scale = rnd.value(0.05, 0.13)
 
   // each start point gets a line
   for (const point of points) {
     svg.path((path) => {
       // choose a random stroke color for the line
-      path.stroke = spectrum.at(random(0, 1, rng))
+      path.stroke = spectrum.at(rnd.value(0, 1))
 
       // move along the vector field defined by the 2D noise function.
       // the line length is "100", which is totally arbitrary.
@@ -78,6 +75,6 @@ renderSvg(config, (svg) => {
 
   // when loopCount > 1, this will randomize the seed on each iteration
   return () => {
-    seed = randomSeed()
+    seed = rnd.seed()
   }
 })
