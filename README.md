@@ -123,17 +123,15 @@ import {
   renderSvg,
   map,
   vec2,
-  randomSeed,
-  createRng,
   Vector2,
-  random,
   ColorRgb,
   PI,
   cos,
   sin,
   ColorSequence,
-  shuffle,
   createOscNoise,
+  Random,
+  randomSeed,
 } from '@salamivg/core'
 
 const config = {
@@ -143,6 +141,8 @@ const config = {
   loopCount: 1,
 }
 
+let seed = randomSeed()
+
 const colors = ['#B2D0DE', '#E0A0A5', '#9BB3E7', '#F1D1B8', '#D9A9D6']
 
 renderSvg(config, (svg) => {
@@ -151,7 +151,7 @@ renderSvg(config, (svg) => {
   svg.filenameMetadata = { seed }
 
   // a seeded pseudo-random number generator provides controlled randomness for our sketch
-  const rng = createRng(seed)
+  const rnd = Random.create(seed)
 
   // black background 😎
   svg.setBackground('#000')
@@ -169,20 +169,20 @@ renderSvg(config, (svg) => {
   const nPoints = 200
   const points = new Array(nPoints)
     .fill(0)
-    .map(() => Vector2.random(0, svg.width, 0, svg.height, rng))
+    .map(() => Vector2.random(0, svg.width, 0, svg.height, rnd.rng))
 
   // define a color spectrum that can be indexed randomly for line colors
-  const spectrum = ColorSequence.fromColors(shuffle(colors, rng))
+  const spectrum = ColorSequence.fromColors(rnd.shuffle(colors))
 
   // noise functions usually require some type of scaling;
   // here we randomize slightly to get the amount of "flowiness" that we want.
-  const scale = random(0.05, 0.13, rng)
+  const scale = rnd.value(0.05, 0.13)
 
   // each start point gets a line
   for (const point of points) {
     svg.path((path) => {
       // choose a random stroke color for the line
-      path.stroke = spectrum.at(random(0, 1, rng))
+      path.stroke = spectrum.at(rnd.value(0, 1))
 
       // move along the vector field defined by the 2D noise function.
       // the line length is "100", which is totally arbitrary.
@@ -197,7 +197,7 @@ renderSvg(config, (svg) => {
 
   // when loopCount > 1, this will randomize the seed on each iteration
   return () => {
-    seed = randomSeed()
+    seed = rnd.seed()
   }
 })
 ```
@@ -222,16 +222,13 @@ Rules
 import {
   renderSvg,
   vec2,
-  randomSeed,
-  createRng,
   Vector2,
-  random,
-  randomInt,
   PI,
   ColorSequence,
-  shuffle,
   TAU,
   ColorRgb,
+  Random,
+  randomSeed,
 } from '@salamivg/core'
 
 const config = {
@@ -241,7 +238,7 @@ const config = {
   loopCount: 1,
 }
 
-let seed = 8852037180828291 // or, randomSeed()
+let seed = randomSeed()
 
 const colors = [
   '#974F7A',
@@ -258,34 +255,34 @@ const bg = '#2E4163'
 const stroke = ColorRgb.fromHex('#DAE7E8')
 
 renderSvg(config, (svg) => {
-  const rng = createRng(seed)
-  const maxDepth = randomInt(5, 7, rng)
+  const rnd = Random.create(seed)
+  const maxDepth = rnd.int(5, 7)
   svg.filenameMetadata = { seed, maxDepth }
   svg.setBackground(bg)
   svg.numericPrecision = 3
   svg.fill = bg
   svg.stroke = stroke
   svg.strokeWidth = 0.25
-  const spectrum = ColorSequence.fromColors(shuffle(colors, rng))
+  const spectrum = ColorSequence.fromColors(rnd.shuffle(colors))
 
   function drawTriangle(a, b, c, depth = 0) {
     // always draw the first triangle; then, draw about half of the triangles
-    if (depth === 0 || random(0, 1, rng) < 0.5) {
+    if (depth === 0 || rnd.value(0, 1) < 0.5) {
       // offset amount increases with depth
       const offsetAmount = depth / 2
       const offset = vec2(
-        random(-offsetAmount, offsetAmount, rng),
-        random(-offsetAmount, offsetAmount, rng),
+        rnd.value(-offsetAmount, offsetAmount),
+        rnd.value(-offsetAmount, offsetAmount),
       )
       // draw the triangle with some offset
       svg.polygon({
         points: [a.add(offset), b.add(offset), c.add(offset)],
-        fill: spectrum.at(random(0, 1, rng)).opacify(0.4).toHex(),
+        fill: spectrum.at(rnd.value(0, 1)).opacify(0.4).toHex(),
         stroke: stroke.opacify(1 / (depth / 4 + 1)).toHex(),
       })
     }
     // recurse if we're above maxDepth and "lady chance allows it"
-    if (depth < maxDepth && (depth < 2 || random(0, 1, rng) < 0.75)) {
+    if (depth < maxDepth && (depth < 2 || rnd.value(0, 1) < 0.75)) {
       const ab = Vector2.mix(a, b, 0.5)
       const ac = Vector2.mix(a, c, 0.5)
       const bc = Vector2.mix(b, c, 0.5)
@@ -297,7 +294,7 @@ renderSvg(config, (svg) => {
   }
 
   // construct an equilateral triangle from the center of the canvas with a random rotation
-  const angle = random(0, TAU, rng)
+  const angle = rnd.value(0, TAU)
   const a = svg.center.add(Vector2.fromAngle(angle).scale(45))
   const b = svg.center.add(Vector2.fromAngle(angle + (PI * 2) / 3).scale(45))
   const c = svg.center.add(Vector2.fromAngle(angle + (PI * 4) / 3).scale(45))
@@ -305,7 +302,7 @@ renderSvg(config, (svg) => {
 
   // when loopCount > 1, this will randomize the seed on each iteration
   return () => {
-    seed = randomSeed()
+    seed = rnd.seed()
   }
 })
 ```
