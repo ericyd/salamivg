@@ -155,7 +155,28 @@ export type SvgBuilder = (
   | Promise<undefined>
   | Promise<SvgBuilderPostLoop>
 
-export type SvgBuilderPostLoop = (() => void) | (() => Promise<void>)
+export type PostLoopContext = {
+  /**
+   * The rendered SVG as a string.
+   */
+  rendered: string
+  /**
+   * The directory the SVG was written to.
+   */
+  dirname: string
+  /**
+   * The base name of the SVG file, without the extension.
+   */
+  basename: string
+  /**
+   * The full path to the SVG file.
+   */
+  filename: string
+}
+
+export type SvgBuilderPostLoop =
+  | ((context?: PostLoopContext) => void)
+  | ((context?: PostLoopContext) => Promise<void>)
 
 /**
  * @param {SvgAttributes} attributes

@@ -6,7 +6,7 @@
 
 import { mkdir, writeFile } from 'node:fs/promises'
 import { exec } from 'node:child_process'
-import { basename, extname, join } from 'node:path'
+import { basename, extname, join, resolve } from 'node:path'
 import { Svg, SvgAttributes, SvgBuilder } from './components/index.js'
 
 const NOOP = () => {}
@@ -60,13 +60,13 @@ export async function renderSvg(
     const svg = new Svg(svgAttributes)
     loops++
     const sketchFilename = basename(process.argv[1], extname(process.argv[1]))
-    await mkdir(join(renderDirectory, sketchFilename), { recursive: true })
+    const dirname = resolve(join(renderDirectory, sketchFilename))
+    await mkdir(dirname, { recursive: true })
     const postLoop = (await builder(svg)) ?? NOOP
-    const filename = join(
-      renderDirectory,
-      sketchFilename,
-      `${timestamp()}-${svg.formatFilenameMetadata()}.svg`,
-    )
+    const baseFilename = [timestamp(), svg.formatFilenameMetadata()]
+      .filter(Boolean)
+      .join('-')
+    const filename = join(dirname, `${baseFilename}.svg`)
     rendered = svg.render()
     await writeFile(filename, rendered)
     if (openEveryFrame) {
@@ -76,7 +76,12 @@ export async function renderSvg(
     if (logFilename) {
       console.log(filename)
     }
-    await postLoop()
+    await postLoop({
+      rendered,
+      dirname,
+      basename: baseFilename,
+      filename,
+    })
   }
   return rendered
 }
