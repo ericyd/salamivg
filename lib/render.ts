@@ -4,9 +4,9 @@
  * This file is exported separately from the rest of the lib to isolate Node.js dependencies.
  */
 
-import { mkdirSync, writeFileSync } from 'node:fs'
-import { execSync } from 'node:child_process'
-import { basename, extname, join } from 'node:path'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { exec } from 'node:child_process'
+import { basename, extname, join, resolve } from 'node:path'
 import { Svg, SvgAttributes, SvgBuilder } from './components/index.js'
 
 const NOOP = () => {}
@@ -44,7 +44,7 @@ export function timestamp(d = new Date()): string {
 /**
  * @returns the most recent rendered SVG
  */
-export function renderSvg(
+export async function renderSvg(
   {
     loopCount = 1,
     openEveryFrame = true,
@@ -53,30 +53,35 @@ export function renderSvg(
     ...svgAttributes
   }: SvgAttributes & RenderLoopOptions,
   builder: SvgBuilder,
-): string {
+): Promise<string> {
   let loops = 0
   let rendered = ''
   while (loops < loopCount) {
     const svg = new Svg(svgAttributes)
     loops++
     const sketchFilename = basename(process.argv[1], extname(process.argv[1]))
-    mkdirSync(join(renderDirectory, sketchFilename), { recursive: true })
-    const postLoop = builder(svg) ?? NOOP
-    const filename = join(
-      renderDirectory,
-      sketchFilename,
-      `${timestamp()}-${svg.formatFilenameMetadata()}.svg`,
-    )
+    const dirname = resolve(join(renderDirectory, sketchFilename))
+    await mkdir(dirname, { recursive: true })
+    const postLoop = (await builder(svg)) ?? NOOP
+    const baseFilename = [timestamp(), svg.formatFilenameMetadata()]
+      .filter(Boolean)
+      .join('-')
+    const filename = join(dirname, `${baseFilename}.svg`)
     rendered = svg.render()
-    writeFileSync(filename, rendered)
+    await writeFile(filename, rendered)
     if (openEveryFrame) {
       const command = process.platform === 'win32' ? 'start' : 'open'
-      execSync(`${command} "${filename}"`)
+      exec(`${command} "${filename}"`)
     }
     if (logFilename) {
       console.log(filename)
     }
-    postLoop()
+    await postLoop({
+      rendered,
+      dirname,
+      basename: baseFilename,
+      filename,
+    })
   }
   return rendered
 }
